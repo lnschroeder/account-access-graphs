@@ -80,6 +80,17 @@
         </table>
       </template>
 
+      <template id="Graph">
+        <h1 class="title">A simple graph implementation</h1>
+        <p>
+          <button onclick="${AddNode}" class="button">Add Node</button>
+          <input type="text" id="nodeName" class="input" bind="${NodeName}">
+        </p>
+        <p>
+          The Graph has the following Nodes: ${NodeNames}
+        </p>
+      </template>
+
       <template id="ErrorNotification">
         <div class="notification is-warning">
           <button class="delete ${HideClass}" onclick="${Hide}"></button>

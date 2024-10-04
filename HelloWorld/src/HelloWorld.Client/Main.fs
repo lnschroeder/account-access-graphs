@@ -12,6 +12,7 @@ open Bolero.Html
 type Page =
     | [<EndPoint "/">] Home
     | [<EndPoint "/counter">] Counter
+    | [<EndPoint "/graph">] Graph
     | [<EndPoint "/data">] Data
 
 /// The Elmish application's model.
@@ -20,6 +21,8 @@ type Model =
         page: Page
         counter: int
         books: Book[] option
+        nodes: Node[]
+        newNodeName: string
         error: string option
     }
 
@@ -31,11 +34,18 @@ and Book =
         isbn: string
     }
 
+and Node =
+    {
+        name: string
+    }
+
 let initModel =
     {
         page = Home
         counter = 0
         books = None
+        nodes = [||]
+        newNodeName = ""
         error = None
     }
 
@@ -48,6 +58,8 @@ type Message =
     | SetCounter of int
     | GetBooks
     | GotBooks of Book[]
+    | AddNode
+    | UpdateNodeName of string
     | Error of exn
     | ClearError
 
@@ -69,6 +81,12 @@ let update (http: HttpClient) message model =
         { model with books = None }, cmd
     | GotBooks books ->
         { model with books = Some books }, Cmd.none
+
+    | AddNode ->
+        let newNode = {name = model.newNodeName}
+        {model with nodes = Array.append model.nodes [| newNode |]}, Cmd.none
+    | UpdateNodeName value ->
+        {model with newNodeName = value }, Cmd.none
 
     | Error exn ->
         { model with error = Some exn.Message }, Cmd.none
@@ -106,6 +124,15 @@ let dataPage model dispatch =
                     })
         .Elt()
 
+let graphPage model dispatch =
+    Main.Graph()
+        .AddNode(fun _ -> dispatch AddNode)
+        .NodeName("model.newNodeName", fun v -> dispatch (UpdateNodeName v))
+        .NodeNames(
+            model.nodes
+            |> Seq.map (fun node -> node.name)
+            |> String.concat "; ")
+        .Elt()
 
 let menuItem (model: Model) (page: Page) (text: string) =
     Main.MenuItem()
@@ -120,13 +147,14 @@ let view model dispatch =
             menuItem model Home "Home"
             menuItem model Counter "Counter"
             menuItem model Data "Download data"
+            menuItem model Graph "Graph"
         })
         .Body(
             cond model.page <| function
             | Home -> homePage model dispatch
             | Counter -> counterPage model dispatch
-            | Data ->
-                dataPage model dispatch
+            | Data -> dataPage model dispatch
+            | Graph -> graphPage model dispatch
         )
         .Error(
             cond model.error <| function
