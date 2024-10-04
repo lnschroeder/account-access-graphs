@@ -17,37 +17,28 @@ type Page =
 
 /// The Elmish application's model.
 type Model =
-    {
-        page: Page
-        counter: int
-        books: Book[] option
-        nodes: Node[]
-        newNodeName: string
-        error: string option
-    }
+    { page: Page
+      counter: int
+      books: Book[] option
+      nodes: Node[]
+      newNodeName: string
+      error: string option }
 
 and Book =
-    {
-        title: string
-        author: string
-        publishDate: DateTime
-        isbn: string
-    }
+    { title: string
+      author: string
+      publishDate: DateTime
+      isbn: string }
 
-and Node =
-    {
-        name: string
-    }
+and Node = { name: string }
 
 let initModel =
-    {
-        page = Home
-        counter = 0
-        books = None
-        nodes = [||]
-        newNodeName = ""
-        error = None
-    }
+    { page = Home
+      counter = 0
+      books = None
+      nodes = [||]
+      newNodeName = ""
+      error = None }
 
 
 /// The Elmish application's update messages.
@@ -65,77 +56,83 @@ type Message =
 
 let update (http: HttpClient) message model =
     match message with
-    | SetPage page ->
-        { model with page = page }, Cmd.none
+    | SetPage page -> { model with page = page }, Cmd.none
 
     | Increment ->
-        { model with counter = model.counter + 1 }, Cmd.none
+        { model with
+            counter = model.counter + 1 },
+        Cmd.none
     | Decrement ->
-        { model with counter = model.counter - 1 }, Cmd.none
-    | SetCounter value ->
-        { model with counter = value }, Cmd.none
+        { model with
+            counter = model.counter - 1 },
+        Cmd.none
+    | SetCounter value -> { model with counter = value }, Cmd.none
 
     | GetBooks ->
-        let getBooks() = http.GetFromJsonAsync<Book[]>("/books.json")
+        let getBooks () =
+            http.GetFromJsonAsync<Book[]>("/books.json")
+
         let cmd = Cmd.OfTask.either getBooks () GotBooks Error
         { model with books = None }, cmd
-    | GotBooks books ->
-        { model with books = Some books }, Cmd.none
+    | GotBooks books -> { model with books = Some books }, Cmd.none
 
     | AddNode ->
-        let newNode = {name = model.newNodeName}
-        {model with nodes = Array.append model.nodes [| newNode |]}, Cmd.none
-    | UpdateNodeName value ->
-        {model with newNodeName = value }, Cmd.none
+        let newNode = { name = model.newNodeName }
 
-    | Error exn ->
-        { model with error = Some exn.Message }, Cmd.none
-    | ClearError ->
-        { model with error = None }, Cmd.none
+        { model with
+            nodes = Array.append model.nodes [| newNode |] },
+        Cmd.none
+    | UpdateNodeName value -> { model with newNodeName = value }, Cmd.none
+
+    | Error exn -> { model with error = Some exn.Message }, Cmd.none
+    | ClearError -> { model with error = None }, Cmd.none
 
 /// Connects the routing system to the Elmish application.
 let router = Router.infer SetPage (fun model -> model.page)
 
 type Main = Template<"wwwroot/main.html">
 
-let homePage model dispatch =
-    Main.Home().Elt()
+let homePage model dispatch = Main.Home().Elt()
 
 let counterPage model dispatch =
-    Main.Counter()
+    Main
+        .Counter()
         .Decrement(fun _ -> dispatch Decrement)
         .Increment(fun _ -> dispatch Increment)
         .Value(model.counter, fun v -> dispatch (SetCounter v))
         .Elt()
 
 let dataPage model dispatch =
-    Main.Data()
+    Main
+        .Data()
         .Reload(fun _ -> dispatch GetBooks)
-        .Rows(cond model.books <| function
-            | None ->
-                Main.EmptyData().Elt()
-            | Some books ->
-                forEach books <| fun book ->
-                    tr {
-                        td { book.title }
-                        td { book.author }
-                        td { book.publishDate.ToString("yyyy-MM-dd") }
-                        td { book.isbn }
-                    })
+        .Rows(
+            cond model.books
+            <| function
+                | None -> Main.EmptyData().Elt()
+                | Some books ->
+                    forEach books
+                    <| fun book ->
+                        tr {
+                            td { book.title }
+                            td { book.author }
+                            td { book.publishDate.ToString("yyyy-MM-dd") }
+                            td { book.isbn }
+                        }
+        )
         .Elt()
 
 let graphPage model dispatch =
-    Main.Graph()
+    Main
+        .Graph()
         .AddNode(fun _ -> dispatch AddNode)
         .NodeName("model.newNodeName", fun v -> dispatch (UpdateNodeName v))
-        .NodeNames(
-            model.nodes
-            |> Seq.map (fun node -> node.name)
-            |> String.concat "; ")
+        .NodeNames(model.nodes |> Seq.map (fun node -> node.name) |> String.concat "; ")
         .Elt()
 
 let menuItem (model: Model) (page: Page) (text: string) =
-    Main.MenuItem()
+    Main
+        .MenuItem()
         .Active(if model.page = page then "is-active" else "")
         .Url(router.Link page)
         .Text(text)
@@ -143,27 +140,27 @@ let menuItem (model: Model) (page: Page) (text: string) =
 
 let view model dispatch =
     Main()
-        .Menu(concat {
-            menuItem model Home "Home"
-            menuItem model Counter "Counter"
-            menuItem model Data "Download data"
-            menuItem model Graph "Graph"
-        })
+        .Menu(
+            concat {
+                menuItem model Home "Home"
+                menuItem model Counter "Counter"
+                menuItem model Data "Download data"
+                menuItem model Graph "Graph"
+            }
+        )
         .Body(
-            cond model.page <| function
-            | Home -> homePage model dispatch
-            | Counter -> counterPage model dispatch
-            | Data -> dataPage model dispatch
-            | Graph -> graphPage model dispatch
+            cond model.page
+            <| function
+                | Home -> homePage model dispatch
+                | Counter -> counterPage model dispatch
+                | Data -> dataPage model dispatch
+                | Graph -> graphPage model dispatch
         )
         .Error(
-            cond model.error <| function
-            | None -> empty()
-            | Some err ->
-                Main.ErrorNotification()
-                    .Text(err)
-                    .Hide(fun _ -> dispatch ClearError)
-                    .Elt()
+            cond model.error
+            <| function
+                | None -> empty ()
+                | Some err -> Main.ErrorNotification().Text(err).Hide(fun _ -> dispatch ClearError).Elt()
         )
         .Elt()
 
@@ -177,5 +174,6 @@ type MyApp() =
 
     override this.Program =
         let update = update this.HttpClient
+
         Program.mkProgram (fun _ -> initModel, Cmd.ofMsg GetBooks) update view
         |> Program.withRouter router
