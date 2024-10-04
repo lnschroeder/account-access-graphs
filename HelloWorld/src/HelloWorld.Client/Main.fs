@@ -20,7 +20,7 @@ type Model =
     { page: Page
       counter: int
       books: Book[] option
-      nodes: Node[]
+      graph: Graph
       newNodeName: string
       error: string option }
 
@@ -30,13 +30,19 @@ and Book =
       publishDate: DateTime
       isbn: string }
 
-and Node = { name: string }
+and Node = {
+    name: string
+    accesses: Access[] }
+
+and Access = { access: string[] }
+
+and Graph = { nodes: Node[] }
 
 let initModel =
     { page = Home
       counter = 0
       books = None
-      nodes = [||]
+      graph = {nodes = [||]}
       newNodeName = ""
       error = None }
 
@@ -49,7 +55,7 @@ type Message =
     | SetCounter of int
     | GetBooks
     | GotBooks of Book[]
-    | AddNode
+    | AddNode of string
     | UpdateNodeName of string
     | Error of exn
     | ClearError
@@ -76,11 +82,12 @@ let update (http: HttpClient) message model =
         { model with books = None }, cmd
     | GotBooks books -> { model with books = Some books }, Cmd.none
 
-    | AddNode ->
-        let newNode = { name = model.newNodeName }
+    | AddNode "" -> model, Cmd.none
+    | AddNode value ->
+        let newNode = { name = value; accesses = [||] }
 
         { model with
-            nodes = Array.append model.nodes [| newNode |] },
+            graph = {nodes = Array.append model.graph.nodes [| newNode |]} },
         Cmd.none
     | UpdateNodeName value -> { model with newNodeName = value }, Cmd.none
 
@@ -122,12 +129,12 @@ let dataPage model dispatch =
         )
         .Elt()
 
-let graphPage model dispatch =
+let graphPage (model: Model) dispatch =
     Main
         .Graph()
-        .AddNode(fun _ -> dispatch AddNode)
+        .AddNode(fun _ -> dispatch (AddNode model.newNodeName))
         .NodeName("model.newNodeName", fun v -> dispatch (UpdateNodeName v))
-        .NodeNames(model.nodes |> Seq.map (fun node -> node.name) |> String.concat "; ")
+        .NodeNames(model.graph.nodes |> Seq.map (fun node -> node.name) |> String.concat "; ")
         .Elt()
 
 let menuItem (model: Model) (page: Page) (text: string) =
