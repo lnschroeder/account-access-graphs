@@ -13,4 +13,9 @@
     <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.DevServer" Version="8.0.*" />
     <PackageReference Include="System.Net.Http.Json" Version="8.0.*" />
   </ItemGroup>
+  <!-- when changing a template .html file the cachces must be deleted manually. -->
+  <!-- Otherwise the next `dotnet run` does not include the newest changes  -->
+  <Target Name="CleanCache" BeforeTargets="BeforeBuild">
+    <Delete Files="./obj/Debug/net8.0/HelloWorld.Client.AssemblyInfoInputs.cache" />
+  </Target>
 </Project>
