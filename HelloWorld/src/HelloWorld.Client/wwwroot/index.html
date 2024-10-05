@@ -8,6 +8,7 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.7.4/css/bulma.min.css">
     <link rel="stylesheet" href="css/index.css">
     <link rel="stylesheet" href="HelloWorld.Client.styles.css">
+    <script src="https://cdn.jsdelivr.net/npm/@viz-js/viz@3.9.0/lib/viz-standalone.min.js"></script>
   </head>
   <body>
     <nav class="navbar is-dark" role="navigation" aria-label="main navigation">
@@ -19,7 +20,40 @@
         </a>
       </div>
     </nav>
+    <button class="button" onclick="myJavaScriptFunction()">SomeJSaction</button>
+
     <div id="main">Loading...</div>
     <script src="_framework/blazor.webassembly.js"></script>
+
+    <script>
+      function myJavaScriptFunction() {
+        console.log("JavaScript function called!");
+        alert("Hello from JavaScript!");
+      }
+    </script>
+
+    <!-- <script>
+        Viz.instance()
+            .then(viz => {
+                return viz.renderSVGElement('digraph { a b c}');
+            })
+            .then(function (element) {
+                document.getElementById('graph-container').appendChild(element);
+            })
+            .catch(error => {
+                console.error('Error in rendering:', error);
+            });
+      // Create an instance of viz.js
+      const viz = new Viz();
+
+      // Render the graph and append to the graph-container div
+      viz.renderSVGElement('digraph { a -> b }')
+          .then(function (element) {
+              document.getElementById('graph-container').appendChild(element);
+          })
+          .catch(error => {
+              console.error(error);
+          });
+    </script> -->
   </body>
 </html>

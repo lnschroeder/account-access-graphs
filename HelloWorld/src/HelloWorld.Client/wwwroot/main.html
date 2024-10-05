@@ -83,12 +83,10 @@
       <template id="Graph">
         <h1 class="title">A simple graph implementation</h1>
         <p>
-          <button onclick="${AddNode}" class="button">Add Node</button>
+          <button id="addNodeButton" onclick="${AddNode}" class="button">Add Node</button>
           <input type="text" id="nodeName" class="input" bind="${NodeName}">
         </p>
-        <p>
-          The Graph has the following Nodes: ${NodeNames}
-        </p>
+        <div id="graph-container"></div>
       </template>
 
       <template id="ErrorNotification">
@@ -101,3 +99,41 @@
     </section>
   </div>
 </div>
+
+<script>
+  function renderGraph(graphData = 'digraph { }') {
+    console.log(graphData)
+    Viz.instance()
+      .then(viz => {
+          return viz.renderSVGElement(graphData);
+      })
+      .then(function (element) {
+          // document.getElementById('graph-container').appendChild(element);
+          const container = document.getElementById('graph-container');
+          container.innerHTML = element.outerHTML;
+      })
+      .catch(error => {
+          console.error('Error in rendering:', error);
+      });
+  }
+
+  // change focus to text field when clicking button
+  document.getElementById("addNodeButton").addEventListener("click", () => {
+    document.getElementById("nodeName").focus();
+  });
+
+  // click button when pressing enter
+  // Get the input field
+  var input = document.getElementById("nodeName");
+
+  // Execute a function when the user presses a key on the keyboard
+  input.addEventListener("keypress", function(event) {
+    // If the user presses the "Enter" key on the keyboard
+    if (event.key === "Enter") {
+      // Cancel the default action, if needed
+      event.preventDefault();
+      // Trigger the button element with a click
+      document.getElementById("addNodeButton").click();
+    }
+  });
+</script>
