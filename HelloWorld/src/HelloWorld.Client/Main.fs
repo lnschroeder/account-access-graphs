@@ -103,7 +103,7 @@ type Main = Template<"wwwroot/main.html">
 let homePage model dispatch = Main.Home().Elt()
 
 let graphPage (jsRuntime: IJSRuntime) (model: Model) dispatch =
-    jsRuntime.InvokeVoidAsync("renderGraph", model.graph)
+    jsRuntime.InvokeVoidAsync("renderGraph", graphToDot model.graph)
     |> ignore
 
     Main
