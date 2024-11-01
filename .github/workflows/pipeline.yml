@@ -13,12 +13,15 @@ jobs:
         with:
           dotnet-version: 5.0.x
       - run: dotnet publish -c Release -o release --nologo
+        working-directory: blazordemo
       - run: sed -i 's/<base href="\/" \/>/<base href="\/account-access-graphs\/" \/>/g' release/wwwroot/index.html
+        working-directory: blazordemo
       - run: touch release/wwwroot/.nojekyll
+        working-directory: blazordemo
       - id: deployment
         uses: actions/upload-pages-artifact@v3
         with:
-          path: release/wwwroot/
+          path: blazordemo/release/wwwroot/
 
   deploy-github-pages:
     environment:
