@@ -14,6 +14,8 @@ jobs:
           dotnet-version: 8.0.x
       - run: dotnet restore
         working-directory: bolerodemo/MyApp
+      - run: dotnet build
+        working-directory: bolerodemo/MyApp
       - run: dotnet publish -c Release -o release --nologo
         working-directory: bolerodemo/MyApp
       - run: sed -i 's/<base href="\/" \/>/<base href="\/account-access-graphs\/" \/>/g' release/wwwroot/index.html
