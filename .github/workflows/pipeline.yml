@@ -12,7 +12,7 @@ jobs:
       - uses: actions/setup-dotnet@v4
         with:
           dotnet-version: '8.0.306'
-      - run: dotnet publish -c Release -o release --no-logo src/MyApp.Client/MyApp.Client.fsproj
+      - run: dotnet publish -c Release -o release --nologo src/MyApp.Client/MyApp.Client.fsproj
         working-directory: bolerodemo/MyApp
       - run: sed -i 's/<base href="\/">/<base href="\/account-access-graphs\/">/g' release/wwwroot/index.html
         working-directory: bolerodemo/MyApp
