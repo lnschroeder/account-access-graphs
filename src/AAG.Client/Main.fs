@@ -1,4 +1,4 @@
-module HelloWorld.Client.Main
+module AAG.Client.Main
 
 open System.Net.Http
 open Microsoft.AspNetCore.Components
@@ -158,7 +158,7 @@ let init _ = initModel, Cmd.none
 type MyApp() =
     inherit ProgramComponent<Model, Message>()
 
-    override _.CssScope = CssScopes.HelloWorld
+    override _.CssScope = CssScopes.AAG
 
     [<Inject>]
     member val HttpClient = Unchecked.defaultof<HttpClient> with get, set
