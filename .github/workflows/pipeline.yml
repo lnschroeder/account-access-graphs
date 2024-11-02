@@ -17,7 +17,7 @@ jobs:
       - name: Publish dotnet project
         run: dotnet publish -c Release -o release --nologo src/AAG.Client/AAG.Client.fsproj
       - name: Set base path
-        run: sed -i 's/<base href="\/" \/>/<base href="\/acchout-access-graphs\/" \/>/g' release/wwwroot/index.html
+        run: sed -i 's/<base href="\/" \/>/<base href="\/account-access-graphs\/" \/>/g' release/wwwroot/index.html
       - name: Add .nojekyll to include _framework folder
         run: touch release/wwwroot/.nojekyll
       - name: Add 404 page to enable page refreshes
