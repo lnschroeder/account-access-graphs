@@ -11,7 +11,7 @@ jobs:
       - uses: actions/checkout@v4
       - uses: actions/setup-dotnet@v4
         with:
-          dotnet-version: '8.0.403'
+          dotnet-version: '8.0.306'
       - run: dotnet publish -c Release -o release --nologo src/MyApp.Client/MyApp.Client.fsproj
         working-directory: bolerodemo/MyApp
       - run: sed -i 's/<base href="\/">/<base href="\/account-access-graphs\/">/g' release/wwwroot/index.html
