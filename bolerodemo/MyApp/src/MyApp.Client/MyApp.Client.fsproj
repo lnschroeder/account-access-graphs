@@ -13,9 +13,4 @@
     <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.DevServer" Version="8.0.*" />
     <PackageReference Include="System.Net.Http.Json" Version="8.0.*" />
   </ItemGroup>
-  <ItemGroup>
-    <BoleroScopedCss Include="MyApp.bolero.css">
-      <ScopeName>MyApp</ScopeName>
-    </BoleroScopedCss>
-  </ItemGroup>
 </Project>

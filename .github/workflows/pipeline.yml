@@ -11,9 +11,13 @@ jobs:
       - uses: actions/checkout@v4
       - uses: actions/setup-dotnet@v4
         with:
-          dotnet-version: 8.0.110
-      - run: dotnet publish src/MyApp.Client/MyApp.Client.fsproj -c Release -r linux-x64 --self-contained -o release --nologo
-        working-directory: bolerodemo/MyApp
+          dotnet-version: 8.0.x
+      - run: dotnet publish -c Release -o release MyApp/src/MyApp.Client/MyApp.Client.fsproj
+        working-directory: bolerodemo
+      - run: ls -la
+        if: always()
+      - run: tree .
+        if: always()
       - run: sed -i 's/<base href="\/" \/>/<base href="\/account-access-graphs\/" \/>/g' release/wwwroot/index.html
         working-directory: bolerodemo/MyApp
       - run: touch release/wwwroot/.nojekyll
