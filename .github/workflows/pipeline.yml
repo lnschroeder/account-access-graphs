@@ -14,7 +14,6 @@ jobs:
         uses: actions/setup-dotnet@v4
         with:
           dotnet-version: '8.0.110'
-          cache: true
       - name: Publish dotnet project
         run: dotnet publish -c Release -o release --nologo src/AAG.Client/AAG.Client.fsproj
       - name: Set base path
