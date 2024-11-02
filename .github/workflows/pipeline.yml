@@ -9,21 +9,14 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - uses: actions/setup-dotnet@v4
-        with:
-          dotnet-version: 8.0.110
-      - run: dotnet restore
+      - name: Build Docker Image
+        run: docker build -t myapp-image .
         working-directory: bolerodemo/MyApp
-      - run: dotnet clean
+      - name: Run Publish in Docker
+        run: |
+          docker run --rm -v $(pwd):/app myapp-image \
+          /bin/bash -c "dotnet publish -c Release -o /app/release src/MyApp.Client/MyApp.Client.fsproj"
         working-directory: bolerodemo/MyApp
-      - run: dotnet build --no-restore
-        working-directory: bolerodemo/MyApp
-      - run: ls -la
-        if: always()
-      - run: tree .
-        if: always()
-      - run: cat bolerodemo/MyApp/src/MyApp.Client/obj/CssScopes.fs
-        if: always()
       - run: sed -i 's/<base href="\/" \/>/<base href="\/account-access-graphs\/" \/>/g' release/wwwroot/index.html
         working-directory: bolerodemo/MyApp
       - run: touch release/wwwroot/.nojekyll
