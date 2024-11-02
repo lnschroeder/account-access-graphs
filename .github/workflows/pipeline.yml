@@ -14,7 +14,7 @@ jobs:
           dotnet-version: '8.0.110'
       - run: dotnet --list-sdks
       - run: dotnet --list-runtimes
-      - run: dotnet publish -c Release -o release
+      - run: dotnet publish -c Release -o release -r linux-x64 --self-contained
         working-directory: bolerodemo/MyApp
       # - run: |
       #     apt-get update
