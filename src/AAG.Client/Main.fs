@@ -10,8 +10,7 @@ open System
 
 /// Routing endpoints definition.
 type Page =
-    | [<EndPoint "/">] Home
-    | [<EndPoint "/graph">] Graph
+    | [<EndPoint "/">] Graph
 
 /// The Elmish application's model.
 type Model =
@@ -27,7 +26,7 @@ and Access = { access: string [] }
 and Graph = { nodes: Node [] }
 
 let initModel =
-    { page = Home
+    { page = Graph
       graph = { nodes = [||] }
       newNodeName = ""
       error = None }
@@ -100,8 +99,6 @@ let router = Router.infer SetPage (fun model -> model.page)
 
 type Main = Template<"wwwroot/main.html">
 
-let homePage model dispatch = Main.Home().Elt()
-
 let graphPage (jsRuntime: IJSRuntime) (model: Model) dispatch =
     jsRuntime.InvokeVoidAsync("renderGraph", graphToDot model.graph)
     |> ignore
@@ -129,14 +126,12 @@ let view (jsRuntime: IJSRuntime) model dispatch =
     Main()
         .Menu(
             concat {
-                menuItem model Home "Home"
                 menuItem model Graph "Graph"
             }
         )
         .Body(
             cond model.page
             <| function
-                | Home -> homePage model dispatch
                 | Graph -> graphPage jsRuntime model dispatch
         )
         .Error(
