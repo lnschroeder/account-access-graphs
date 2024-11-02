@@ -12,16 +12,9 @@ jobs:
       - uses: actions/setup-dotnet@v4
         with:
           dotnet-version: 8.0.110
-      - name: Restore dependencies
-        run: dotnet restore
+      - run: dotnet restore
         working-directory: bolerodemo/MyApp
-      - name: Build
-        run: dotnet build --no-restore
-        working-directory: bolerodemo/MyApp
-      - name: Publish
-        run: dotnet publish -c Release -r linux-x64 --self-contained -o out
-        working-directory: bolerodemo/MyApp
-      - run: dotnet build src/MyApp.Client/MyApp.Client.fsproj
+      - run: dotnet build --no-restore
         working-directory: bolerodemo/MyApp
       - run: dotnet publish src/MyApp.Client/MyApp.Client.fsproj -c Release -r linux-x64 --self-contained -o release --nologo
         working-directory: bolerodemo/MyApp
