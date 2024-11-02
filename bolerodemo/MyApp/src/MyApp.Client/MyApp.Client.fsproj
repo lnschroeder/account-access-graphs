@@ -3,6 +3,11 @@
   <PropertyGroup>
     <TargetFramework>net8.0</TargetFramework>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(CI)' == 'true'">
+    <BoleroScopedCss Include="MyApp.bolero.css">
+      <ScopeName>MyApp</ScopeName>
+    </BoleroScopedCss>
+  </PropertyGroup>
   <ItemGroup>
     <Compile Include="Main.fs" />
     <Compile Include="Startup.fs" />
