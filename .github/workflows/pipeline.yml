@@ -12,10 +12,6 @@ jobs:
       - uses: actions/setup-dotnet@v4
         with:
           dotnet-version: 8.0.110
-      - run: dotnet restore
-        working-directory: bolerodemo/MyApp
-      - run: dotnet build --no-restore
-        working-directory: bolerodemo/MyApp
       - run: dotnet publish src/MyApp.Client/MyApp.Client.fsproj -c Release -r linux-x64 --self-contained -o release --nologo
         working-directory: bolerodemo/MyApp
       - run: sed -i 's/<base href="\/" \/>/<base href="\/account-access-graphs\/" \/>/g' release/wwwroot/index.html
