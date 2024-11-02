@@ -12,23 +12,8 @@ jobs:
       - uses: actions/setup-dotnet@v4
         with:
           dotnet-version: '8.0.110'
-      - run: dotnet --list-sdks
-      - run: dotnet --list-runtimes
-      - run: dotnet publish -c Release -o release -r linux-x64 --self-contained
+      - run: dotnet publish -c Release -o release src/MyApp.Client/MyApp.Client.fsproj --no-logo
         working-directory: bolerodemo/MyApp
-      # - run: |
-      #     apt-get update
-      #     apt-get install -y aspnetcore-runtime-8.0 dotnet-sdk-8.0
-      #     dotnet publish -c Release -o /app/release src/MyApp.Client/MyApp.Client.fsproj
-      # - name: Build Docker Image
-      #   run: docker build -t myapp-image .
-      #   working-directory: bolerodemo/MyApp
-      # - name: Run Publish in Docker
-      #   run: |
-      #     docker run --rm -v $(pwd):/app myapp-image \
-      #     /bin/bash -c "dotnet publish -c Release -o /app/release src/MyApp.Client/MyApp.Client.fsproj"
-      #   working-directory: bolerodemo/MyApp
-        # working-directory: bolerodemo/MyApp
       - run: sed -i 's/<base href="\/">/<base href="\/account-access-graphs\/">/g' release/wwwroot/index.html
         working-directory: bolerodemo/MyApp
       - run: touch release/wwwroot/.nojekyll
