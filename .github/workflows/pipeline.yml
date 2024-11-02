@@ -29,7 +29,7 @@ jobs:
       #     /bin/bash -c "dotnet publish -c Release -o /app/release src/MyApp.Client/MyApp.Client.fsproj"
       #   working-directory: bolerodemo/MyApp
         # working-directory: bolerodemo/MyApp
-      - run: sed -i 's/<base href="\/" \/>/<base href="\/account-access-graphs\/" \/>/g' release/wwwroot/index.html
+      - run: sed -i 's/<base href="\/">/<base href="\/account-access-graphs\/">/g' release/wwwroot/index.html
         working-directory: bolerodemo/MyApp
       - run: touch release/wwwroot/.nojekyll
         working-directory: bolerodemo/MyApp
