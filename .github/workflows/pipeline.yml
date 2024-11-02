@@ -18,6 +18,8 @@ jobs:
         if: always()
       - run: tree .
         if: always()
+      - run: cat bolerodemo/MyApp/src/MyApp.Client/obj/CssScopes.fs
+        if: always()
       - run: sed -i 's/<base href="\/" \/>/<base href="\/account-access-graphs\/" \/>/g' release/wwwroot/index.html
         working-directory: bolerodemo/MyApp
       - run: touch release/wwwroot/.nojekyll
