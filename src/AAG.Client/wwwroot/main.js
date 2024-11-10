@@ -16,6 +16,7 @@ function renderGraph(graphData = "dinetwork { }") {
 
   new vis.Network(container, data, options);
 }
+window.renderGraph = renderGraph;
 
 // change focus to text field when clicking button
 document.getElementById("addNodeButton").addEventListener("click", () => {
