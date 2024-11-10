@@ -14,24 +14,9 @@ type Page = | [<EndPoint "/">] Graph
 /// The Elmish application's model.
 type Model =
     { page: Page
-      graph: Graph
+      graph: AAG.Graph
       newNodeName: string
       error: string option }
-
-and Node =
-    { id: Guid
-      name: string
-      accesses: Access [] }
-
-and Access = { access: string [] }
-
-and Graph = { nodes: Node [] }
-
-let initModel =
-    { page = Graph
-      graph = { nodes = [||] }
-      newNodeName = ""
-      error = None }
 
 
 /// The Elmish application's update messages.
@@ -43,34 +28,15 @@ type Message =
     | ClearError
     | CallJsFunction
 
-type VisNetworkNode = { id: Guid; label: string }
-
-let node2VisNetworkNode (node: Node) : VisNetworkNode = { id = node.id; label = node.name }
-
-
-type VisNetworkEdge =
-    { id: Guid
-      from: string
-      ``to``: string }
-
-type VisNetwork =
-    { nodes: VisNetworkNode []
-      edges: VisNetworkEdge [] }
-
-let graph2visNetwork (graph: Graph) : VisNetwork =
-    { nodes = (graph.nodes |> Array.map node2VisNetworkNode)
-      edges = Array.empty }
+let initModel =
+    { page = Graph
+      graph = { nodes = [||] }
+      newNodeName = ""
+      error = None }
 
 
-let isNodeNameInGraph (graph: Graph) value =
-    Seq.contains value (graph.nodes |> Seq.map (fun node -> node.name))
-
-let isInvalidNodeName graph value =
-    String.IsNullOrWhiteSpace(value)
-    || (isNodeNameInGraph graph value)
-
-let invokeUpdateNetwork (graph: Graph) (jsRuntime: IJSRuntime) =
-    let visNetwork = graph2visNetwork graph
+let invokeUpdateNetwork (graph: AAG.Graph) (jsRuntime: IJSRuntime) =
+    let visNetwork = Vis.graph2visNetwork graph
 
     jsRuntime.InvokeVoidAsync("updateNetwork", visNetwork.nodes, visNetwork.edges)
     |> ignore
@@ -79,14 +45,14 @@ let update (jsRuntime: IJSRuntime) message model =
     match message with
     | SetPage page -> { model with page = page }, Cmd.none
 
-    | AddNode value when isInvalidNodeName model.graph value -> model, Cmd.none
+    | AddNode value when AAG.isInvalidNodeName model.graph value -> model, Cmd.none
     | AddNode value ->
-        let newNode =
+        let newNode: AAG.Node =
             { id = Guid.NewGuid()
               name = value
               accesses = [||] }
 
-        let newGraph = { nodes = Array.append model.graph.nodes [| newNode |] }
+        let newGraph: AAG.Graph = { nodes = Array.append model.graph.nodes [| newNode |] }
 
         invokeUpdateNetwork newGraph jsRuntime
 
@@ -97,7 +63,7 @@ let update (jsRuntime: IJSRuntime) message model =
 
     | UpdateNodeName value ->
         let error =
-            if isInvalidNodeName model.graph value then
+            if AAG.isInvalidNodeName model.graph value then
                 Some "invalid node name"
             else
                 None
@@ -166,7 +132,6 @@ let view (jsRuntime: IJSRuntime) model dispatch =
         .Elt()
 
 let init _ = initModel, Cmd.none
-
 
 type MyApp() =
     inherit ProgramComponent<Model, Message>()
