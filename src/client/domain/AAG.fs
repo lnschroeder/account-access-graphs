@@ -13,7 +13,7 @@ and Graph =
     { nodes: Node list }
     static member Empty = { nodes = [] }
 
-let isNodeNameInGraph value (graph: Graph) =
+let isNodeNameInGraph value graph =
     Seq.contains value (graph.nodes |> Seq.map (fun node -> node.name))
 
 let isInvalidNodeName value = String.IsNullOrWhiteSpace(value)

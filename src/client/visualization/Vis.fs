@@ -13,8 +13,8 @@ type VisNetwork =
     { nodes: VisNetworkNode list
       edges: VisNetworkEdge list }
 
-let node2VisNetworkNode (node: AAG.Node) : VisNetworkNode = { id = node.id; label = node.name }
+let node2VisNetworkNode (node: AAG.Node) = { id = node.id; label = node.name }
 
-let graph2visNetwork (graph: AAG.Graph) : VisNetwork =
+let graph2visNetwork (graph: AAG.Graph) =
     { nodes = (graph.nodes |> List.map node2VisNetworkNode)
       edges = [] }

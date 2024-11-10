@@ -22,8 +22,6 @@ type Model =
           newNodeName = ""
           error = None }
 
-
-
 /// The Elmish application's update messages.
 type Message =
     | SetPage of Page
@@ -67,7 +65,7 @@ let updateNodeName name model =
         error = error },
     Cmd.none
 
-let update (jsRuntime: IJSRuntime) message model =
+let update jsRuntime message model =
     match message with
     | SetPage page -> { model with page = page }, Cmd.none
     | AddNode value -> addNode value model jsRuntime
@@ -80,7 +78,7 @@ let router = Router.infer SetPage (fun model -> model.page)
 
 type Main = Template<"wwwroot/main.html">
 
-let graphPage (jsRuntime: IJSRuntime) (model: Model) dispatch =
+let graphPage jsRuntime model dispatch =
     invokeUpdateNetwork model.graph jsRuntime
 
     Main
@@ -89,7 +87,7 @@ let graphPage (jsRuntime: IJSRuntime) (model: Model) dispatch =
         .NodeName(model.newNodeName, (fun v -> dispatch (UpdateNodeName v)))
         .Elt()
 
-let menuItem (model: Model) (page: Page) (text: string) =
+let menuItem model page (text: string) =
     Main
         .MenuItem()
         .Active(
@@ -102,7 +100,7 @@ let menuItem (model: Model) (page: Page) (text: string) =
         .Text(text)
         .Elt()
 
-let view (jsRuntime: IJSRuntime) model dispatch =
+let view jsRuntime model dispatch =
     Main()
         .Menu(concat { menuItem model Graph "Graph" })
         .Body(
