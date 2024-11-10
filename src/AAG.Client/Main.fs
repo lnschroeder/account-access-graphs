@@ -9,8 +9,7 @@ open Microsoft.JSInterop
 open System
 
 /// Routing endpoints definition.
-type Page =
-    | [<EndPoint "/">] Graph
+type Page = | [<EndPoint "/">] Graph
 
 /// The Elmish application's model.
 type Model =
@@ -19,7 +18,10 @@ type Model =
       newNodeName: string
       error: string option }
 
-and Node = { name: string; accesses: Access [] }
+and Node =
+    { id: Guid
+      name: string
+      accesses: Access [] }
 
 and Access = { access: string [] }
 
@@ -41,19 +43,37 @@ type Message =
     | ClearError
     | CallJsFunction
 
-let graphToDot graph =
-    "dinetwork { "
-    + (graph.nodes
-       |> Seq.map (fun node -> node.name)
-       |> String.concat " ")
-    + "}"
+type VisNetworkNode = { id: Guid; label: string }
 
-let isNodeNameInGraph graph value =
+let node2VisNetworkNode (node: Node) : VisNetworkNode = { id = node.id; label = node.name }
+
+
+type VisNetworkEdge =
+    { id: Guid
+      from: string
+      ``to``: string }
+
+type VisNetwork =
+    { nodes: VisNetworkNode []
+      edges: VisNetworkEdge [] }
+
+let graph2visNetwork (graph: Graph) : VisNetwork =
+    { nodes = (graph.nodes |> Array.map node2VisNetworkNode)
+      edges = Array.empty }
+
+
+let isNodeNameInGraph (graph: Graph) value =
     Seq.contains value (graph.nodes |> Seq.map (fun node -> node.name))
 
 let isInvalidNodeName graph value =
     String.IsNullOrWhiteSpace(value)
     || (isNodeNameInGraph graph value)
+
+let invokeUpdateNetwork (graph: Graph) (jsRuntime: IJSRuntime) =
+    let visNetwork = graph2visNetwork graph
+
+    jsRuntime.InvokeVoidAsync("updateNetwork", visNetwork.nodes, visNetwork.edges)
+    |> ignore
 
 let update (jsRuntime: IJSRuntime) message model =
     match message with
@@ -61,11 +81,14 @@ let update (jsRuntime: IJSRuntime) message model =
 
     | AddNode value when isInvalidNodeName model.graph value -> model, Cmd.none
     | AddNode value ->
-        let newNode = { name = value; accesses = [||] }
+        let newNode =
+            { id = Guid.NewGuid()
+              name = value
+              accesses = [||] }
+
         let newGraph = { nodes = Array.append model.graph.nodes [| newNode |] }
 
-        jsRuntime.InvokeVoidAsync("renderGraph", newGraph)
-        |> ignore
+        invokeUpdateNetwork newGraph jsRuntime
 
         { model with
             graph = newGraph
@@ -100,8 +123,7 @@ let router = Router.infer SetPage (fun model -> model.page)
 type Main = Template<"wwwroot/main.html">
 
 let graphPage (jsRuntime: IJSRuntime) (model: Model) dispatch =
-    jsRuntime.InvokeVoidAsync("renderGraph", graphToDot model.graph)
-    |> ignore
+    invokeUpdateNetwork model.graph jsRuntime
 
     Main
         .Graph()
@@ -124,11 +146,7 @@ let menuItem (model: Model) (page: Page) (text: string) =
 
 let view (jsRuntime: IJSRuntime) model dispatch =
     Main()
-        .Menu(
-            concat {
-                menuItem model Graph "Graph"
-            }
-        )
+        .Menu(concat { menuItem model Graph "Graph" })
         .Body(
             cond model.page
             <| function
