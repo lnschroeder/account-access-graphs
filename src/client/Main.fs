@@ -6,7 +6,6 @@ open Elmish
 open Bolero
 open Bolero.Html
 open Microsoft.JSInterop
-open System
 
 /// Routing endpoints definition.
 type Page = | [<EndPoint "/">] Graph
@@ -32,7 +31,6 @@ type Message =
     | UpdateNodeName of string
     | Error of exn
     | ClearError
-    | CallJsFunction
 
 let invokeUpdateNetwork (graph: AAG.Graph) (jsRuntime: IJSRuntime) =
     let visNetwork = Vis.graph2visNetwork graph
@@ -40,47 +38,42 @@ let invokeUpdateNetwork (graph: AAG.Graph) (jsRuntime: IJSRuntime) =
     jsRuntime.InvokeVoidAsync("updateNetwork", visNetwork.nodes, visNetwork.edges)
     |> ignore
 
-let update (jsRuntime: IJSRuntime) message model =
-    match message with
-    | SetPage page -> { model with page = page }, Cmd.none
+let addNode name model jsRuntime =
+    if AAG.isInvalidNodeName name then
+        model, Cmd.none
+    elif AAG.isNodeNameInGraph name model.graph then
+        model, Cmd.none
+    else
+        let graph = AAG.addNode name model.graph
 
-    | AddNode value when AAG.isInvalidNodeName model.graph value -> model, Cmd.none
-    | AddNode value ->
-        let newNode: AAG.Node =
-            { id = Guid.NewGuid()
-              name = value
-              accesses = [] }
-
-        let newGraph: AAG.Graph = { nodes = newNode :: model.graph.nodes }
-
-        invokeUpdateNetwork newGraph jsRuntime
+        invokeUpdateNetwork graph jsRuntime
 
         { model with
-            graph = newGraph
+            graph = graph
             newNodeName = "" },
         Cmd.none
 
-    | UpdateNodeName value ->
-        let error =
-            if AAG.isInvalidNodeName model.graph value then
-                Some "invalid node name"
-            else
-                None
+let updateNodeName name model =
+    let error =
+        if AAG.isInvalidNodeName name then
+            Some "invalid node name"
+        elif AAG.isNodeNameInGraph name model.graph then
+            Some "node already exists"
+        else
+            None
 
-        { model with
-            newNodeName = value
-            error = error },
-        Cmd.none
+    { model with
+        newNodeName = name
+        error = error },
+    Cmd.none
 
+let update (jsRuntime: IJSRuntime) message model =
+    match message with
+    | SetPage page -> { model with page = page }, Cmd.none
+    | AddNode value -> addNode value model jsRuntime
+    | UpdateNodeName value -> updateNodeName value model
     | Error exn -> { model with error = Some exn.Message }, Cmd.none
     | ClearError -> { model with error = None }, Cmd.none
-
-    | CallJsFunction ->
-        // Use IJSRuntime to call the JavaScript function
-        jsRuntime.InvokeVoidAsync("myJavaScriptFunction")
-        |> ignore
-
-        model, Cmd.none // Return the unchanged model
 
 /// Connects the routing system to the Elmish application.
 let router = Router.infer SetPage (fun model -> model.page)
