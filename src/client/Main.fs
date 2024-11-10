@@ -17,6 +17,12 @@ type Model =
       graph: AAG.Graph
       newNodeName: string
       error: string option }
+    static member Init =
+        { page = Graph
+          graph = AAG.Graph.Empty
+          newNodeName = ""
+          error = None }
+
 
 
 /// The Elmish application's update messages.
@@ -27,13 +33,6 @@ type Message =
     | Error of exn
     | ClearError
     | CallJsFunction
-
-let initModel =
-    { page = Graph
-      graph = { nodes = [] }
-      newNodeName = ""
-      error = None }
-
 
 let invokeUpdateNetwork (graph: AAG.Graph) (jsRuntime: IJSRuntime) =
     let visNetwork = Vis.graph2visNetwork graph
@@ -131,7 +130,7 @@ let view (jsRuntime: IJSRuntime) model dispatch =
         )
         .Elt()
 
-let init _ = initModel, Cmd.none
+let init _ = Model.Init, Cmd.none
 
 type MyApp() =
     inherit ProgramComponent<Model, Message>()
