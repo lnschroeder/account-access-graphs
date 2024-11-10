@@ -5,11 +5,11 @@ open System
 type Node =
     { id: Guid
       name: string
-      accesses: Access [] }
+      accesses: Access list }
 
-and Access = { access: string [] }
+and Access = { access: string list }
 
-and Graph = { nodes: Node [] }
+and Graph = { nodes: Node list }
 
 let isNodeNameInGraph (graph: Graph) value =
     Seq.contains value (graph.nodes |> Seq.map (fun node -> node.name))

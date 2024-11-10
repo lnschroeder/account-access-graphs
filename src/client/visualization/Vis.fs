@@ -10,11 +10,11 @@ type VisNetworkEdge =
       ``to``: string }
 
 type VisNetwork =
-    { nodes: VisNetworkNode []
-      edges: VisNetworkEdge [] }
+    { nodes: VisNetworkNode list
+      edges: VisNetworkEdge list }
 
 let node2VisNetworkNode (node: AAG.Node) : VisNetworkNode = { id = node.id; label = node.name }
 
 let graph2visNetwork (graph: AAG.Graph) : VisNetwork =
-    { nodes = (graph.nodes |> Array.map node2VisNetworkNode)
-      edges = Array.empty }
+    { nodes = (graph.nodes |> List.map node2VisNetworkNode)
+      edges = [] }

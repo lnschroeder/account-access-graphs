@@ -30,7 +30,7 @@ type Message =
 
 let initModel =
     { page = Graph
-      graph = { nodes = [||] }
+      graph = { nodes = [] }
       newNodeName = ""
       error = None }
 
@@ -50,9 +50,9 @@ let update (jsRuntime: IJSRuntime) message model =
         let newNode: AAG.Node =
             { id = Guid.NewGuid()
               name = value
-              accesses = [||] }
+              accesses = [] }
 
-        let newGraph: AAG.Graph = { nodes = Array.append model.graph.nodes [| newNode |] }
+        let newGraph: AAG.Graph = { nodes = newNode :: model.graph.nodes }
 
         invokeUpdateNetwork newGraph jsRuntime
 
