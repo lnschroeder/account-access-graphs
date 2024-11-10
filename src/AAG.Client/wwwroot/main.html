@@ -41,20 +41,27 @@
 </div>
 
 <script>
-  function renderGraph(graphData = "digraph { }") {
-    console.log(graphData);
-    Viz.instance()
-      .then((viz) => {
-        return viz.renderSVGElement(graphData);
-      })
-      .then(function (element) {
-        // document.getElementById('graph-container').appendChild(element);
-        const container = document.getElementById("graph-container");
-        container.innerHTML = element.outerHTML;
-      })
-      .catch((error) => {
-        console.error("Error in rendering:", error);
-      });
+  function renderGraph(graphData = "dinetwork { }") {
+    var parsedData = vis.parseDOTNetwork(graphData);
+
+    var data = {
+      nodes: parsedData.nodes,
+      edges: parsedData.edges,
+    };
+
+    var options = parsedData.options;
+    options.layout = {
+      randomSeed: 2,
+    };
+    options.nodes = {
+      color: "red",
+    };
+    var container = document.getElementById("graph-container");
+
+    // create a network
+    var network = new vis.Network(container, data, options);
+    sleep(2);
+    data.nodes;
   }
 
   // change focus to text field when clicking button

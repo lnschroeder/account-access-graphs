@@ -42,7 +42,7 @@ type Message =
     | CallJsFunction
 
 let graphToDot graph =
-    "digraph { "
+    "dinetwork { "
     + (graph.nodes
        |> Seq.map (fun node -> node.name)
        |> String.concat " ")
