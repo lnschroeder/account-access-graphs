@@ -16,13 +16,13 @@ let private menuItem currentPage page (text: string) =
         .Text(text)
         .Elt()
 
-let setPage (model: ElmishModel.Model) page = { model with page = page }
+let setPage (model: Model.Model) page = { model with page = page }
 
-let setError (model: ElmishModel.Model) (exn: exn) = { model with error = Some exn.Message }
+let setError (model: Model.Model) (exn: exn) = { model with error = Some exn.Message }
 
-let clearError (model: ElmishModel.Model) = { model with error = None }
+let clearError (model: Model.Model) = { model with error = None }
 
-let view jsRuntime (model: ElmishModel.Model) dispatch =
+let view jsRuntime (model: Model.Model) dispatch =
     Template
         .Main()
         .Menu(concat { menuItem model.page Endpoint.Graph "Graph" })

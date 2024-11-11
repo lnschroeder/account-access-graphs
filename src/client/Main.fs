@@ -5,21 +5,21 @@ open Microsoft.AspNetCore.Components
 open Elmish
 open Bolero
 
-let private init _ = ElmishModel.Model.Init, Cmd.none
+let private init _ = Model.Model.Init, Cmd.none
 
 let private update jsRuntime message model =
     match message with
     | Msg.SetPage page -> MainPage.setPage model page, Cmd.none
     | Msg.Error exn -> MainPage.setError model exn, Cmd.none
     | Msg.ClearError -> MainPage.clearError model, Cmd.none
-    
+
     | Msg.AddNode value -> GraphPage.addNode value model jsRuntime
     | Msg.UpdateNodeName value -> GraphPage.updateNodeName value model
 
 let private view jsRuntime model dispatch = MainPage.view jsRuntime model dispatch
 
 type MyApp() =
-    inherit ProgramComponent<ElmishModel.Model, Msg.Message>()
+    inherit ProgramComponent<Model.Model, Msg.Message>()
 
     override _.CssScope = CssScopes.AAG
 

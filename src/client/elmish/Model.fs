@@ -1,4 +1,4 @@
-module AAG.Client.ElmishModel
+module AAG.Client.Model
 
 /// The Elmish application's model.
 type Model =

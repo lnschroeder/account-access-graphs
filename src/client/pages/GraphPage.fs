@@ -9,7 +9,7 @@ let private invokeUpdateNetwork (graph: AAG.Graph) (jsRuntime: IJSRuntime) =
     jsRuntime.InvokeVoidAsync("updateNetwork", visNetwork.nodes, visNetwork.edges)
     |> ignore
 
-let addNode name (model: ElmishModel.Model) jsRuntime =
+let addNode name (model: Model.Model) jsRuntime =
     if AAG.isInvalidNodeName name then
         model, Cmd.none
     elif AAG.isNodeNameInGraph name model.graph then
@@ -24,7 +24,7 @@ let addNode name (model: ElmishModel.Model) jsRuntime =
             newNodeName = "" },
         Cmd.none
 
-let updateNodeName name (model: ElmishModel.Model) =
+let updateNodeName name (model: Model.Model) =
     let error =
         if AAG.isInvalidNodeName name then
             Some "invalid node name"
@@ -38,7 +38,7 @@ let updateNodeName name (model: ElmishModel.Model) =
         error = error },
     Cmd.none
 
-let view jsRuntime (model: ElmishModel.Model) dispatch =
+let view jsRuntime (model: Model.Model) dispatch =
     invokeUpdateNetwork model.graph jsRuntime
 
     Template
