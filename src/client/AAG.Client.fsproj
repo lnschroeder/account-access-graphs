@@ -4,17 +4,17 @@
     <TargetFramework>net8.0</TargetFramework>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="domain/AAG.fs" />
-    <Compile Include="elmish/Template.fs" />
-    <Compile Include="elmish/Endpoint.fs" />
-    <Compile Include="elmish/Message.fs" />
-    <Compile Include="elmish/Model.fs" />
-    <Compile Include="elmish/Router.fs" />
-    <Compile Include="transformer/VisJS.fs" />
-    <Compile Include="pages/GraphPage.fs" />
-    <Compile Include="pages/MainPage.fs" />
-    <Compile Include="Main.fs" />
-    <Compile Include="Startup.fs" />
+    <Compile Include="fsharp/domain/AAG.fs" />
+    <Compile Include="fsharp/elmish/Template.fs" />
+    <Compile Include="fsharp/elmish/Endpoint.fs" />
+    <Compile Include="fsharp/elmish/Message.fs" />
+    <Compile Include="fsharp/elmish/Model.fs" />
+    <Compile Include="fsharp/elmish/Router.fs" />
+    <Compile Include="fsharp/transformer/VisJS.fs" />
+    <Compile Include="fsharp/pages/GraphPage.fs" />
+    <Compile Include="fsharp/pages/MainPage.fs" />
+    <Compile Include="fsharp/Main.fs" />
+    <Compile Include="fsharp/Startup.fs" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Bolero" Version="0.*" />
