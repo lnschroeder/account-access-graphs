@@ -1,11 +1,10 @@
 module AAG.Client.MainPage
 
-open Bolero
+open Bolero.Html
 
-type Main = Template<"wwwroot/main.html">
-
-let menuItem currentPage page (text: string) =
-    Main
+let private menuItem currentPage page (text: string) =
+    Template
+        .Main
         .MenuItem()
         .Active(
             if currentPage = page then
@@ -13,7 +12,35 @@ let menuItem currentPage page (text: string) =
             else
                 ""
         )
-        .Url(Routing.router.Link page)
+        .Url(Router.router.Link page)
         .Text(text)
         .Elt()
 
+let setPage (model: ElmishModel.Model) page = { model with page = page }
+
+let setError (model: ElmishModel.Model) (exn: exn) = { model with error = Some exn.Message }
+
+let clearError (model: ElmishModel.Model) = { model with error = None }
+
+let view jsRuntime (model: ElmishModel.Model) dispatch =
+    Template
+        .Main()
+        .Menu(concat { menuItem model.page Endpoint.Graph "Graph" })
+        .Body(
+            cond model.page
+            <| function
+                | Endpoint.Graph -> GraphPage.view jsRuntime model dispatch
+        )
+        .Error(
+            cond model.error
+            <| function
+                | None -> empty ()
+                | Some err ->
+                    Template
+                        .Main
+                        .ErrorNotification()
+                        .Text(err)
+                        .Hide(fun _ -> dispatch Msg.ClearError)
+                        .Elt()
+        )
+        .Elt()

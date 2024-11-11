@@ -4,41 +4,22 @@ open System.Net.Http
 open Microsoft.AspNetCore.Components
 open Elmish
 open Bolero
-open Bolero.Html
 
-let private init _ = Routing.Model.Init, Cmd.none
+let private init _ = ElmishModel.Model.Init, Cmd.none
 
-let private update jsRuntime message (model: Routing.Model) =
+let private update jsRuntime message model =
     match message with
-    | Routing.SetPage page -> { model with page = page }, Cmd.none
-    | Routing.AddNode value -> GraphPage.addNode value model jsRuntime
-    | Routing.UpdateNodeName value -> GraphPage.updateNodeName value model
-    | Routing.Error exn -> { model with error = Some exn.Message }, Cmd.none
-    | Routing.ClearError -> { model with error = None }, Cmd.none
+    | Msg.SetPage page -> MainPage.setPage model page, Cmd.none
+    | Msg.Error exn -> MainPage.setError model exn, Cmd.none
+    | Msg.ClearError -> MainPage.clearError model, Cmd.none
+    
+    | Msg.AddNode value -> GraphPage.addNode value model jsRuntime
+    | Msg.UpdateNodeName value -> GraphPage.updateNodeName value model
 
-let private view jsRuntime (model: Routing.Model) dispatch =
-    MainPage.Main()
-        .Menu(concat { MainPage.menuItem model.page Routing.Graph "Graph" })
-        .Body(
-            cond model.page
-            <| function
-                | Routing.Graph -> GraphPage.graphPage jsRuntime model dispatch
-        )
-        .Error(
-            cond model.error
-            <| function
-                | None -> empty ()
-                | Some err ->
-                    MainPage.Main
-                        .ErrorNotification()
-                        .Text(err)
-                        .Hide(fun _ -> dispatch Routing.ClearError)
-                        .Elt()
-        )
-        .Elt()
+let private view jsRuntime model dispatch = MainPage.view jsRuntime model dispatch
 
 type MyApp() =
-    inherit ProgramComponent<Routing.Model, Routing.Message>()
+    inherit ProgramComponent<ElmishModel.Model, Msg.Message>()
 
     override _.CssScope = CssScopes.AAG
 
@@ -47,4 +28,4 @@ type MyApp() =
 
     override this.Program =
         Program.mkProgram init (update this.JSRuntime) (view this.JSRuntime)
-        |> Program.withRouter Routing.router
+        |> Program.withRouter Router.router
