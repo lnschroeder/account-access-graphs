@@ -18,7 +18,7 @@ let private update jsRuntime message model =
 
 let private view jsRuntime model dispatch = MainPage.view jsRuntime model dispatch
 
-type MyApp() =
+type App() =
     inherit ProgramComponent<Model.Model, Msg.Message>()
 
     override _.CssScope = CssScopes.AAG
