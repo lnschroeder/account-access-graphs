@@ -6,9 +6,9 @@ open Elmish
 open Bolero
 open Bolero.Html
 
-let init _ = Routing.Model.Init, Cmd.none
+let private init _ = Routing.Model.Init, Cmd.none
 
-let update jsRuntime message (model: Routing.Model) =
+let private update jsRuntime message (model: Routing.Model) =
     match message with
     | Routing.SetPage page -> { model with page = page }, Cmd.none
     | Routing.AddNode value -> GraphPage.addNode value model jsRuntime
@@ -16,7 +16,7 @@ let update jsRuntime message (model: Routing.Model) =
     | Routing.Error exn -> { model with error = Some exn.Message }, Cmd.none
     | Routing.ClearError -> { model with error = None }, Cmd.none
 
-let view jsRuntime (model: Routing.Model) dispatch =
+let private view jsRuntime (model: Routing.Model) dispatch =
     MainPage.Main()
         .Menu(concat { MainPage.menuItem model.page Routing.Graph "Graph" })
         .Body(

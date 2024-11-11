@@ -5,7 +5,7 @@ open Microsoft.AspNetCore.Components
 open Elmish
 
 
-let invokeUpdateNetwork (graph: AAG.Graph) (jsRuntime: IJSRuntime) =
+let private invokeUpdateNetwork (graph: AAG.Graph) (jsRuntime: IJSRuntime) =
     let visNetwork = Vis.graph2visNetwork graph
 
     jsRuntime.InvokeVoidAsync("updateNetwork", visNetwork.nodes, visNetwork.edges)
