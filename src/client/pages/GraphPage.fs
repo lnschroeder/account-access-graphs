@@ -2,6 +2,7 @@ module AAG.Client.GraphPage
 
 open Microsoft.JSInterop
 open Elmish
+open Model
 
 let private invokeUpdateNetwork (graph: AAG.Graph) (jsRuntime: IJSRuntime) =
     let visNetwork = VisJSTransformer.transform graph
@@ -9,7 +10,7 @@ let private invokeUpdateNetwork (graph: AAG.Graph) (jsRuntime: IJSRuntime) =
     jsRuntime.InvokeVoidAsync("updateNetwork", visNetwork.nodes, visNetwork.edges)
     |> ignore
 
-let addNode name (model: Model.Model) jsRuntime =
+let addNode name (model: Model) jsRuntime =
     if AAG.isInvalidNodeName name then
         model, Cmd.none
     elif AAG.isNodeNameInGraph name model.graph then
@@ -24,7 +25,7 @@ let addNode name (model: Model.Model) jsRuntime =
             newNodeName = "" },
         Cmd.none
 
-let updateNodeName name (model: Model.Model) =
+let updateNodeName name (model: Model) =
     let error =
         if AAG.isInvalidNodeName name then
             Some "invalid node name"
@@ -38,7 +39,7 @@ let updateNodeName name (model: Model.Model) =
         error = error },
     Cmd.none
 
-let view jsRuntime (model: Model.Model) dispatch =
+let view jsRuntime (model: Model) dispatch =
     invokeUpdateNetwork model.graph jsRuntime
 
     Template

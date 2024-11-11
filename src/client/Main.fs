@@ -4,8 +4,9 @@ open System.Net.Http
 open Microsoft.AspNetCore.Components
 open Elmish
 open Bolero
+open Model
 
-let private init _ = Model.Model.Init, Cmd.none
+let private init _ = Model.Init, Cmd.none
 
 let private update jsRuntime message model =
     match message with
@@ -19,7 +20,7 @@ let private update jsRuntime message model =
 let private view jsRuntime model dispatch = MainPage.view jsRuntime model dispatch
 
 type App() =
-    inherit ProgramComponent<Model.Model, Msg.Message>()
+    inherit ProgramComponent<Model, Msg.Message>()
 
     override _.CssScope = CssScopes.AAG
 
