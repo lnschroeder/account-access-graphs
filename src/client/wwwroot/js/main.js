@@ -3,10 +3,28 @@ let initEdges = [];
 
 let container = document.getElementById("graph-container");
 let data = {
-  nodes: new vis.DataSet([]),
-  edges: new vis.DataSet([]),
+  nodes: new vis.DataSet(initNodes),
+  edges: new vis.DataSet(initEdges),
 };
-let options = { layout: { randomSeed: 2 } };
+let options = {
+  layout: { randomSeed: 2 },
+  nodes: {
+    borderWidth: 1,
+    borderWidthSelected: 4,
+    color: {
+      border: '#000000',
+      background: '#ffffff',
+      highlight: {
+        border: '#000000',
+        background: '#ffffff',
+      }
+    },
+    labelHighlightBold: false,
+    font: {
+      face: 'BlinkMacSystemFont, -apple-system, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, "Fira Sans", "Droid Sans", "Helvetica Neue", Helvetica, Arial, sans-serif',    }
+  },
+
+};
 let network = new vis.Network(container, data, options);
 
 // removes, updates, and adds nodes and edges to the network
