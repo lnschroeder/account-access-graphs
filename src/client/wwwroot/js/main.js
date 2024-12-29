@@ -1,4 +1,6 @@
-let initNodes = [];
+let initNodes = [
+  // { id: 1, label: "abc" },
+];
 let initEdges = [];
 
 let container = document.getElementById("graph-container");
@@ -6,24 +8,30 @@ let data = {
   nodes: new vis.DataSet(initNodes),
   edges: new vis.DataSet(initEdges),
 };
+
+function getCssVariable(variable) {
+  return getComputedStyle(document.body).getPropertyValue(variable).trim();
+}
+
 let options = {
   layout: { randomSeed: 2 },
   nodes: {
     borderWidth: 1,
     borderWidthSelected: 4,
     color: {
-      border: '#000000',
-      background: '#ffffff',
+      border: getCssVariable("--bulma-link"),
+      background: "#00000000",
       highlight: {
-        border: '#000000',
-        background: '#ffffff',
-      }
+        border: getCssVariable("--bulma-link"),
+        background: "#00000000",
+      },
     },
     labelHighlightBold: false,
     font: {
-      face: 'BlinkMacSystemFont, -apple-system, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, "Fira Sans", "Droid Sans", "Helvetica Neue", Helvetica, Arial, sans-serif',    }
+      color: getCssVariable("--bulma-text"),
+      face: getCssVariable("--bulma-body-family"),
+    },
   },
-
 };
 let network = new vis.Network(container, data, options);
 
