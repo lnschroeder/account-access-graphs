@@ -6,14 +6,31 @@
   </div>
 
   <template id="Graph">
-    <h1 class="title">A simple graph implementation</h1>
-    <p>
-      <button id="addNodeButton" onclick="${AddNode}" class="button">
-        Add Node
-      </button>
-      <input type="text" id="nodeName" class="input" bind="${NodeName}" />
-    </p>
-    <div id="graph-container"></div>
+    <div class="columns">
+
+      <div class="column is-one-third">
+        <h1 class="title">Adding new node</h1>
+        <p>
+
+          <div class="field">
+            <label class="label">Name</label>
+            <div class="control">
+              <input type="text" id="nodeName" class="input" bind="${NodeName}" placeholder="Node name"/>
+            </div>
+          </div>
+
+          <button id="addNodeButton" onclick="${AddNode}" class="button">
+            Add Node
+          </button>
+
+        </p>
+      </div>
+
+      <div class="column">
+        <div id="graph-container"></div>
+      </div>
+
+    </div>
   </template>
 
   <template id="ErrorNotification">
