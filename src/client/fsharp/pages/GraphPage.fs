@@ -13,7 +13,7 @@ let private invokeUpdateNetwork (graph: AAG.Graph) (jsRuntime: IJSRuntime) =
 let addNode name (model: Model) jsRuntime =
     if AAG.isInvalidNodeName name then
         model, Cmd.none
-    elif AAG.isNodeNameInGraph name model.graph then
+    elif AAG.isNodeWithNameInGraph name model.graph then
         model, Cmd.none
     else
         let graph = AAG.addNode name model.graph
@@ -29,7 +29,7 @@ let updateNodeName name (model: Model) =
     let error =
         if AAG.isInvalidNodeName name then
             Some "invalid node name"
-        elif AAG.isNodeNameInGraph name model.graph then
+        elif AAG.isNodeWithNameInGraph name model.graph then
             Some "node already exists"
         else
             None

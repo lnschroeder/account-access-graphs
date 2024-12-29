@@ -13,15 +13,15 @@ and Graph =
     { nodes: Node list }
     static member Empty = { nodes = [] }
 
-let isNodeNameInGraph value graph =
-    Seq.contains value (graph.nodes |> Seq.map (fun node -> node.name))
+let isNodeWithNameInGraph nodeName graph =
+    Seq.contains nodeName (graph.nodes |> Seq.map (fun node -> node.name))
 
 let isInvalidNodeName value = String.IsNullOrWhiteSpace(value)
 
-let addNode name graph =
+let addNode nodeName graph =
     let newNode: Node =
         { id = Guid.NewGuid()
-          name = name
+          name = nodeName
           accesses = [] }
 
     { graph with nodes = newNode :: graph.nodes }
