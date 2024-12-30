@@ -26,11 +26,18 @@ let updateVertexName name (model: Model) =
         newVertexName = name
         error = error }
 
+let cancel model =
+    { model with
+        newVertexName = ""
+        error = None
+        page = Endpoint.MainMenu },
+    Cmd.none
+
 let view (model: Model) dispatch =
     Template
         .Main
         .AddVertexForm()
-        .CancelButton(fun _ -> dispatch (Msg.SetPage Endpoint.MainMenu))
+        .CancelButton(fun _ -> dispatch Msg.CancelAddVertex)
         .SaveButton(fun _ -> dispatch (Msg.AddVertex model.newVertexName))
         .VertexNameInput(model.newVertexName, (fun v -> dispatch (Msg.UpdateVertexName v)))
         .Elt()
