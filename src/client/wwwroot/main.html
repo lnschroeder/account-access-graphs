@@ -1,41 +1,43 @@
 <section class="section">
-  ${Body}
-
   <div id="notification-area">
     <div>${Error}</div>
   </div>
 
-  <template id="Graph">
-    <div class="columns">
-
-      <div class="column is-one-third">
-        <h1 class="title">Adding new node</h1>
-        <p>
-
-          <div class="field">
-            <label class="label">Name</label>
-            <div class="control">
-              <input type="text" id="nodeName" class="input" bind="${NodeName}" placeholder="Node name"/>
-            </div>
-          </div>
-
-          <div class="columns">
-            <div class="column is-half">
-              <button class="button is-warning is-fullwidth">Cancel</button>
-            </div>
-            <div class="column is-half">
-              <button class="button is-primary is-fullwidth" id="addNodeButton" onclick="${AddNode}">Save</button>
-            </div>
-          </div>
-
-        </p>
+  <div class="columns">
+    <div class="column is-one-third">
+      <div class="box">
+        ${Body}
       </div>
-
-      <div class="column">
-        <div id="graph-container"></div>
-      </div>
-
     </div>
+
+    <div class="column">
+      <div id="graph-container" class="box"></div>
+    </div>
+
+  </div>
+
+  <!-- Template: Add new node -->
+  <template id="Graph">
+    <h1 class="title">Adding new node</h1>
+    <p>
+
+      <div class="field">
+        <label class="label">Name</label>
+        <div class="control">
+          <input type="text" id="nodeName" class="input" bind="${NodeName}" placeholder="Node name"/>
+        </div>
+      </div>
+
+      <div class="columns">
+        <div class="column is-half">
+          <button class="button is-warning is-fullwidth">Cancel</button>
+        </div>
+        <div class="column is-half">
+          <button class="button is-primary is-fullwidth" id="addNodeButton" onclick="${AddNode}">Save</button>
+        </div>
+      </div>
+
+    </p>
   </template>
 
   <template id="ErrorNotification">
