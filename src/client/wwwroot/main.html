@@ -15,14 +15,14 @@
   </div>
 
   <!-- Templates -->
-  <template id="CreateNodeForm">
-    <h1 class="title">Adding new node</h1>
+  <template id="CreateVertexForm">
+    <h1 class="title">Adding new vertex</h1>
     <p>
 
       <div class="field">
         <label class="label">Name</label>
         <div class="control">
-          <input type="text" id="nodeName" class="input" bind="${NodeNameInput}" placeholder="Node name"/>
+          <input type="text" id="vertexName" class="input" bind="${VertexNameInput}" placeholder="Vertex name"/>
         </div>
       </div>
 
@@ -31,7 +31,7 @@
           <button class="button is-warning is-fullwidth">Cancel</button>
         </div>
         <div class="column is-half">
-          <button class="button is-primary is-fullwidth" id="addNodeButton" onclick="${SaveButton}">Save</button>
+          <button class="button is-primary is-fullwidth" id="addVertexButton" onclick="${SaveButton}">Save</button>
         </div>
       </div>
 
@@ -47,3 +47,4 @@
 </section>
 
 <script type="module" src="js/main.js"></script>
+<script type="module" src="js/vis.js"></script>

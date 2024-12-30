@@ -14,8 +14,8 @@ let private update jsRuntime message model =
     | Msg.Error exn -> MainPage.setError model exn, Cmd.none
     | Msg.ClearError -> MainPage.clearError model, Cmd.none
 
-    | Msg.AddNode value -> GraphPage.addNode value model jsRuntime
-    | Msg.UpdateNodeName value -> GraphPage.updateNodeName value model
+    | Msg.AddVertex value -> GraphPage.addVertex value model jsRuntime
+    | Msg.UpdateVertexName value -> GraphPage.updateVertexName value model
 
 let private view jsRuntime model dispatch = MainPage.view jsRuntime model dispatch
 

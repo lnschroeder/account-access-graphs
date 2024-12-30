@@ -13,8 +13,8 @@ type Network =
     { nodes: Node list
       edges: Edge list }
 
-let private transformNode (node: AAG.Node) = { id = node.id; label = node.name }
+let private transformVertex (vertex: AAG.Vertex) = { id = vertex.id; label = vertex.name }
 
 let transform (graph: AAG.Graph) =
-    { nodes = (graph.nodes |> List.map transformNode)
+    { nodes = (graph.vertices |> List.map transformVertex)
       edges = [] }

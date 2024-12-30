@@ -4,10 +4,10 @@ module AAG.Client.Model
 type Model =
     { page: Endpoint.Page
       graph: AAG.Graph
-      newNodeName: string
+      newVertexName: string
       error: string option }
     static member Init =
         { page = Endpoint.Graph
           graph = AAG.Graph.Empty
-          newNodeName = ""
+          newVertexName = ""
           error = None }

@@ -2,7 +2,7 @@ module AAG.Client.AAG
 
 open System
 
-type Node =
+type Vertex =
     { id: Guid
       name: string
       accesses: Access list }
@@ -10,18 +10,18 @@ type Node =
 and Access = { access: string list }
 
 and Graph =
-    { nodes: Node list }
-    static member Empty = { nodes = [] }
+    { vertices: Vertex list }
+    static member Empty = { vertices = [] }
 
-let isNodeWithNameInGraph nodeName graph =
-    Seq.contains nodeName (graph.nodes |> Seq.map (fun node -> node.name))
+let isVertexWithNameInGraph vertexName graph =
+    Seq.contains vertexName (graph.vertices |> Seq.map (fun vertex -> vertex.name))
 
-let isInvalidNodeName value = String.IsNullOrWhiteSpace(value)
+let isInvalidVertexName value = String.IsNullOrWhiteSpace(value)
 
-let addNode nodeName graph =
-    let newNode: Node =
+let addVertex vertexName graph =
+    let newVertex: Vertex =
         { id = Guid.NewGuid()
-          name = nodeName
+          name = vertexName
           accesses = [] }
 
-    { graph with nodes = newNode :: graph.nodes }
+    { graph with vertices = newVertex :: graph.vertices }

@@ -3,7 +3,7 @@ module AAG.Client.Msg
 /// The Elmish application's update messages.
 type Message =
     | SetPage of Endpoint.Page
-    | AddNode of string
-    | UpdateNodeName of string
+    | AddVertex of string
+    | UpdateVertexName of string
     | Error of exn
     | ClearError
