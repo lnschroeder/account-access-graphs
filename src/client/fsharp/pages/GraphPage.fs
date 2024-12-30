@@ -44,7 +44,7 @@ let view jsRuntime (model: Model) dispatch =
 
     Template
         .Main
-        .Graph()
-        .AddNode(fun _ -> dispatch (Msg.AddNode model.newNodeName))
-        .NodeName(model.newNodeName, (fun v -> dispatch (Msg.UpdateNodeName v)))
+        .CreateNodeForm()
+        .SaveButton(fun _ -> dispatch (Msg.AddNode model.newNodeName))
+        .NodeNameInput(model.newNodeName, (fun v -> dispatch (Msg.UpdateNodeName v)))
         .Elt()

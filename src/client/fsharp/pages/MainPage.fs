@@ -11,7 +11,7 @@ let clearError (model: Model) = { model with error = None }
 let view jsRuntime (model: Model) dispatch =
     Template
         .Main()
-        .Body(
+        .LeftColumn(
             cond model.page
             <| function
                 | Endpoint.Graph -> GraphPage.view jsRuntime model dispatch
