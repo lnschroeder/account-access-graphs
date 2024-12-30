@@ -11,7 +11,6 @@ let private invokeUpdateNetwork (graph: AAG.Graph) (jsRuntime: IJSRuntime) =
     |> ignore
 
 let clearGraph jsRuntime =
-    invokeUpdateNetwork Model.Init.graph jsRuntime
     Model.Init, Cmd.none
 
 let view jsRuntime (model: Model) dispatch =

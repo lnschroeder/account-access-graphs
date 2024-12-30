@@ -16,12 +16,8 @@ let addVertex name (model: Model) jsRuntime =
     elif AAG.isVertexWithNameInGraph name model.graph then
         model, Cmd.none
     else
-        let graph = AAG.addVertex name model.graph
-
-        invokeUpdateNetwork graph jsRuntime
-
         { model with
-            graph = graph
+            graph = AAG.addVertex name model.graph
             newVertexName = "" },
         Cmd.none
 
