@@ -18,7 +18,7 @@ let private init _ = MainMenuPage.clearGraph
 let private update message model =
     let (model, cmd) =
         match message with
-        | Msg.SetPage page-> MainPage.setPage model page
+        | Msg.SetPage page -> MainPage.setPage model page
         | Msg.Error exn -> MainPage.setError model exn
         | Msg.ClearError -> MainPage.clearError model
 
@@ -26,11 +26,11 @@ let private update message model =
         | Msg.UpdateVertexName value -> AddVertexPage.updateVertexName value model
 
         | Msg.ClearGraph -> MainMenuPage.clearGraph
+
     model, cmd
 
 let private view jsRuntime model dispatch =
     invokeUpdateNetwork model.graph jsRuntime
-
     MainPage.view model dispatch
 
 type App() =
