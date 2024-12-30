@@ -3,7 +3,7 @@ module AAG.Client.AddVertexPage
 open Elmish
 open Model
 
-let addVertex name (model: Model) jsRuntime =
+let addVertex name (model: Model) =
     if AAG.isInvalidVertexName name then
         model, Cmd.none
     elif AAG.isVertexWithNameInGraph name model.graph then

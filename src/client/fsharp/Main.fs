@@ -8,14 +8,14 @@ open Model
 
 let private init _ = MainMenuPage.clearGraph
 
-let private update jsRuntime message model =
+let private update message model =
     let (model, cmd) =
         match message with
         | Msg.SetPage page-> MainPage.setPage model page
         | Msg.Error exn -> MainPage.setError model exn
         | Msg.ClearError -> MainPage.clearError model
 
-        | Msg.AddVertex value -> AddVertexPage.addVertex value model jsRuntime
+        | Msg.AddVertex value -> AddVertexPage.addVertex value model
         | Msg.UpdateVertexName value -> AddVertexPage.updateVertexName value model
 
         | Msg.ClearGraph -> MainMenuPage.clearGraph
@@ -33,5 +33,5 @@ type App() =
     member val HttpClient = Unchecked.defaultof<HttpClient> with get, set
 
     override this.Program =
-        Program.mkProgram init (update this.JSRuntime) (view this.JSRuntime)
+        Program.mkProgram init update (view this.JSRuntime)
         |> Program.withRouter Router.router
