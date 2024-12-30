@@ -37,9 +37,6 @@ let network = new vis.Network(container, data, options);
 
 // removes, updates, and adds nodes and edges to the network
 function updateNetwork(nodes, edges) {
-  console.log(nodes);
-  console.log(edges);
-
   let oldNodeIds = data.nodes.map((item) => item.id);
   let oldEdgeIds = data.edges.map((item) => item.id);
   let newNodeIds = nodes.map((item) => item.id);
@@ -58,10 +55,9 @@ function updateNetwork(nodes, edges) {
       removedEdgeIds.push(id);
     }
   });
-
-  data.nodes.remove(removedEdgeIds);
-  data.edges.remove(removedNodeIds);
-  data.nodes.update(nodes);
+  data.edges.remove(removedEdgeIds);
+  data.nodes.remove(removedNodeIds);
   data.edges.update(edges);
+  data.nodes.update(nodes);
 }
 window.updateNetwork = updateNetwork;
