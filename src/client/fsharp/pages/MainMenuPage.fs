@@ -10,5 +10,6 @@ let view (model: Model) dispatch =
         .Main
         .MainMenu()
         .OpenAddVertexFormButton(fun _ -> dispatch (Msg.SetPage Endpoint.AddVertex))
+        .OpenAddAccessFormButton(fun _ -> dispatch (Msg.SetPage Endpoint.AddAccess))
         .ClearGraphButton(fun _ -> dispatch (Msg.ClearGraph))
         .Elt()

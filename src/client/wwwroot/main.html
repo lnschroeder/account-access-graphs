@@ -10,7 +10,7 @@
       </div>
     </div>
     <div class="column">
-      <div id="graph-container" class="box"></div>
+      <div id="graph-container" class="box p-0"></div>
     </div>
   </div>
 
@@ -20,7 +20,7 @@
     <p>
       <div class="buttons">
         <button class="button is-link is-fullwidth" onclick="${OpenAddVertexFormButton}">Add Vertex</button>
-        <button class="button is-link is-fullwidth" onclick="${OpenAddAccessFormButton}" disabled>Add access</button>
+        <button class="button is-link is-fullwidth" onclick="${OpenAddAccessFormButton}">Add access</button>
         <button class="button is-link is-fullwidth" onclick="${ExportButton}" disabled>Export to JSON</button>
         <button class="button is-link is-fullwidth" onclick="${ImportButton}" disabled>Import from JSON</button>
         <button class="button is-danger is-fullwidth" onclick="${ClearGraphButton}">Clear Graph</button>
@@ -45,6 +45,32 @@
         </div>
         <div class="column is-half">
           <button class="button is-primary is-fullwidth" onclick="${SaveButton}" id="addVertexButton">Save</button>
+        </div>
+      </div>
+
+      <script type="module" src="js/add-vertex.js"></script>
+    </p>
+
+    <script type="module" src="js/add-vertex.js"></script>
+  </template>
+
+  <template id="AddAccessForm">
+    <h1 class="title">Adding new access</h1>
+    <p>
+
+      <div class="field">
+        <label class="label">For which vertex do you want to add a new access method?</label>
+        <div class="control">
+          <input type="text" id="vertexName" class="input" bind="${VertexNameInput}" placeholder="Vertex name"/>
+        </div>
+      </div>
+
+      <div class="columns">
+        <div class="column is-half">
+          <button class="button is-warning is-fullwidth" onclick="${CancelButton}">Cancel</button>
+        </div>
+        <div class="column is-half">
+          <button class="button is-primary is-fullwidth" onclick="${SelectVertexForNewAccessButton}" disabled>Continue</button>
         </div>
       </div>
 

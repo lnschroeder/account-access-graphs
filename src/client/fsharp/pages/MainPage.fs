@@ -19,6 +19,7 @@ let view (model: Model) dispatch =
             <| function
                 | Endpoint.MainMenu -> MainMenuPage.view model dispatch
                 | Endpoint.AddVertex -> AddVertexPage.view model dispatch
+                | Endpoint.AddAccess -> AddAccessPage.view model dispatch
         )
         .Error(
             cond model.error

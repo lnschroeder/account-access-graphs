@@ -25,6 +25,8 @@ let private update message model =
         | Msg.AddVertex value -> AddVertexPage.addVertex value model
         | Msg.UpdateVertexName value -> AddVertexPage.updateVertexName value model
 
+        | Msg.SelectVertexForNewAccess value -> AddAccessPage.selectVertexForNewAccess value model
+
         | Msg.ClearGraph -> MainMenuPage.clearGraph
 
     model, cmd
