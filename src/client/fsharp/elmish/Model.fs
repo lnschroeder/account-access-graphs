@@ -7,7 +7,7 @@ type Model =
       newVertexName: string
       error: string option }
     static member Init =
-        { page = Endpoint.Graph
+        { page = Endpoint.MainMenu
           graph = AAG.Graph.Empty
           newVertexName = ""
           error = None }

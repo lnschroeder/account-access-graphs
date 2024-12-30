@@ -15,6 +15,18 @@
   </div>
 
   <!-- Templates -->
+  <template id="MainMenu">
+    <h1 class="title">Main menu</h1>
+    <p>
+      <div class="buttons">
+        <button class="button is-link is-fullwidth" onclick="${OpenAddVertexFormButton}" id="openAddVertexFormButton">Add Vertex</button>
+        <button class="button is-link is-fullwidth" onclick="${OpenAddAccessFormButton}" id="openAddAccessFormButton" disabled>Add access</button>
+        <button class="button is-link is-fullwidth" onclick="${ExportButton}" id="exportButton" disabled>Export to JSON</button>
+        <button class="button is-link is-fullwidth" onclick="${ImportButton}" id="importButton" disabled>Import from JSON</button>
+      </div>
+    </p>
+  </template>
+
   <template id="AddVertexForm">
     <h1 class="title">Adding new vertex</h1>
     <p>
@@ -28,13 +40,14 @@
 
       <div class="columns">
         <div class="column is-half">
-          <button class="button is-warning is-fullwidth">Cancel</button>
+          <button class="button is-warning is-fullwidth" onclick="${CancelButton}">Cancel</button>
         </div>
         <div class="column is-half">
-          <button class="button is-primary is-fullwidth" id="addVertexButton" onclick="${SaveButton}">Save</button>
+          <button class="button is-primary is-fullwidth" onclick="${SaveButton}" id="addVertexButton">Save</button>
         </div>
       </div>
 
+      <script type="module" src="js/add-vertex.js"></script>
     </p>
 
     <script type="module" src="js/add-vertex.js"></script>

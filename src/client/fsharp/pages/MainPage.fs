@@ -14,7 +14,8 @@ let view jsRuntime (model: Model) dispatch =
         .LeftColumn(
             cond model.page
             <| function
-                | Endpoint.Graph -> GraphPage.view jsRuntime model dispatch
+                | Endpoint.MainMenu -> MainMenuPage.view jsRuntime model dispatch
+                | Endpoint.AddVertex -> AddVertexPage.view jsRuntime model dispatch
         )
         .Error(
             cond model.error

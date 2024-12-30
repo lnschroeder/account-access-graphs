@@ -1,4 +1,4 @@
-module AAG.Client.GraphPage
+module AAG.Client.AddVertexPage
 
 open Microsoft.JSInterop
 open Elmish
@@ -45,6 +45,7 @@ let view jsRuntime (model: Model) dispatch =
     Template
         .Main
         .AddVertexForm()
+        .CancelButton(fun _ -> dispatch (Msg.SetPage Endpoint.MainMenu))
         .SaveButton(fun _ -> dispatch (Msg.AddVertex model.newVertexName))
         .VertexNameInput(model.newVertexName, (fun v -> dispatch (Msg.UpdateVertexName v)))
         .Elt()
