@@ -4,12 +4,12 @@ open Model
 open Bolero.Html
 open Elmish
 
-let setPage (model: Model) page = { model with page = page }, Cmd.none
+let setPage (model: Model) page = { model with page = page }
 
 let setError (model: Model) (exn: exn) =
-    { model with error = Some exn.Message }, Cmd.none
+    { model with error = Some exn.Message }
 
-let clearError (model: Model) = { model with error = None }, Cmd.none
+let clearError (model: Model) = { model with error = None }
 
 let view (model: Model) dispatch =
     Template

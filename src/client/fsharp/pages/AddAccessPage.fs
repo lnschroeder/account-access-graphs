@@ -6,8 +6,7 @@ open Model
 let selectVertexForNewAccess name (model: Model) =
     if name = "" then
             { model with
-                selectedVertexForNewAccess = "" },
-            Cmd.none
+                selectedVertexForNewAccess = "" }
     else
         let error =
             if not (AAG.isVertexWithNameInGraph name model.graph) then
@@ -16,9 +15,7 @@ let selectVertexForNewAccess name (model: Model) =
                 None
         { model with
             selectedVertexForNewAccess = name
-            error = error },
-        Cmd.none
-
+            error = error }
 let view (model: Model) dispatch =
     Template
         .Main

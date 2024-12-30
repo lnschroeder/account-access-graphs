@@ -13,23 +13,20 @@ let private invokeUpdateNetwork (graph: AAG.Graph) (jsRuntime: IJSRuntime) =
     jsRuntime.InvokeVoidAsync("updateNetwork", visNetwork.nodes, visNetwork.edges)
     |> ignore
 
-let private init _ = MainMenuPage.clearGraph
+let private init _ = MainMenuPage.clearGraph, Cmd.none
 
 let private update message model =
-    let (model, cmd) =
-        match message with
-        | Msg.SetPage page -> MainPage.setPage model page
-        | Msg.Error exn -> MainPage.setError model exn
-        | Msg.ClearError -> MainPage.clearError model
-
-        | Msg.AddVertex value -> AddVertexPage.addVertex value model
-        | Msg.UpdateVertexName value -> AddVertexPage.updateVertexName value model
-
-        | Msg.SelectVertexForNewAccess value -> AddAccessPage.selectVertexForNewAccess value model
-
-        | Msg.ClearGraph -> MainMenuPage.clearGraph
-
-    model, cmd
+    match message with
+    // MainPage
+    | Msg.SetPage page -> MainPage.setPage model page, Cmd.none
+    | Msg.Error exn -> MainPage.setError model exn, Cmd.none
+    | Msg.ClearError -> MainPage.clearError model, Cmd.none
+    // MainMenuPage
+    | Msg.ClearGraph -> MainMenuPage.clearGraph, Cmd.none
+    // AddVertexPage
+    | Msg.AddVertex value -> AddVertexPage.addVertex value model, Cmd.none
+    | Msg.UpdateVertexName value -> AddVertexPage.updateVertexName value model, Cmd.none
+    | Msg.SelectVertexForNewAccess value -> AddAccessPage.selectVertexForNewAccess value model, Cmd.none
 
 let private view jsRuntime model dispatch =
     invokeUpdateNetwork model.graph jsRuntime

@@ -3,7 +3,7 @@ module AAG.Client.MainMenuPage
 open Model
 open Elmish
 
-let clearGraph<'a> : Model * Cmd<'a> = Model.Init, Cmd.none
+let clearGraph = Model.Init
 
 let view (model: Model) dispatch =
     Template

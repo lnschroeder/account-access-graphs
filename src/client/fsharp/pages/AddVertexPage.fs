@@ -5,14 +5,13 @@ open Model
 
 let addVertex name (model: Model) =
     if AAG.isInvalidVertexName name then
-        model, Cmd.none
+        model
     elif AAG.isVertexWithNameInGraph name model.graph then
-        model, Cmd.none
+        model
     else
         { model with
             graph = AAG.addVertex name model.graph
-            newVertexName = "" },
-        Cmd.none
+            newVertexName = "" }
 
 let updateVertexName name (model: Model) =
     let error =
@@ -25,8 +24,7 @@ let updateVertexName name (model: Model) =
 
     { model with
         newVertexName = name
-        error = error },
-    Cmd.none
+        error = error }
 
 let view (model: Model) dispatch =
     Template
