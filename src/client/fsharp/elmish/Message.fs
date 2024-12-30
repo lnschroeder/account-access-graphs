@@ -6,6 +6,7 @@ type Message =
     | AddVertex of string
     | UpdateVertexName of string
     | SelectVertexForNewAccess of string
+    | CancelAddAccess
     | CancelAddVertex
     | ClearGraph
     | Error of exn

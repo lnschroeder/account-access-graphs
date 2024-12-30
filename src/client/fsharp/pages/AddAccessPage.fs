@@ -16,10 +16,19 @@ let selectVertexForNewAccess name (model: Model) =
         { model with
             selectedVertexForNewAccess = name
             error = error }
+
+let cancel model =
+    { model with
+        selectedVertexForNewAccess = ""
+        error = None
+        page = Endpoint.MainMenu },
+    Cmd.none
+
+
 let view (model: Model) dispatch =
     Template
         .Main
         .AddAccessForm()
-        .CancelButton(fun _ -> dispatch (Msg.SetPage Endpoint.MainMenu))
+        .CancelButton(fun _ -> dispatch Msg.CancelAddAccess)
         .VertexNameInput(model.selectedVertexForNewAccess, (fun v -> dispatch (Msg.SelectVertexForNewAccess v)))
         .Elt()
