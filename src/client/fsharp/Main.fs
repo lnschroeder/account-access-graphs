@@ -5,6 +5,13 @@ open Microsoft.AspNetCore.Components
 open Elmish
 open Bolero
 open Model
+open Microsoft.JSInterop
+
+let private invokeUpdateNetwork (graph: AAG.Graph) (jsRuntime: IJSRuntime) =
+    let visNetwork = VisJSTransformer.transform graph
+
+    jsRuntime.InvokeVoidAsync("updateNetwork", visNetwork.nodes, visNetwork.edges)
+    |> ignore
 
 let private init _ = MainMenuPage.clearGraph
 
@@ -22,7 +29,9 @@ let private update message model =
     model, cmd
 
 let private view jsRuntime model dispatch =
-    MainPage.view jsRuntime model dispatch
+    invokeUpdateNetwork model.graph jsRuntime
+
+    MainPage.view model dispatch
 
 type App() =
     inherit ProgramComponent<Model, Msg.Message>()
