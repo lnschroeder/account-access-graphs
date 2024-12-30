@@ -6,4 +6,3 @@ open Bolero
 type Page =
     | [<EndPoint "/">] MainMenu
     | [<EndPoint "/vertex">] AddVertex
-

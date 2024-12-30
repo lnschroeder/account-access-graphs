@@ -5,5 +5,6 @@ type Message =
     | SetPage of Endpoint.Page
     | AddVertex of string
     | UpdateVertexName of string
+    | ClearGraph
     | Error of exn
     | ClearError

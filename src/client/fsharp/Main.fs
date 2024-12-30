@@ -17,6 +17,8 @@ let private update jsRuntime message model =
     | Msg.AddVertex value -> AddVertexPage.addVertex value model jsRuntime
     | Msg.UpdateVertexName value -> AddVertexPage.updateVertexName value model
 
+    | Msg.ClearGraph -> MainMenuPage.clearGraph jsRuntime, Cmd.none
+
 let private view jsRuntime model dispatch = MainPage.view jsRuntime model dispatch
 
 type App() =

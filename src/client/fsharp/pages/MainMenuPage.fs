@@ -9,6 +9,10 @@ let private invokeUpdateNetwork (graph: AAG.Graph) (jsRuntime: IJSRuntime) =
     jsRuntime.InvokeVoidAsync("updateNetwork", visNetwork.nodes, visNetwork.edges)
     |> ignore
 
+let clearGraph jsRuntime =
+    invokeUpdateNetwork Model.Init.graph jsRuntime
+    Model.Init
+
 let view jsRuntime (model: Model) dispatch =
     invokeUpdateNetwork model.graph jsRuntime
 
@@ -16,4 +20,5 @@ let view jsRuntime (model: Model) dispatch =
         .Main
         .MainMenu()
         .OpenAddVertexFormButton(fun _ -> dispatch (Msg.SetPage Endpoint.AddVertex))
+        .ClearGraphButton(fun _ -> dispatch (Msg.ClearGraph))
         .Elt()
