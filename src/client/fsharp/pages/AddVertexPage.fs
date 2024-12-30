@@ -1,14 +1,7 @@
 module AAG.Client.AddVertexPage
 
-open Microsoft.JSInterop
 open Elmish
 open Model
-
-let private invokeUpdateNetwork (graph: AAG.Graph) (jsRuntime: IJSRuntime) =
-    let visNetwork = VisJSTransformer.transform graph
-
-    jsRuntime.InvokeVoidAsync("updateNetwork", visNetwork.nodes, visNetwork.edges)
-    |> ignore
 
 let addVertex name (model: Model) jsRuntime =
     if AAG.isInvalidVertexName name then
@@ -35,9 +28,7 @@ let updateVertexName name (model: Model) =
         error = error },
     Cmd.none
 
-let view jsRuntime (model: Model) dispatch =
-    invokeUpdateNetwork model.graph jsRuntime
-
+let view (model: Model) dispatch =
     Template
         .Main
         .AddVertexForm()

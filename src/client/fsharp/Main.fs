@@ -9,17 +9,21 @@ open Model
 let private init jsRuntime _ = MainMenuPage.clearGraph jsRuntime
 
 let private update jsRuntime message model =
-    match message with
-    | Msg.SetPage page-> MainPage.setPage model page
-    | Msg.Error exn -> MainPage.setError model exn
-    | Msg.ClearError -> MainPage.clearError model
+    let (model, cmd) =
+        match message with
+        | Msg.SetPage page-> MainPage.setPage model page
+        | Msg.Error exn -> MainPage.setError model exn
+        | Msg.ClearError -> MainPage.clearError model
 
-    | Msg.AddVertex value -> AddVertexPage.addVertex value model jsRuntime
-    | Msg.UpdateVertexName value -> AddVertexPage.updateVertexName value model
+        | Msg.AddVertex value -> AddVertexPage.addVertex value model jsRuntime
+        | Msg.UpdateVertexName value -> AddVertexPage.updateVertexName value model
 
-    | Msg.ClearGraph -> MainMenuPage.clearGraph jsRuntime
+        | Msg.ClearGraph -> MainMenuPage.clearGraph jsRuntime
 
-let private view jsRuntime model dispatch = MainPage.view jsRuntime model dispatch
+    model, cmd
+
+let private view jsRuntime model dispatch =
+    MainPage.view jsRuntime model dispatch
 
 type App() =
     inherit ProgramComponent<Model, Msg.Message>()
