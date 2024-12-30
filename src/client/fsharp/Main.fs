@@ -6,7 +6,7 @@ open Elmish
 open Bolero
 open Model
 
-let private init jsRuntime _ = MainMenuPage.clearGraph jsRuntime
+let private init _ = MainMenuPage.clearGraph
 
 let private update jsRuntime message model =
     let (model, cmd) =
@@ -18,8 +18,7 @@ let private update jsRuntime message model =
         | Msg.AddVertex value -> AddVertexPage.addVertex value model jsRuntime
         | Msg.UpdateVertexName value -> AddVertexPage.updateVertexName value model
 
-        | Msg.ClearGraph -> MainMenuPage.clearGraph jsRuntime
-
+        | Msg.ClearGraph -> MainMenuPage.clearGraph
     model, cmd
 
 let private view jsRuntime model dispatch =
@@ -34,5 +33,5 @@ type App() =
     member val HttpClient = Unchecked.defaultof<HttpClient> with get, set
 
     override this.Program =
-        Program.mkProgram (init this.JSRuntime) (update this.JSRuntime) (view this.JSRuntime)
+        Program.mkProgram init (update this.JSRuntime) (view this.JSRuntime)
         |> Program.withRouter Router.router
