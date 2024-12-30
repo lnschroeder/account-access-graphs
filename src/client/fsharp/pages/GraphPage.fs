@@ -44,7 +44,7 @@ let view jsRuntime (model: Model) dispatch =
 
     Template
         .Main
-        .CreateVertexForm()
+        .AddVertexForm()
         .SaveButton(fun _ -> dispatch (Msg.AddVertex model.newVertexName))
         .VertexNameInput(model.newVertexName, (fun v -> dispatch (Msg.UpdateVertexName v)))
         .Elt()
