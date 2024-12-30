@@ -6,7 +6,7 @@ open Elmish
 open Bolero
 open Model
 
-let private init _ = Model.Init, Cmd.none
+let private init jsRuntime _ = MainMenuPage.clearGraph jsRuntime
 
 let private update jsRuntime message model =
     match message with
@@ -30,5 +30,5 @@ type App() =
     member val HttpClient = Unchecked.defaultof<HttpClient> with get, set
 
     override this.Program =
-        Program.mkProgram init (update this.JSRuntime) (view this.JSRuntime)
+        Program.mkProgram (init this.JSRuntime) (update this.JSRuntime) (view this.JSRuntime)
         |> Program.withRouter Router.router
