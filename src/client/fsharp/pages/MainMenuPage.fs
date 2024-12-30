@@ -2,6 +2,7 @@ module AAG.Client.MainMenuPage
 
 open Microsoft.JSInterop
 open Model
+open Elmish
 
 let private invokeUpdateNetwork (graph: AAG.Graph) (jsRuntime: IJSRuntime) =
     let visNetwork = VisJSTransformer.transform graph
@@ -11,7 +12,7 @@ let private invokeUpdateNetwork (graph: AAG.Graph) (jsRuntime: IJSRuntime) =
 
 let clearGraph jsRuntime =
     invokeUpdateNetwork Model.Init.graph jsRuntime
-    Model.Init
+    Model.Init, Cmd.none
 
 let view jsRuntime (model: Model) dispatch =
     invokeUpdateNetwork model.graph jsRuntime

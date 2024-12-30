@@ -10,14 +10,14 @@ let private init _ = Model.Init, Cmd.none
 
 let private update jsRuntime message model =
     match message with
-    | Msg.SetPage page -> MainPage.setPage model page, Cmd.none
-    | Msg.Error exn -> MainPage.setError model exn, Cmd.none
-    | Msg.ClearError -> MainPage.clearError model, Cmd.none
+    | Msg.SetPage page-> MainPage.setPage model page
+    | Msg.Error exn -> MainPage.setError model exn
+    | Msg.ClearError -> MainPage.clearError model
 
     | Msg.AddVertex value -> AddVertexPage.addVertex value model jsRuntime
     | Msg.UpdateVertexName value -> AddVertexPage.updateVertexName value model
 
-    | Msg.ClearGraph -> MainMenuPage.clearGraph jsRuntime, Cmd.none
+    | Msg.ClearGraph -> MainMenuPage.clearGraph jsRuntime
 
 let private view jsRuntime model dispatch = MainPage.view jsRuntime model dispatch
 
