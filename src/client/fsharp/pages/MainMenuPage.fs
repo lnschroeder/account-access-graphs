@@ -1,7 +1,6 @@
 module AAG.Client.MainMenuPage
 
 open Model
-open Elmish
 
 let clearGraph = Model.Init
 

@@ -2,7 +2,6 @@ module AAG.Client.MainPage
 
 open Model
 open Bolero.Html
-open Elmish
 
 let setPage (model: Model) page = { model with page = page }
 

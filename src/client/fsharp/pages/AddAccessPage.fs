@@ -1,6 +1,5 @@
 module AAG.Client.AddAccessPage
 
-open Elmish
 open Model
 
 let selectVertexForNewAccess name (model: Model) =
