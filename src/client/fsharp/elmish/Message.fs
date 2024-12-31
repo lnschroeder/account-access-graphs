@@ -9,5 +9,6 @@ type Message =
     | CancelAddAccess
     | CancelAddVertex
     | ClearGraph
+    | ExampleGraph
     | Error of exn
     | ClearError

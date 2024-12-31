@@ -17,6 +17,7 @@ let private update message model =
     | Msg.ClearError -> MainPage.clearError model, Cmd.none
     // MainMenuPage
     | Msg.ClearGraph -> MainMenuPage.clearGraph, Cmd.none
+    | Msg.ExampleGraph -> MainMenuPage.exampleGraph, Cmd.none
     // AddVertexPage
     | Msg.AddVertex value -> AddVertexPage.addVertex value model, Cmd.none
     | Msg.UpdateVertexName value -> AddVertexPage.updateVertexName value model, Cmd.none

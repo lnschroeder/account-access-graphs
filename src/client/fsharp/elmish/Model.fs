@@ -40,3 +40,5 @@ type Model =
           newVertexNameInput = Input.NewVertexNameInput
           vertexForNewAccessInput = Input.VertexForNewAccessInput
           error = None }
+    static member Example =
+        { Model.Init with graph = AAG.Graph.Example }

@@ -7,11 +7,24 @@ type Vertex =
       name: string
       accesses: Access list }
 
+
 and Access = { access: string list }
 
 and Graph =
     { vertices: Vertex list }
     static member Empty = { vertices = [] }
+
+    static member Example =
+        { vertices =
+            [ { id = Guid.NewGuid()
+                name = "test"
+                accesses = [] }
+              { id = Guid.NewGuid()
+                name = "test2"
+                accesses = [] }
+              { id = Guid.NewGuid()
+                name = "test222"
+                accesses = [] } ] }
 
 let getVertexIdByName name graph =
     graph.vertices
@@ -20,7 +33,10 @@ let getVertexIdByName name graph =
 
 
 let isVertexWithNameInGraph vertexName graph =
-    Seq.contains vertexName (graph.vertices |> Seq.map (fun vertex -> vertex.name))
+    Seq.contains
+        vertexName
+        (graph.vertices
+         |> Seq.map (fun vertex -> vertex.name))
 
 let isInvalidVertexName value = String.IsNullOrWhiteSpace(value)
 
