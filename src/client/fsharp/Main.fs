@@ -25,14 +25,11 @@ let private update message model =
     | Msg.SelectVertexForNewAccess value -> AddAccessPage.selectVertexForNewAccess value model, Cmd.none
     | Msg.CancelAddAccess -> AddAccessPage.cancel model, Cmd.none
 
-let private invokeJS (jsRuntime: IJSRuntime) model =
+let private view (jsRuntime: IJSRuntime) model dispatch =
     let visNetwork = VisJSTransformer.transform model
-
     jsRuntime.InvokeVoidAsync("updateNetwork", visNetwork.nodes, visNetwork.edges, visNetwork.nodeIdOfNewAccess)
     |> ignore
 
-let private view jsRuntime model dispatch =
-    invokeJS jsRuntime model
     MainPage.view jsRuntime model dispatch
 
 type App() =

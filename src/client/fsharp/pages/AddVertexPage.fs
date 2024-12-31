@@ -29,12 +29,9 @@ let cancel model =
         newVertexNameValid = false
         page = Endpoint.MainMenu }
 
-let private invokeJS model (jsRuntime: IJSRuntime) =
+let view (jsRuntime: IJSRuntime) (model: Model) dispatch =
     jsRuntime.InvokeVoidAsync("setButtonEnabled", "addVertexSaveButton", model.newVertexNameValid)
-    |> ignore
-
-let view jsRuntime (model: Model) dispatch =
-    invokeJS model jsRuntime
+        |> ignore
 
     Template
         .Main
