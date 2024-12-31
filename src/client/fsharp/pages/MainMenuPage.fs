@@ -4,7 +4,7 @@ open Model
 
 let clearGraph = Model.Init
 
-let view (model: Model) dispatch =
+let view dispatch =
     Template
         .Main
         .MainMenu()

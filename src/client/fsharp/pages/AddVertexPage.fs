@@ -1,6 +1,7 @@
 module AAG.Client.AddVertexPage
 
 open Model
+open Microsoft.JSInterop
 
 let addVertex name (model: Model) =
     if AAG.isInvalidVertexName name then
@@ -24,7 +25,12 @@ let cancel model =
         newVertexNameValid = false
         page = Endpoint.MainMenu }
 
-let view (model: Model) dispatch =
+let private invokeJS model (jsRuntime: IJSRuntime) =
+    jsRuntime.InvokeVoidAsync("setButtonEnabled", "addVertexSaveButton", model.newVertexNameValid)
+    |> ignore
+
+let view jsRuntime (model: Model) dispatch =
+    invokeJS model jsRuntime
     Template
         .Main
         .AddVertexForm()

@@ -10,14 +10,14 @@ let setError (model: Model) (exn: exn) =
 
 let clearError (model: Model) = { model with error = None }
 
-let view (model: Model) dispatch =
+let view jsRuntime (model: Model) dispatch =
     Template
         .Main()
         .LeftColumn(
             cond model.page
             <| function
-                | Endpoint.MainMenu -> MainMenuPage.view model dispatch
-                | Endpoint.AddVertex -> AddVertexPage.view model dispatch
+                | Endpoint.MainMenu -> MainMenuPage.view dispatch
+                | Endpoint.AddVertex -> AddVertexPage.view jsRuntime model dispatch
                 | Endpoint.AddAccess -> AddAccessPage.view model dispatch
         )
         .Error(
