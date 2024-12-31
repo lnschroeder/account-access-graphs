@@ -5,11 +5,13 @@ type Model =
     { page: Endpoint.Page
       graph: AAG.Graph
       newVertexName: string
+      newVertexNameValid: bool
       selectedVertexForNewAccess: string
       error: string option }
     static member Init =
         { page = Endpoint.MainMenu
           graph = AAG.Graph.Empty
           newVertexName = ""
+          newVertexNameValid = false
           selectedVertexForNewAccess = ""
           error = None }

@@ -10,25 +10,18 @@ let addVertex name (model: Model) =
     else
         { model with
             graph = AAG.addVertex name model.graph
-            newVertexName = "" }
+            newVertexName = ""
+            newVertexNameValid = false }
 
 let updateVertexName name (model: Model) =
-    let error =
-        if AAG.isInvalidVertexName name then
-            Some "invalid vertex name"
-        elif AAG.isVertexWithNameInGraph name model.graph then
-            Some "vertex already exists"
-        else
-            None
-
-    { model with
-        newVertexName = name
-        error = error }
+       { model with
+            newVertexName = name
+            newVertexNameValid = not (AAG.isInvalidVertexName name || AAG.isVertexWithNameInGraph name model.graph) }
 
 let cancel model =
     { model with
         newVertexName = ""
-        error = None
+        newVertexNameValid = false
         page = Endpoint.MainMenu }
 
 let view (model: Model) dispatch =

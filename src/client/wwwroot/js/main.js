@@ -1,7 +1,14 @@
+// utility
+function setButtonEnabled(buttonId, isEnabled) {
+  document.getElementById(buttonId).disabled = !isEnabled;
+}
+window.setButtonEnabled = setButtonEnabled;
+
 function getCssVariable(variable) {
   return getComputedStyle(document.body).getPropertyValue(variable).trim();
 }
 
+// vis network
 let initNodes = [
   // { id: 1, label: "abc" },
 ];

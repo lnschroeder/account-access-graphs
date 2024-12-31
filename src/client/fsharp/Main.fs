@@ -10,7 +10,10 @@ open Microsoft.JSInterop
 let private invokeUpdateNetwork model (jsRuntime: IJSRuntime) =
     let visNetwork = VisJSTransformer.transform model
 
-    jsRuntime.InvokeVoidAsync("updateNetwork", visNetwork.nodes, visNetwork.edges, visNetwork.nodeIdsOfNewAccess)
+    jsRuntime.InvokeVoidAsync("updateNetwork", visNetwork.nodes, visNetwork.edges, visNetwork.nodeIdOfNewAccess)
+    |> ignore
+
+    jsRuntime.InvokeVoidAsync("setButtonEnabled", "addVertexSaveButton", model.newVertexNameValid)
     |> ignore
 
 let private init _ = MainMenuPage.clearGraph, Cmd.none
