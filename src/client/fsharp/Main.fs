@@ -10,21 +10,24 @@ open Microsoft.JSInterop
 let private init _ = MainMenuPage.clearGraph, Cmd.none
 
 let private update message model =
-    match message with
-    // MainPage
-    | Msg.SetPage page -> MainPage.setPage model page, Cmd.none
-    | Msg.Error exn -> MainPage.setError model exn, Cmd.none
-    | Msg.ClearError -> MainPage.clearError model, Cmd.none
-    // MainMenuPage
-    | Msg.ClearGraph -> MainMenuPage.clearGraph, Cmd.none
-    | Msg.ExampleGraph -> MainMenuPage.exampleGraph, Cmd.none
-    // AddVertexPage
-    | Msg.AddVertex value -> AddVertexPage.addVertex value model, Cmd.none
-    | Msg.UpdateVertexName value -> AddVertexPage.updateVertexName value model, Cmd.none
-    | Msg.CancelAddVertex -> AddVertexPage.cancel model, Cmd.none
-    // AddAccessPage
-    | Msg.SelectVertexForNewAccess value -> AddAccessPage.selectVertexForNewAccess value model, Cmd.none
-    | Msg.CancelAddAccess -> AddAccessPage.cancel model, Cmd.none
+    let model =
+        match message with
+        // MainPage
+        | Msg.SetPage page -> MainPage.setPage model page
+        | Msg.Error exn -> MainPage.setError model exn
+        | Msg.ClearError -> MainPage.clearError model
+        // MainMenuPage
+        | Msg.ClearGraph -> MainMenuPage.clearGraph
+        | Msg.ExampleGraph -> MainMenuPage.exampleGraph
+        // AddVertexPage
+        | Msg.AddVertex value -> AddVertexPage.addVertex value model
+        | Msg.UpdateVertexName value -> AddVertexPage.updateVertexName value model
+        | Msg.CancelAddVertex -> AddVertexPage.cancel model
+        // AddAccessPage
+        | Msg.SelectVertexForNewAccess value -> AddAccessPage.selectVertexForNewAccess value model
+        | Msg.CancelAddAccess -> AddAccessPage.cancel model
+
+    model, Cmd.none
 
 let private view (jsRuntime: IJSRuntime) model dispatch =
     jsRuntime.InvokeVoidAsync("updateNetwork", VisJSTransformer.transform model)
