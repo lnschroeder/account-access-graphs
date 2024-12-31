@@ -15,9 +15,13 @@ let addVertex name (model: Model) =
             newVertexNameValid = false }
 
 let updateVertexName name (model: Model) =
-       { model with
-            newVertexName = name
-            newVertexNameValid = not (AAG.isInvalidVertexName name || AAG.isVertexWithNameInGraph name model.graph) }
+    { model with
+        newVertexName = name
+        newVertexNameValid =
+            not (
+                AAG.isInvalidVertexName name
+                || AAG.isVertexWithNameInGraph name model.graph
+            ) }
 
 let cancel model =
     { model with
@@ -31,6 +35,7 @@ let private invokeJS model (jsRuntime: IJSRuntime) =
 
 let view jsRuntime (model: Model) dispatch =
     invokeJS model jsRuntime
+
     Template
         .Main
         .AddVertexForm()
