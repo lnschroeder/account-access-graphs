@@ -13,6 +13,12 @@ and Graph =
     { vertices: Vertex list }
     static member Empty = { vertices = [] }
 
+let getVertexIdByName name graph =
+    graph.vertices
+    |> List.tryFind (fun vertex -> vertex.name = name)
+    |> Option.map (fun vertex -> vertex.id)
+
+
 let isVertexWithNameInGraph vertexName graph =
     Seq.contains vertexName (graph.vertices |> Seq.map (fun vertex -> vertex.name))
 

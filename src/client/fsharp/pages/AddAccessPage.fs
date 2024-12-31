@@ -5,8 +5,9 @@ open Model
 
 let selectVertexForNewAccess name (model: Model) =
     if name = "" then
-            { model with
-                selectedVertexForNewAccess = "" }
+        { model with
+            selectedVertexForNewAccess = ""
+            error = None }
     else
         let error =
             if not (AAG.isVertexWithNameInGraph name model.graph) then

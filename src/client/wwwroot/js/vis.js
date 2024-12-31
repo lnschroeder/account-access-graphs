@@ -36,7 +36,7 @@ let options = {
 let network = new vis.Network(container, data, options);
 
 // removes, updates, and adds nodes and edges to the network
-function updateNetwork(nodes, edges) {
+function updateNetwork(nodes, edges, nodeIdOfNewAccess) {
   let oldNodeIds = data.nodes.map((item) => item.id);
   let oldEdgeIds = data.edges.map((item) => item.id);
   let newNodeIds = nodes.map((item) => item.id);
@@ -59,5 +59,7 @@ function updateNetwork(nodes, edges) {
   data.nodes.remove(removedNodeIds);
   data.edges.update(edges);
   data.nodes.update(nodes);
+
+  network.selectNodes(nodeIdOfNewAccess ? [nodeIdOfNewAccess] : []);
 }
 window.updateNetwork = updateNetwork;

@@ -7,10 +7,10 @@ open Bolero
 open Model
 open Microsoft.JSInterop
 
-let private invokeUpdateNetwork (graph: AAG.Graph) (jsRuntime: IJSRuntime) =
-    let visNetwork = VisJSTransformer.transform graph
+let private invokeUpdateNetwork model (jsRuntime: IJSRuntime) =
+    let visNetwork = VisJSTransformer.transform model
 
-    jsRuntime.InvokeVoidAsync("updateNetwork", visNetwork.nodes, visNetwork.edges)
+    jsRuntime.InvokeVoidAsync("updateNetwork", visNetwork.nodes, visNetwork.edges, visNetwork.nodeIdsOfNewAccess)
     |> ignore
 
 let private init _ = MainMenuPage.clearGraph, Cmd.none
@@ -32,7 +32,7 @@ let private update message model =
     | Msg.CancelAddAccess -> AddAccessPage.cancel model
 
 let private view jsRuntime model dispatch =
-    invokeUpdateNetwork model.graph jsRuntime
+    invokeUpdateNetwork model jsRuntime
     MainPage.view model dispatch
 
 type App() =
