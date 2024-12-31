@@ -1,6 +1,7 @@
 module AAG.Client.AddAccessPage
 
 open Model
+open Microsoft.JSInterop
 
 let selectVertexForNewAccess name (model: Model) =
     let hint =
@@ -23,7 +24,14 @@ let cancel model =
         page = Endpoint.MainMenu }
 
 
-let view (model: Model) dispatch =
+let view (jsRuntime: IJSRuntime) (model: Model) dispatch =
+    jsRuntime.InvokeVoidAsync(
+        "setButtonDisabled",
+        "selectVertexForNewAccessButton",
+        isInvalidInput model.vertexForNewAccessInput
+    )
+    |> ignore
+
     Template
         .Main
         .AddAccessForm()

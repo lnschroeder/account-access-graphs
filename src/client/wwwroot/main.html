@@ -37,7 +37,7 @@
         <div class="control">
           <input type="text" id="vertexName" class="input" bind="${VertexNameInput}" placeholder="Vertex name"/>
         </div>
-        <p class="help is-success">${AddVertexNameHint}</p>
+        <p class="help is-danger">${AddVertexNameHint}</p>
       </div>
 
       <div class="columns">
@@ -62,7 +62,7 @@
         <div class="control">
           <input type="text" id="vertexName" class="input" bind="${VertexNameInput}" placeholder="Vertex name"/>
         </div>
-        <p class="help is-success">${SelectVertexHint}</p>
+        <p class="help is-danger">${SelectVertexHint}</p>
       </div>
 
       <div class="columns">
@@ -70,7 +70,7 @@
           <button class="button is-warning is-fullwidth" onclick="${CancelButton}">Cancel</button>
         </div>
         <div class="column is-half">
-          <button class="button is-primary is-fullwidth" onclick="${SelectVertexForNewAccessButton}" disabled>Continue</button>
+          <button class="button is-primary is-fullwidth" onclick="${SelectVertexForNewAccessButton}" id="selectVertexForNewAccessButton" disabled>Continue</button>
         </div>
       </div>
     </p>

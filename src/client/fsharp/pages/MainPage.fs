@@ -18,7 +18,7 @@ let view jsRuntime (model: Model) dispatch =
             <| function
                 | Endpoint.MainMenu -> MainMenuPage.view dispatch
                 | Endpoint.AddVertex -> AddVertexPage.view jsRuntime model dispatch
-                | Endpoint.AddAccess -> AddAccessPage.view model dispatch
+                | Endpoint.AddAccess -> AddAccessPage.view jsRuntime model dispatch
         )
         .Error(
             cond model.error
