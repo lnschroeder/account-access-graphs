@@ -37,6 +37,7 @@
         <div class="control">
           <input type="text" id="vertexName" class="input" bind="${VertexNameInput}" placeholder="Vertex name"/>
         </div>
+        <p class="help is-success">${AddVertexNameHint}</p>
       </div>
 
       <div class="columns">
@@ -44,7 +45,7 @@
           <button class="button is-warning is-fullwidth" onclick="${CancelButton}">Cancel</button>
         </div>
         <div class="column is-half">
-          <button class="button is-primary is-fullwidth" onclick="${SaveButton}" id="addVertexSaveButton">Save</button>
+          <button class="button is-primary is-fullwidth" onclick="${SaveButton}" id="addVertexSaveButton" disabled>Save</button>
         </div>
       </div>
     </p>

@@ -11,32 +11,39 @@ let addVertex name (model: Model) =
     else
         { model with
             graph = AAG.addVertex name model.graph
-            newVertexName = ""
-            newVertexNameValid = false }
+            newVertexNameInput = Model.Init.newVertexNameInput }
 
 let updateVertexName name (model: Model) =
+    let hint =
+        if name = "" then
+            Hint.Required
+        elif AAG.isInvalidVertexName name then
+            Hint.Error "Invalid name"
+        elif AAG.isVertexWithNameInGraph name model.graph then
+            Hint.Error "Vertex already exists"
+        else
+            Hint.Info
+
     { model with
-        newVertexName = name
-        newVertexNameValid =
-            not (
-                AAG.isInvalidVertexName name
-                || AAG.isVertexWithNameInGraph name model.graph
-            ) }
+        newVertexNameInput =
+            { model.newVertexNameInput with
+                value = name
+                hint = hint } }
 
 let cancel model =
     { model with
-        newVertexName = ""
-        newVertexNameValid = false
+        newVertexNameInput = Model.Init.newVertexNameInput
         page = Endpoint.MainMenu }
 
 let view (jsRuntime: IJSRuntime) (model: Model) dispatch =
-    jsRuntime.InvokeVoidAsync("setButtonEnabled", "addVertexSaveButton", model.newVertexNameValid)
-        |> ignore
+    jsRuntime.InvokeVoidAsync("setButtonDisabled", "addVertexSaveButton", isInvalidInput model.newVertexNameInput)
+    |> ignore
 
     Template
         .Main
         .AddVertexForm()
         .CancelButton(fun _ -> dispatch Msg.CancelAddVertex)
-        .SaveButton(fun _ -> dispatch (Msg.AddVertex model.newVertexName))
-        .VertexNameInput(model.newVertexName, (fun v -> dispatch (Msg.UpdateVertexName v)))
+        .SaveButton(fun _ -> dispatch (Msg.AddVertex model.newVertexNameInput.value))
+        .VertexNameInput(model.newVertexNameInput.value, (fun v -> dispatch (Msg.UpdateVertexName v)))
+        .AddVertexNameHint(model.newVertexNameInput.hint.value)
         .Elt()

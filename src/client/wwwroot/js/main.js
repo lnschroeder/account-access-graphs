@@ -1,8 +1,8 @@
 // utility
-function setButtonEnabled(buttonId, isEnabled) {
-  document.getElementById(buttonId).disabled = !isEnabled;
+function setButtonDisabled(buttonId, isDisabled) {
+  document.getElementById(buttonId).disabled = isDisabled;
 }
-window.setButtonEnabled = setButtonEnabled;
+window.setButtonDisabled = setButtonDisabled;
 
 function getCssVariable(variable) {
   return getComputedStyle(document.body).getPropertyValue(variable).trim();
@@ -44,9 +44,9 @@ let network = new vis.Network(container, data, options);
 
 // removes, updates, and adds nodes and edges to the network
 function updateNetwork(networkDTO) {
-  let nodes = networkDTO.nodes
-  let edges = networkDTO.edges
-  let nodeIdOfNewAccess = networkDTO.nodeIdOfNewAccess
+  let nodes = networkDTO.nodes;
+  let edges = networkDTO.edges;
+  let nodeIdOfNewAccess = networkDTO.nodeIdOfNewAccess;
 
   let oldNodeIds = data.nodes.map((item) => item.id);
   let oldEdgeIds = data.edges.map((item) => item.id);
