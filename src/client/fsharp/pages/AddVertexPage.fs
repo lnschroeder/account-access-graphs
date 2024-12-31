@@ -16,7 +16,7 @@ let addVertex name (model: Model) =
 let updateVertexName name (model: Model) =
     let hint =
         if name = "" then
-            Hint.Required
+            Input.NewVertexNameInput.hint
         elif AAG.isInvalidVertexName name then
             Hint.Error "Invalid name"
         elif AAG.isVertexWithNameInGraph name model.graph then
@@ -32,7 +32,7 @@ let updateVertexName name (model: Model) =
 
 let cancel model =
     { model with
-        newVertexNameInput = Model.Init.newVertexNameInput
+        newVertexNameInput = Input.NewVertexNameInput
         page = Endpoint.MainMenu }
 
 let view (jsRuntime: IJSRuntime) (model: Model) dispatch =

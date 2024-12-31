@@ -19,9 +19,12 @@ type Hint =
 type Input =
     { value: string
       hint: Hint }
-    static member Required = { value = ""; hint = Hint.Required }
+    static member private Required = { value = ""; hint = Hint.Required }
+    static member private Optional = { value = ""; hint = Hint.Info }
+    // Defaults
+    static member NewVertexNameInput = Input.Required
+    static member VertexForNewAccessInput = Input.Required
 
-    static member Optional = { value = ""; hint = Hint.Info }
 
 let isInvalidInput (input: Input) = input.hint.``type`` = Error
 
@@ -29,11 +32,11 @@ type Model =
     { page: Endpoint.Page
       graph: AAG.Graph
       newVertexNameInput: Input
-      selectedVertexForNewAccess: string
+      vertexForNewAccessInput: Input
       error: string option }
     static member Init =
         { page = Endpoint.MainMenu
           graph = AAG.Graph.Empty
-          newVertexNameInput = Input.Required
-          selectedVertexForNewAccess = ""
+          newVertexNameInput = Input.NewVertexNameInput
+          vertexForNewAccessInput = Input.VertexForNewAccessInput
           error = None }

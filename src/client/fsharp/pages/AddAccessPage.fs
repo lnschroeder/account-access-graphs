@@ -3,24 +3,23 @@ module AAG.Client.AddAccessPage
 open Model
 
 let selectVertexForNewAccess name (model: Model) =
-    if name = "" then
-        { model with
-            selectedVertexForNewAccess = ""
-            error = None }
-    else
-        let error =
-            if not (AAG.isVertexWithNameInGraph name model.graph) then
-                Some "vertex does not exist"
-            else
-                None
-        { model with
-            selectedVertexForNewAccess = name
-            error = error }
+    let hint =
+        if name = "" then
+            Input.VertexForNewAccessInput.hint
+        elif not (AAG.isVertexWithNameInGraph name model.graph) then
+            Hint.Error "Vertex does not exist"
+        else
+            Hint.Info
+
+    { model with
+        vertexForNewAccessInput =
+            { model.vertexForNewAccessInput with
+                value = name
+                hint = hint } }
 
 let cancel model =
     { model with
-        selectedVertexForNewAccess = ""
-        error = None
+        vertexForNewAccessInput = Input.VertexForNewAccessInput
         page = Endpoint.MainMenu }
 
 
@@ -29,5 +28,6 @@ let view (model: Model) dispatch =
         .Main
         .AddAccessForm()
         .CancelButton(fun _ -> dispatch Msg.CancelAddAccess)
-        .VertexNameInput(model.selectedVertexForNewAccess, (fun v -> dispatch (Msg.SelectVertexForNewAccess v)))
+        .VertexNameInput(model.vertexForNewAccessInput.value, (fun v -> dispatch (Msg.SelectVertexForNewAccess v)))
+        .SelectVertexHint(model.vertexForNewAccessInput.hint.value)
         .Elt()

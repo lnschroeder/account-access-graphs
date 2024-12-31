@@ -20,4 +20,4 @@ let private transformVertex (vertex: AAG.Vertex) = { id = vertex.id; label = ver
 let transform (model: Model) =
     { nodes = (model.graph.vertices |> List.map transformVertex)
       edges = []
-      nodeIdOfNewAccess = AAG.getVertexIdByName model.selectedVertexForNewAccess model.graph }
+      nodeIdOfNewAccess = AAG.getVertexIdByName model.vertexForNewAccessInput.value model.graph }
