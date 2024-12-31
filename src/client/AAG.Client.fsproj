@@ -9,7 +9,6 @@
     <Compile Include="fsharp/elmish/Endpoint.fs" />
     <Compile Include="fsharp/elmish/Message.fs" />
     <Compile Include="fsharp/elmish/Model.fs" />
-    <Compile Include="fsharp/elmish/Router.fs" />
     <Compile Include="fsharp/pages/AddAccessPage.fs" />
     <Compile Include="fsharp/pages/AddVertexPage.fs" />
     <Compile Include="fsharp/pages/MainMenuPage.fs" />

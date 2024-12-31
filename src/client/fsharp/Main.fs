@@ -35,6 +35,8 @@ let private view (jsRuntime: IJSRuntime) model dispatch =
 
     MainPage.view jsRuntime model dispatch
 
+let private router = Router.infer Msg.SetPage (fun (model: Model) -> model.page)
+
 type App() =
     inherit ProgramComponent<Model, Msg.Message>()
 
@@ -45,4 +47,4 @@ type App() =
 
     override this.Program =
         Program.mkProgram init update (view this.JSRuntime)
-        |> Program.withRouter Router.router
+        |> Program.withRouter router
