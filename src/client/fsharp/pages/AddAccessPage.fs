@@ -22,8 +22,7 @@ let cancel model =
     { model with
         selectedVertexForNewAccess = ""
         error = None
-        page = Endpoint.MainMenu },
-    Cmd.none
+        page = Endpoint.MainMenu }
 
 
 let view (model: Model) dispatch =

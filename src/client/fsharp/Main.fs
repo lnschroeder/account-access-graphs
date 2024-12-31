@@ -26,10 +26,10 @@ let private update message model =
     // AddVertexPage
     | Msg.AddVertex value -> AddVertexPage.addVertex value model, Cmd.none
     | Msg.UpdateVertexName value -> AddVertexPage.updateVertexName value model, Cmd.none
-    | Msg.CancelAddVertex -> AddVertexPage.cancel model
+    | Msg.CancelAddVertex -> AddVertexPage.cancel model, Cmd.none
     // AddAccessPage
     | Msg.SelectVertexForNewAccess value -> AddAccessPage.selectVertexForNewAccess value model, Cmd.none
-    | Msg.CancelAddAccess -> AddAccessPage.cancel model
+    | Msg.CancelAddAccess -> AddAccessPage.cancel model, Cmd.none
 
 let private view jsRuntime model dispatch =
     invokeUpdateNetwork model jsRuntime

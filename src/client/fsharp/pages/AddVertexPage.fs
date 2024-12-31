@@ -1,6 +1,5 @@
 module AAG.Client.AddVertexPage
 
-open Elmish
 open Model
 
 let addVertex name (model: Model) =
@@ -30,8 +29,7 @@ let cancel model =
     { model with
         newVertexName = ""
         error = None
-        page = Endpoint.MainMenu },
-    Cmd.none
+        page = Endpoint.MainMenu }
 
 let view (model: Model) dispatch =
     Template
