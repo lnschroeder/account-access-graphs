@@ -26,8 +26,7 @@ let private update message model =
     | Msg.CancelAddAccess -> AddAccessPage.cancel model, Cmd.none
 
 let private view (jsRuntime: IJSRuntime) model dispatch =
-    let visNetwork = VisJSTransformer.transform model
-    jsRuntime.InvokeVoidAsync("updateNetwork", visNetwork.nodes, visNetwork.edges, visNetwork.nodeIdOfNewAccess)
+    jsRuntime.InvokeVoidAsync("updateNetwork", VisJSTransformer.transform model)
     |> ignore
 
     MainPage.view jsRuntime model dispatch
