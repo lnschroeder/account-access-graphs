@@ -1,7 +1,6 @@
 module AAG.Client.AddVertexPage
 
 open Model
-open Microsoft.JSInterop
 
 let addVertex name (model: Model) =
     if AAG.isInvalidVertexName name then
@@ -35,8 +34,8 @@ let cancel model =
         newVertexNameInput = Input.NewVertexNameInput
         page = Endpoint.MainMenu }
 
-let view (jsRuntime: IJSRuntime) (model: Model) dispatch =
-    jsRuntime.InvokeVoidAsync("setButtonDisabled", "SaveButton", isInvalidInput model.newVertexNameInput)
+let view jsRuntime (model: Model) dispatch =
+    Utility.disableButton "SaveButton" (isInvalidInput model.newVertexNameInput) jsRuntime
     |> ignore
 
     Template
