@@ -10,5 +10,3 @@ type Message =
     | CancelAddVertex
     | ClearGraph
     | ExampleGraph
-    | Error of exn
-    | ClearError

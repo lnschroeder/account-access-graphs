@@ -32,13 +32,11 @@ type Model =
     { page: Endpoint.Page
       graph: AAG.Graph
       newVertexNameInput: Input
-      vertexForNewAccessInput: Input
-      error: string option }
+      vertexForNewAccessInput: Input }
     static member Init =
         { page = Endpoint.MainMenu
           graph = AAG.Graph.Empty
           newVertexNameInput = Input.NewVertexNameInput
-          vertexForNewAccessInput = Input.VertexForNewAccessInput
-          error = None }
+          vertexForNewAccessInput = Input.VertexForNewAccessInput }
     static member Example =
         { Model.Init with graph = AAG.Graph.Example }

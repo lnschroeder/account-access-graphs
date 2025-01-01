@@ -14,8 +14,6 @@ let private update message model =
         match message with
         // MainPage
         | Msg.SetPage page -> MainPage.setPage model page
-        | Msg.Error exn -> MainPage.setError model exn
-        | Msg.ClearError -> MainPage.clearError model
         // MainMenuPage
         | Msg.ClearGraph -> MainMenuPage.clearGraph
         | Msg.ExampleGraph -> MainMenuPage.exampleGraph
