@@ -27,7 +27,7 @@ let cancel model =
 let view (jsRuntime: IJSRuntime) (model: Model) dispatch =
     jsRuntime.InvokeVoidAsync(
         "setButtonDisabled",
-        "selectVertexForNewAccessButton",
+        "SelectVertexForNewAccessButton",
         isInvalidInput model.vertexForNewAccessInput
     )
     |> ignore

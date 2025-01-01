@@ -36,7 +36,7 @@ let cancel model =
         page = Endpoint.MainMenu }
 
 let view (jsRuntime: IJSRuntime) (model: Model) dispatch =
-    jsRuntime.InvokeVoidAsync("setButtonDisabled", "addVertexSaveButton", isInvalidInput model.newVertexNameInput)
+    jsRuntime.InvokeVoidAsync("setButtonDisabled", "SaveButton", isInvalidInput model.newVertexNameInput)
     |> ignore
 
     Template
