@@ -20,32 +20,32 @@ let data = {
   edges: new vis.DataSet(initEdges),
 };
 
-let options = {
-  layout: { randomSeed: 2 },
-  nodes: {
-    borderWidth: 1,
-    borderWidthSelected: 4,
-    color: {
-      border: getCssVariable("--bulma-link"),
-      background: "#00000000",
-      highlight: {
+const options = () => ({
+    layout: { randomSeed: 2 },
+    nodes: {
+      borderWidth: 1,
+      borderWidthSelected: 2,
+      color: {
         border: getCssVariable("--bulma-link"),
         background: "#00000000",
+        highlight: {
+          border: getCssVariable("--bulma-link"),
+          background: "#00000000",
+        },
+      },
+      labelHighlightBold: false,
+      font: {
+        color: getCssVariable("--bulma-text-bold"),
+        face: getCssVariable("--bulma-body-family"),
       },
     },
-    labelHighlightBold: false,
-    font: {
-      color: getCssVariable("--bulma-text"),
-      face: getCssVariable("--bulma-body-family"),
+    interaction: {
+      selectable: false,
+      selectConnectedEdges: false,
+      hoverConnectedEdges: false,
     },
-  },
-  interaction: {
-    selectable: false,
-    selectConnectedEdges: false,
-    hoverConnectedEdges: false,
-  },
-};
-let network = new vis.Network(container, data, options);
+});
+let network = new vis.Network(container, data, options());
 
 // removes, updates, and adds nodes and edges to the network
 function updateNetwork(networkDTO) {
@@ -103,4 +103,14 @@ network.on("click", function (params) {
 
   clickedNodeInput.value = nodeLabel;
   clickedNodeInput.dispatchEvent(new Event("input", { bubbles: true }));
+});
+
+// Listen for changes in the system's color scheme preference
+window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', (e) => {
+  console.log("themechange")
+  network.setOptions(options());
+  updateNetwork({
+    nodes: data.nodes.get(),
+    edges: data.edges.get()
+  });
 });
