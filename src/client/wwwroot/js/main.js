@@ -51,7 +51,6 @@ let network = new vis.Network(container, data, options);
 function updateNetwork(networkDTO) {
   let nodes = networkDTO.nodes;
   let edges = networkDTO.edges;
-  let nodeIdOfNewAccess = networkDTO.nodeIdOfNewAccess;
 
   let oldNodeIds = data.nodes.map((item) => item.id);
   let oldEdgeIds = data.edges.map((item) => item.id);
@@ -76,19 +75,17 @@ function updateNetwork(networkDTO) {
   data.edges.update(edges);
   data.nodes.update(nodes);
 
-  network.selectNodes(nodeIdOfNewAccess ? [nodeIdOfNewAccess] : []);
+  nodes.forEach((node) => {
+    let backgroundColor = node.isSelected ? getCssVariable("--bulma-primary-soft") : "#00000000";
+
+    data.nodes.update({ id: node.id, color: { background: backgroundColor } });
+  });
 }
 window.updateNetwork = updateNetwork;
 
 // unselect dragged node after dragging
-let previousSelection = network.getSelection();
-
-container.addEventListener("mousedown", (event) => {
-  previousSelection = network.getSelection();
-});
-
 network.on("dragEnd", function () {
-  network.setSelection(previousSelection);
+  network.unselectAll();
 });
 
 // custom behavior for clicking on nodes/edges
