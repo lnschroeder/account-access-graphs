@@ -33,11 +33,9 @@
 
 <script type="module">
   // change focus to text field when clicking button
-  document
-    .getElementById("SaveButton")
-    .addEventListener("click", () => {
-      document.getElementById("VertexNameInput").focus();
-    });
+  document.getElementById("SaveButton").addEventListener("click", () => {
+    document.getElementById("VertexNameInput").focus();
+  });
 
   // click button when pressing enter
   let input = document.getElementById("VertexNameInput");
