@@ -23,7 +23,7 @@ let cancel model =
         page = Endpoint.MainMenu }
 
 let view jsRuntime (model: Model) dispatch =
-    Utility.disableButton "SelectVertexForNewAccessButton" (isInvalidInput model.vertexForNewAccessInput) jsRuntime
+    Utility.disableButton "ContinueButton" (isInvalidInput model.vertexForNewAccessInput) jsRuntime
     |> ignore
 
     Template
