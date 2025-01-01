@@ -24,7 +24,7 @@ const options = () => ({
     layout: { randomSeed: 2 },
     nodes: {
       borderWidth: 1,
-      borderWidthSelected: 2,
+      borderWidthSelected: 1,
       color: {
         border: getCssVariable("--bulma-link"),
         background: "#00000000",
@@ -107,7 +107,6 @@ network.on("click", function (params) {
 
 // Listen for changes in the system's color scheme preference
 window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', (e) => {
-  console.log("themechange")
   network.setOptions(options());
   updateNetwork({
     nodes: data.nodes.get(),
