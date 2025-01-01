@@ -36,5 +36,5 @@ let view (jsRuntime: IJSRuntime) (model: Model) dispatch =
         .AddAccessForm()
         .CancelButton(fun _ -> dispatch Msg.CancelAddAccess)
         .VertexNameInput(model.vertexForNewAccessInput.value, (fun v -> dispatch (Msg.SelectVertexForNewAccess v)))
-        .SelectVertexHint(model.vertexForNewAccessInput.hint.value)
+        .VertexNameHint(model.vertexForNewAccessInput.hint.value)
         .Elt()

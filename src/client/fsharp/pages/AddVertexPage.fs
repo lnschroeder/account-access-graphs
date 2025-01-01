@@ -44,5 +44,5 @@ let view (jsRuntime: IJSRuntime) (model: Model) dispatch =
         .CancelButton(fun _ -> dispatch Msg.CancelAddVertex)
         .SaveButton(fun _ -> dispatch (Msg.AddVertex model.newVertexNameInput.value))
         .VertexNameInput(model.newVertexNameInput.value, (fun v -> dispatch (Msg.UpdateVertexName v)))
-        .AddVertexNameHint(model.newVertexNameInput.hint.value)
+        .VertexNameHint(model.newVertexNameInput.hint.value)
         .Elt()
