@@ -39,6 +39,11 @@ let options = {
       face: getCssVariable("--bulma-body-family"),
     },
   },
+  interaction: {
+    selectable: false,
+    selectConnectedEdges: false,
+    hoverConnectedEdges: false,
+  },
 };
 let network = new vis.Network(container, data, options);
 
@@ -74,3 +79,31 @@ function updateNetwork(networkDTO) {
   network.selectNodes(nodeIdOfNewAccess ? [nodeIdOfNewAccess] : []);
 }
 window.updateNetwork = updateNetwork;
+
+// unselect dragged node after dragging
+let previousSelection = network.getSelection();
+
+container.addEventListener("mousedown", (event) => {
+  previousSelection = network.getSelection();
+});
+
+network.on("dragEnd", function () {
+  network.setSelection(previousSelection);
+});
+
+// custom behavior for clicking on nodes/edges
+network.on("click", function (params) {
+  // click on node behavior
+  let nodeId = this.getNodeAt(params.pointer.DOM);
+  let nodeLabel = "";
+  let clickedNodeInput = document.getElementById("ClickedNodeInput");
+
+  if (nodeId != undefined) {
+    let node = data.nodes.get(nodeId);
+
+    nodeLabel = node.label;
+  }
+
+  clickedNodeInput.value = nodeLabel;
+  clickedNodeInput.dispatchEvent(new Event("input", { bubbles: true }));
+});
