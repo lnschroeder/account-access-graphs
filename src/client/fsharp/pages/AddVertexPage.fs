@@ -40,7 +40,6 @@ let view (jsRuntime: IJSRuntime) (model: Model) dispatch =
     |> ignore
 
     Template
-        .Main
         .AddVertexForm()
         .CancelButton(fun _ -> dispatch Msg.CancelAddVertex)
         .SaveButton(fun _ -> dispatch (Msg.AddVertex model.newVertexNameInput.value))

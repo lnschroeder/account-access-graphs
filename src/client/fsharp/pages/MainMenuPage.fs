@@ -8,7 +8,6 @@ let exampleGraph = Model.Example
 
 let view dispatch =
     Template
-        .Main
         .MainMenu()
         .OpenAddVertexFormButton(fun _ -> dispatch (Msg.SetPage Endpoint.AddVertex))
         .OpenAddAccessFormButton(fun _ -> dispatch (Msg.SetPage Endpoint.AddAccess))

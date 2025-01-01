@@ -1,0 +1,34 @@
+<h1 class="title">Adding new access</h1>
+<div class="field">
+  <label class="label"
+    >For which vertex do you want to add a new access method?</label
+  >
+  <div class="control">
+    <input
+      type="text"
+      id="vertexName"
+      class="input"
+      bind="${VertexNameInput}"
+      placeholder="Vertex name"
+    />
+  </div>
+  <p class="help is-danger">${SelectVertexHint}</p>
+</div>
+
+<div class="columns">
+  <div class="column is-half">
+    <button class="button is-warning is-fullwidth" onclick="${CancelButton}">
+      Cancel
+    </button>
+  </div>
+  <div class="column is-half">
+    <button
+      class="button is-info is-fullwidth"
+      onclick="${SelectVertexForNewAccessButton}"
+      id="selectVertexForNewAccessButton"
+      disabled
+    >
+      Continue
+    </button>
+  </div>
+</div>

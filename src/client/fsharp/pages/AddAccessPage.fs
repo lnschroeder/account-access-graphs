@@ -33,7 +33,6 @@ let view (jsRuntime: IJSRuntime) (model: Model) dispatch =
     |> ignore
 
     Template
-        .Main
         .AddAccessForm()
         .CancelButton(fun _ -> dispatch Msg.CancelAddAccess)
         .VertexNameInput(model.vertexForNewAccessInput.value, (fun v -> dispatch (Msg.SelectVertexForNewAccess v)))

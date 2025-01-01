@@ -1,78 +1,12 @@
 <section class="section">
   <div class="columns">
     <div class="column is-one-third">
-      <div class="box">
-        ${LeftColumn}
-      </div>
+      <div class="box">${LeftColumn}</div>
     </div>
     <div class="column">
       <div id="graph-container" class="box p-0"></div>
     </div>
   </div>
-
-  <!-- Templates -->
-  <template id="MainMenu">
-    <h1 class="title">Main menu</h1>
-    <p>
-      <div class="buttons">
-        <button class="button is-info is-fullwidth" onclick="${OpenAddVertexFormButton}">Add vertex</button>
-        <button class="button is-info is-fullwidth" onclick="${OpenAddAccessFormButton}">Add access</button>
-        <button class="button is-info is-fullwidth" onclick="${ExportButton}" disabled>Export to JSON</button>
-        <button class="button is-info is-fullwidth" onclick="${ImportButton}" disabled>Import from JSON</button>
-        <button class="button is-danger is-fullwidth" onclick="${ClearGraphButton}">Clear graph</button>
-        <button class="button is-success is-fullwidth" onclick="${ExampleGraphButton}">Example graph</button>
-      </div>
-    </p>
-  </template>
-
-  <template id="AddVertexForm">
-    <h1 class="title">Adding new vertex</h1>
-    <p>
-
-      <div class="field">
-        <label class="label">Name</label>
-        <div class="control">
-          <input type="text" id="vertexName" class="input" bind="${VertexNameInput}" placeholder="Vertex name"/>
-        </div>
-        <p class="help is-danger">${AddVertexNameHint}</p>
-      </div>
-
-      <div class="columns">
-        <div class="column is-half">
-          <button class="button is-warning is-fullwidth" onclick="${CancelButton}">Cancel</button>
-        </div>
-        <div class="column is-half">
-          <button class="button is-primary is-fullwidth" onclick="${SaveButton}" id="addVertexSaveButton" disabled>Save</button>
-        </div>
-      </div>
-    </p>
-
-    <script type="module" src="js/add-vertex.js"></script>
-  </template>
-
-  <template id="AddAccessForm">
-    <h1 class="title">Adding new access</h1>
-    <p>
-
-      <div class="field">
-        <label class="label">For which vertex do you want to add a new access method?</label>
-        <div class="control">
-          <input type="text" id="vertexName" class="input" bind="${VertexNameInput}" placeholder="Vertex name"/>
-        </div>
-        <p class="help is-danger">${SelectVertexHint}</p>
-      </div>
-
-      <div class="columns">
-        <div class="column is-half">
-          <button class="button is-warning is-fullwidth" onclick="${CancelButton}">Cancel</button>
-        </div>
-        <div class="column is-half">
-          <button class="button is-info is-fullwidth" onclick="${SelectVertexForNewAccessButton}" id="selectVertexForNewAccessButton" disabled>Continue</button>
-        </div>
-      </div>
-    </p>
-  </template>
-
 </section>
 
 <script type="module" src="js/main.js"></script>
