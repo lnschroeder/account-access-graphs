@@ -1,18 +1,18 @@
 module AAG.Client.Model
 
 /// The Elmish application's model.
-type HintType =
+type HintLevel =
     | Info
     | Warning
     | Error
 
 type Hint =
     { value: string
-      ``type``: HintType }
+      level: HintLevel }
 
-    static member Info = { value = ""; ``type`` = Info }
+    static member Info = { value = ""; level = Info }
 
-    static member Error value = { value = value; ``type`` = Error }
+    static member Error value = { value = value; level = Error }
 
     static member Required = Hint.Error "Field is required"
 
@@ -26,7 +26,7 @@ type Input =
     static member VertexForNewAccessInput = Input.Required
 
 
-let isInvalidInput (input: Input) = input.hint.``type`` = Error
+let isInvalidInput (input: Input) = input.hint.level = Error
 
 type Model =
     { page: Endpoint.Page
