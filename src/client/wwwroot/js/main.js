@@ -21,29 +21,20 @@ let data = {
 };
 
 const options = () => ({
-    layout: { randomSeed: 2 },
-    nodes: {
-      borderWidth: 1,
-      borderWidthSelected: 1,
-      color: {
-        border: getCssVariable("--bulma-link"),
-        background: "#00000000",
-        highlight: {
-          border: getCssVariable("--bulma-link"),
-          background: "#00000000",
-        },
-      },
-      labelHighlightBold: false,
-      font: {
-        color: getCssVariable("--bulma-text-bold"),
-        face: getCssVariable("--bulma-body-family"),
-      },
+  layout: { randomSeed: 2 },
+  nodes: {
+    labelHighlightBold: false,
+    borderWidth: 1,
+    borderWidthSelected: 1,
+    font: {
+      face: getCssVariable("--bulma-body-family"),
     },
-    interaction: {
-      selectable: false,
-      selectConnectedEdges: false,
-      hoverConnectedEdges: false,
-    },
+  },
+  interaction: {
+    selectable: false,
+    selectConnectedEdges: false,
+    hoverConnectedEdges: false,
+  },
 });
 let network = new vis.Network(container, data, options());
 
@@ -76,9 +67,37 @@ function updateNetwork(networkDTO) {
   data.nodes.update(nodes);
 
   nodes.forEach((node) => {
-    let backgroundColor = node.isSelected ? getCssVariable("--bulma-primary-soft") : "#00000000";
+    let borderWidth = 1;
+    let borderColor = getCssVariable("--bulma-link");
+    let backgroundColor = "#00000000";
+    let fontColor = getCssVariable("--bulma-text-bold");
 
-    data.nodes.update({ id: node.id, color: { background: backgroundColor } });
+    if (node.isSelected) {
+      borderWidth = 3;
+    }
+
+    if (node.isFactor) {
+      backgroundColor = getCssVariable("--bulma-warning-on-scheme");
+      fontColor = getCssVariable("--bulma-text-bold-invert");
+    }
+
+    data.nodes.update({
+      id: node.id,
+      borderWidth: borderWidth,
+      color: {
+        border: borderColor,
+        background: backgroundColor,
+
+        highlight: {
+          border: borderColor,
+          background: backgroundColor,
+        },
+      },
+
+      font: {
+        color: fontColor,
+      },
+    });
   });
 }
 window.updateNetwork = updateNetwork;
@@ -106,10 +125,12 @@ network.on("click", function (params) {
 });
 
 // Listen for changes in the system's color scheme preference
-window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', (e) => {
-  network.setOptions(options());
-  updateNetwork({
-    nodes: data.nodes.get(),
-    edges: data.edges.get()
+window
+  .matchMedia("(prefers-color-scheme: dark)")
+  .addEventListener("change", (e) => {
+    network.setOptions(options());
+    updateNetwork({
+      nodes: data.nodes.get(),
+      edges: data.edges.get(),
+    });
   });
-});

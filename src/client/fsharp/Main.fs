@@ -23,6 +23,7 @@ let private update message model =
         | Msg.CancelAddVertex -> AddVertexPage.cancel model
         // AddAccessPage
         | Msg.SelectVertexForNewAccess value -> AddAccessPage.selectVertexForNewAccess value model
+        | Msg.SelectFactorsForNewAccess value -> AddAccessPage.selectFactorForNewAccess value model
         | Msg.CancelAddAccess -> AddAccessPage.cancel model
         | Msg.ContinueAddAccessSubject -> AddAccessPage.continueSubject model
 

@@ -24,6 +24,7 @@ type Input =
     // Defaults
     static member NewVertexNameInput = Input.Required
     static member VertexForNewAccessInput = Input.Required
+    static member FactorsForNewAccessInput = Input.Required
 
 
 let isInvalidInput (input: Input) = input.hint.level = Error
@@ -33,12 +34,14 @@ type Model =
       step: string option
       graph: AAG.Graph
       newVertexNameInput: Input
-      vertexForNewAccessInput: Input }
+      vertexForNewAccessInput: Input
+      factorsForNewAccessInput: string list }
     static member Init =
         { page = Endpoint.MainMenu
           step = None
           graph = AAG.Graph.Empty
           newVertexNameInput = Input.NewVertexNameInput
-          vertexForNewAccessInput = Input.VertexForNewAccessInput }
+          vertexForNewAccessInput = Input.VertexForNewAccessInput
+          factorsForNewAccessInput = [] }
     static member Example =
         { Model.Init with graph = AAG.Graph.Example }

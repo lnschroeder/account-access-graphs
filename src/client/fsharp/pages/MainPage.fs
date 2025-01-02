@@ -20,5 +20,7 @@ let view jsRuntime (model: Model) dispatch =
             fun name ->
                 if model.page = Endpoint.AddAccess && model.step = None then
                     dispatch (Msg.SelectVertexForNewAccess name)
+                elif model.page = Endpoint.AddAccess && model.step = Some "factors" then
+                    dispatch (Msg.SelectFactorsForNewAccess name)
         )
         .Elt()

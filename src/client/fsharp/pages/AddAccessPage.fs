@@ -18,6 +18,22 @@ let selectVertexForNewAccess name (model: Model) =
                 value = name
                 hint = hint } }
 
+let selectFactorForNewAccess name (model: Model) =
+    // let hint =
+    //     if name = "" then
+    //         Input.VertexForNewAccessInput.hint
+    //     elif not (AAG.isVertexWithNameInGraph name model.graph) then
+    //         Hint.Error "Vertex does not exist"
+    //     else
+    //         Hint.Info
+    let factors =
+        if List.contains name model.factorsForNewAccessInput then
+            List.filter ((<>) name) model.factorsForNewAccessInput
+        else
+            name :: model.factorsForNewAccessInput
+
+    { model with factorsForNewAccessInput = factors }
+
 let cancel model =
     { model with
         vertexForNewAccessInput = Input.VertexForNewAccessInput

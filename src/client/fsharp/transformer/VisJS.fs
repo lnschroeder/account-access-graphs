@@ -6,7 +6,8 @@ open Model
 type Node =
     { id: Guid
       label: string
-      isSelected: bool }
+      isSelected: bool
+      isFactor: bool }
 
 type Edge =
     { id: Guid
@@ -18,7 +19,8 @@ type Network = { nodes: Node list; edges: Edge list }
 let private transformVertex model (vertex: AAG.Vertex) =
     { id = vertex.id
       label = vertex.name
-      isSelected = vertex.name = model.vertexForNewAccessInput.value }
+      isSelected = vertex.name = model.vertexForNewAccessInput.value
+      isFactor = Seq.contains vertex.name model.factorsForNewAccessInput }
 
 let transform (model: Model) =
     { nodes =
