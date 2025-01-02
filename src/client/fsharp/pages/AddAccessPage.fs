@@ -3,38 +3,27 @@ module AAG.Client.AddAccessPage
 open Model
 open System
 
-let selectVertexForNewAccess name (model: Model) =
-    let hint =
-        if name = "" then
-            Input.VertexForNewAccessInput.hint
-        elif not (AAG.isVertexWithNameInGraph name model.graph) then
-            Hint.Error "Vertex does not exist"
-        else
-            Hint.Info
+let private deselectSubject (model: Model) =
+    { model with subjectInput = Input.SubjectInput }
 
+let private selectSubject (vertex: AAG.Vertex) (model: Model) =
     { model with
         step = None
-        vertexForNewAccessInput =
-            { model.vertexForNewAccessInput with
-                value = name
-                hint = hint } }
+        subjectInput =
+            { value = vertex.name
+              hint = Hint.Info } }
 
-let selectVertexForNewAccessById (idAsString: string) (model: Model) =
-    let name =
-        if idAsString = "undefined" then
-            ""
-        else
-            let guid = Guid.Parse idAsString
-            let vertex = AAG.findVertexById guid model.graph
+let selectSubjectByName name (model: Model) =
+    let vertex = AAG.findVertexByName name model.graph
 
-            match vertex with
-            | Some vertex -> vertex.name
-            | None -> ""
-
-    selectVertexForNewAccess name model
-
-
-let selectFactorForNewAccessById (idAsString: string) (model: Model) =
+    match vertex with
+    | Some vertex -> selectSubject vertex model
+    | None ->
+        { model with
+            subjectInput =
+                { value = name
+                  hint = Hint.Error "Vertex does not exist" } }
+let selectFactorById (idAsString: string) (model: Model) =
     // let hint =
     //     if name = "" then
     //         Input.VertexForNewAccessInput.hint
@@ -48,40 +37,52 @@ let selectFactorForNewAccessById (idAsString: string) (model: Model) =
         else
             let guid = Guid.Parse idAsString
             let vertex = AAG.findVertexById guid model.graph
+
             match vertex with
             | Some vertex -> vertex.name
             | None -> ""
-    let factors =
-        if List.contains name model.factorsForNewAccessInput then
-            List.filter ((<>) name) model.factorsForNewAccessInput
-        else
-            name :: model.factorsForNewAccessInput
 
-    { model with factorsForNewAccessInput = factors }
+    let factors =
+        if List.contains name model.factorsInput then
+            List.filter ((<>) name) model.factorsInput
+        else
+            name :: model.factorsInput
+
+    { model with factorsInput = factors }
 
 let cancel model =
-    { model with
-        vertexForNewAccessInput = Input.VertexForNewAccessInput
+    { deselectSubject model with
         page = Endpoint.MainMenu
         step = None }
 
 let continueSubject model = { model with step = Some "factors" }
 
+let handleClickedVertex (vertex: AAG.Vertex option) (model: Model) =
+    if model.step = None then
+        match vertex with
+        | Some vertex -> selectSubject vertex model
+        | None -> deselectSubject model
+    else
+        model
+
 let view jsRuntime (model: Model) dispatch =
-    Utility.disableButton "ContinueButton" (isInvalidInput model.vertexForNewAccessInput) jsRuntime
+    Utility.disableButton "ContinueButton" (isInvalidInput model.subjectInput) jsRuntime
     |> ignore
 
     match model.step with
     | Some "factors" ->
         Template
             .AddAccessFactors()
-            .BackButton(fun _ -> dispatch (Msg.SelectVertexForNewAccess model.vertexForNewAccessInput.value))
+            .BackButton(fun _ -> dispatch (Msg.TypedSubjectName model.subjectInput.value))
             .Elt()
     | _ ->
         Template
             .AddAccessSubject()
-            .CancelButton(fun _ -> dispatch Msg.CancelAddAccess)
-            .ContinueButton(fun _ -> dispatch Msg.ContinueAddAccessSubject)
-            .VertexNameInput(model.vertexForNewAccessInput.value, (fun v -> dispatch (Msg.SelectVertexForNewAccess v)))
-            .VertexNameHint(model.vertexForNewAccessInput.hint.value)
+            .CancelButton(fun _ -> dispatch Msg.ClickedCancelAddAccessButton)
+            .ContinueButton(fun _ -> dispatch Msg.ClickedContinueSubject)
+            .VertexNameInput(
+                model.subjectInput.value,
+                (fun v -> dispatch (Msg.TypedSubjectName v))
+            )
+            .VertexNameHint(model.subjectInput.hint.value)
             .Elt()

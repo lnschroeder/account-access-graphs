@@ -10,12 +10,12 @@ let addVertex name (model: Model) =
     else
         { model with
             graph = AAG.addVertex name model.graph
-            newVertexNameInput = Model.Init.newVertexNameInput }
+            addVertexInput = Model.Init.addVertexInput }
 
 let updateVertexName name (model: Model) =
     let hint =
         if name = "" then
-            Input.NewVertexNameInput.hint
+            Input.AddVertexInput.hint
         elif AAG.isInvalidVertexName name then
             Hint.Error "Invalid name"
         elif AAG.isVertexWithNameInGraph name model.graph then
@@ -24,24 +24,24 @@ let updateVertexName name (model: Model) =
             Hint.Info
 
     { model with
-        newVertexNameInput =
-            { model.newVertexNameInput with
+        addVertexInput =
+            { model.addVertexInput with
                 value = name
                 hint = hint } }
 
 let cancel model =
     { model with
-        newVertexNameInput = Input.NewVertexNameInput
+        addVertexInput = Input.AddVertexInput
         page = Endpoint.MainMenu }
 
 let view jsRuntime (model: Model) dispatch =
-    Utility.disableButton "SaveButton" (isInvalidInput model.newVertexNameInput) jsRuntime
+    Utility.disableButton "SaveButton" (isInvalidInput model.addVertexInput) jsRuntime
     |> ignore
 
     Template
         .AddVertex()
-        .CancelButton(fun _ -> dispatch Msg.CancelAddVertex)
-        .SaveButton(fun _ -> dispatch (Msg.AddVertex model.newVertexNameInput.value))
-        .VertexNameInput(model.newVertexNameInput.value, (fun v -> dispatch (Msg.UpdateVertexName v)))
-        .VertexNameHint(model.newVertexNameInput.hint.value)
+        .CancelButton(fun _ -> dispatch Msg.ClickedCancelAddVertexButton)
+        .SaveButton(fun _ -> dispatch (Msg.ClickedSaveAddVertexButton model.addVertexInput.value))
+        .VertexNameInput(model.addVertexInput.value, (fun v -> dispatch (Msg.TypedVertexName v)))
+        .VertexNameHint(model.addVertexInput.hint.value)
         .Elt()

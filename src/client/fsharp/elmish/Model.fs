@@ -9,11 +9,8 @@ type HintLevel =
 type Hint =
     { value: string
       level: HintLevel }
-
     static member Info = { value = ""; level = Info }
-
     static member Error value = { value = value; level = Error }
-
     static member Required = Hint.Error "Field is required"
 
 type Input =
@@ -22,10 +19,8 @@ type Input =
     static member private Required = { value = ""; hint = Hint.Required }
     static member private Optional = { value = ""; hint = Hint.Info }
     // Defaults
-    static member NewVertexNameInput = Input.Required
-    static member VertexForNewAccessInput = Input.Required
-    static member FactorsForNewAccessInput = Input.Required
-
+    static member AddVertexInput = Input.Required
+    static member SubjectInput = Input.Required
 
 let isInvalidInput (input: Input) = input.hint.level = Error
 
@@ -33,15 +28,15 @@ type Model =
     { page: Endpoint.Page
       step: string option
       graph: AAG.Graph
-      newVertexNameInput: Input
-      vertexForNewAccessInput: Input
-      factorsForNewAccessInput: string list }
+      addVertexInput: Input
+      subjectInput: Input
+      factorsInput: string list }
     static member Init =
         { page = Endpoint.MainMenu
           step = None
           graph = AAG.Graph.Empty
-          newVertexNameInput = Input.NewVertexNameInput
-          vertexForNewAccessInput = Input.VertexForNewAccessInput
-          factorsForNewAccessInput = [] }
-    static member Example =
-        { Model.Init with graph = AAG.Graph.Example }
+          addVertexInput = Input.AddVertexInput
+          subjectInput = Input.SubjectInput
+          factorsInput = [] }
+
+    static member Example = { Model.Init with graph = AAG.Graph.Example }

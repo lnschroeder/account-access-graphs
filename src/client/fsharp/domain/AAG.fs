@@ -7,7 +7,6 @@ type Vertex =
       name: string
       accesses: Access list }
 
-
 and Access = { access: string list }
 
 and Graph =
@@ -30,6 +29,10 @@ let findVertexById id graph =
   graph.vertices
   |> List.tryFind (fun vertex -> vertex.id = id)
 
+let findVertexByName name graph =
+  graph.vertices
+  |> List.tryFind (fun vertex -> vertex.name = name)
+
 let isVertexWithNameInGraph vertexName graph =
     Seq.contains
         vertexName
@@ -39,9 +42,9 @@ let isVertexWithNameInGraph vertexName graph =
 let isInvalidVertexName value = String.IsNullOrWhiteSpace(value)
 
 let addVertex vertexName graph =
-    let newVertex: Vertex =
+    let vertex: Vertex =
         { id = Guid.NewGuid()
           name = vertexName
           accesses = [] }
 
-    { graph with vertices = newVertex :: graph.vertices }
+    { graph with vertices = vertex :: graph.vertices }

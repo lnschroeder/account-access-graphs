@@ -19,8 +19,8 @@ type Network = { nodes: Node list; edges: Edge list }
 let private transformVertex model (vertex: AAG.Vertex) =
     { id = vertex.id
       label = vertex.name
-      isSelected = vertex.name = model.vertexForNewAccessInput.value
-      isFactor = Seq.contains vertex.name model.factorsForNewAccessInput }
+      isSelected = vertex.name = model.subjectInput.value
+      isFactor = Seq.contains vertex.name model.factorsInput }
 
 let transform (model: Model) =
     { nodes =

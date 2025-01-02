@@ -2,8 +2,17 @@ module AAG.Client.MainPage
 
 open Model
 open Bolero.Html
+open System
 
 let setPage (model: Model) page = { model with page = page }
+
+let private findVertexById idAsString graph =
+    if idAsString = "undefined" then
+        None
+    else
+        let guid = Guid.Parse idAsString
+        AAG.findVertexById guid graph
+
 
 let view jsRuntime (model: Model) dispatch =
     Template
@@ -18,9 +27,9 @@ let view jsRuntime (model: Model) dispatch =
         .ClickedNodeInput(
             "",
             fun idAsString ->
-                if model.page = Endpoint.AddAccess && model.step = None then
-                    dispatch (Msg.SelectVertexForNewAccessById idAsString)
-                elif model.page = Endpoint.AddAccess && model.step = Some "factors" then
-                    dispatch (Msg.SelectFactorsForNewAccessById idAsString)
+                let vertex = findVertexById idAsString model.graph
+
+                if model.page = Endpoint.AddAccess then
+                    dispatch (Msg.ClickedVisNodeOnAddAccessPage vertex)
         )
         .Elt()
