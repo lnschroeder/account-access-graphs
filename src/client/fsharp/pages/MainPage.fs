@@ -15,8 +15,10 @@ let view jsRuntime (model: Model) dispatch =
                 | Endpoint.AddVertex -> AddVertexPage.view jsRuntime model dispatch
                 | Endpoint.AddAccess -> AddAccessPage.view jsRuntime model dispatch
         )
-        .ClickedNodeInput("", fun name ->
-            if model.page = Endpoint.AddAccess then
-                dispatch (Msg.SelectVertexForNewAccess name)
+        .ClickedNodeInput(
+            "",
+            fun name ->
+                if model.page = Endpoint.AddAccess && model.step = None then
+                    dispatch (Msg.SelectVertexForNewAccess name)
         )
         .Elt()

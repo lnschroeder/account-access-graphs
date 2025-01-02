@@ -12,6 +12,7 @@ let selectVertexForNewAccess name (model: Model) =
             Hint.Info
 
     { model with
+        step = None
         vertexForNewAccessInput =
             { model.vertexForNewAccessInput with
                 value = name
@@ -20,15 +21,26 @@ let selectVertexForNewAccess name (model: Model) =
 let cancel model =
     { model with
         vertexForNewAccessInput = Input.VertexForNewAccessInput
-        page = Endpoint.MainMenu }
+        page = Endpoint.MainMenu
+        step = None }
+
+let continueSubject model = { model with step = Some "factors" }
 
 let view jsRuntime (model: Model) dispatch =
     Utility.disableButton "ContinueButton" (isInvalidInput model.vertexForNewAccessInput) jsRuntime
     |> ignore
 
-    Template
-        .AddAccessSubject()
-        .CancelButton(fun _ -> dispatch Msg.CancelAddAccess)
-        .VertexNameInput(model.vertexForNewAccessInput.value, (fun v -> dispatch (Msg.SelectVertexForNewAccess v)))
-        .VertexNameHint(model.vertexForNewAccessInput.hint.value)
-        .Elt()
+    match model.step with
+    | Some "factors" ->
+        Template
+            .AddAccessFactors()
+            .BackButton(fun _ -> dispatch (Msg.SelectVertexForNewAccess model.vertexForNewAccessInput.value))
+            .Elt()
+    | _ ->
+        Template
+            .AddAccessSubject()
+            .CancelButton(fun _ -> dispatch Msg.CancelAddAccess)
+            .ContinueButton(fun _ -> dispatch Msg.ContinueAddAccessSubject)
+            .VertexNameInput(model.vertexForNewAccessInput.value, (fun v -> dispatch (Msg.SelectVertexForNewAccess v)))
+            .VertexNameHint(model.vertexForNewAccessInput.hint.value)
+            .Elt()

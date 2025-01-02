@@ -30,11 +30,13 @@ let isInvalidInput (input: Input) = input.hint.level = Error
 
 type Model =
     { page: Endpoint.Page
+      step: string option
       graph: AAG.Graph
       newVertexNameInput: Input
       vertexForNewAccessInput: Input }
     static member Init =
         { page = Endpoint.MainMenu
+          step = None
           graph = AAG.Graph.Empty
           newVertexNameInput = Input.NewVertexNameInput
           vertexForNewAccessInput = Input.VertexForNewAccessInput }

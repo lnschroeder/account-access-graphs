@@ -24,6 +24,7 @@ let private update message model =
         // AddAccessPage
         | Msg.SelectVertexForNewAccess value -> AddAccessPage.selectVertexForNewAccess value model
         | Msg.CancelAddAccess -> AddAccessPage.cancel model
+        | Msg.ContinueAddAccessSubject -> AddAccessPage.continueSubject model
 
     model, Cmd.none
 
