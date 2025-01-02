@@ -27,7 +27,7 @@ let view jsRuntime (model: Model) dispatch =
     |> ignore
 
     Template
-        .AddAccessForm()
+        .AddAccessSubject()
         .CancelButton(fun _ -> dispatch Msg.CancelAddAccess)
         .VertexNameInput(model.vertexForNewAccessInput.value, (fun v -> dispatch (Msg.SelectVertexForNewAccess v)))
         .VertexNameHint(model.vertexForNewAccessInput.hint.value)

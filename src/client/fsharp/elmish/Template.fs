@@ -4,5 +4,5 @@ open Bolero
 
 type Main = Template<"wwwroot/main.html">
 type MainMenu = Template<"wwwroot/main-menu.html">
-type AddVertexForm = Template<"wwwroot/add-vertex-form.html">
-type AddAccessForm = Template<"wwwroot/add-access-form.html">
+type AddVertex = Template<"wwwroot/add-vertex.html">
+type AddAccessSubject = Template<"wwwroot/add-access_subject.html">
