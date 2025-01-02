@@ -1,6 +1,7 @@
 module AAG.Client.AddAccessPage
 
 open Model
+open System
 
 let selectVertexForNewAccess name (model: Model) =
     let hint =
@@ -18,7 +19,22 @@ let selectVertexForNewAccess name (model: Model) =
                 value = name
                 hint = hint } }
 
-let selectFactorForNewAccess name (model: Model) =
+let selectVertexForNewAccessById (idAsString: string) (model: Model) =
+    let name =
+        if idAsString = "undefined" then
+            ""
+        else
+            let guid = Guid.Parse idAsString
+            let vertex = AAG.findVertexById guid model.graph
+
+            match vertex with
+            | Some vertex -> vertex.name
+            | None -> ""
+
+    selectVertexForNewAccess name model
+
+
+let selectFactorForNewAccessById (idAsString: string) (model: Model) =
     // let hint =
     //     if name = "" then
     //         Input.VertexForNewAccessInput.hint
@@ -26,6 +42,15 @@ let selectFactorForNewAccess name (model: Model) =
     //         Hint.Error "Vertex does not exist"
     //     else
     //         Hint.Info
+    let name =
+        if idAsString = "undefined" then
+            ""
+        else
+            let guid = Guid.Parse idAsString
+            let vertex = AAG.findVertexById guid model.graph
+            match vertex with
+            | Some vertex -> vertex.name
+            | None -> ""
     let factors =
         if List.contains name model.factorsForNewAccessInput then
             List.filter ((<>) name) model.factorsForNewAccessInput

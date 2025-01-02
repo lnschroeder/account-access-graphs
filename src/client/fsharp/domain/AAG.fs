@@ -26,6 +26,10 @@ and Graph =
                 name = "test222"
                 accesses = [] } ] }
 
+let findVertexById id graph =
+  graph.vertices
+  |> List.tryFind (fun vertex -> vertex.id = id)
+
 let isVertexWithNameInGraph vertexName graph =
     Seq.contains
         vertexName

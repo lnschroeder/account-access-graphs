@@ -6,7 +6,8 @@ type Message =
     | AddVertex of string
     | UpdateVertexName of string
     | SelectVertexForNewAccess of string
-    | SelectFactorsForNewAccess of string
+    | SelectVertexForNewAccessById of string
+    | SelectFactorsForNewAccessById of string
     | ContinueAddAccessSubject
     | CancelAddAccess
     | CancelAddVertex

@@ -17,10 +17,10 @@ let view jsRuntime (model: Model) dispatch =
         )
         .ClickedNodeInput(
             "",
-            fun name ->
+            fun idAsString ->
                 if model.page = Endpoint.AddAccess && model.step = None then
-                    dispatch (Msg.SelectVertexForNewAccess name)
+                    dispatch (Msg.SelectVertexForNewAccessById idAsString)
                 elif model.page = Endpoint.AddAccess && model.step = Some "factors" then
-                    dispatch (Msg.SelectFactorsForNewAccess name)
+                    dispatch (Msg.SelectFactorsForNewAccessById idAsString)
         )
         .Elt()

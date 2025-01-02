@@ -111,16 +111,9 @@ network.on("dragEnd", function () {
 network.on("click", function (params) {
   // click on node behavior
   let nodeId = this.getNodeAt(params.pointer.DOM);
-  let nodeLabel = "";
   let clickedNodeInput = document.getElementById("ClickedNodeInput");
 
-  if (nodeId != undefined) {
-    let node = data.nodes.get(nodeId);
-
-    nodeLabel = node.label;
-  }
-
-  clickedNodeInput.value = nodeLabel;
+  clickedNodeInput.value = nodeId;
   clickedNodeInput.dispatchEvent(new Event("input", { bubbles: true }));
 });
 
