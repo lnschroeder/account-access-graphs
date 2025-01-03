@@ -60,7 +60,8 @@ let selectSubjectByName name (model: Model) =
     | None ->
         { model with
             subjectId = None
-            subjectInput = name }
+            subjectInput = name
+            graph = AAG.removeAllProvisionalAccesses model.graph }
 
 let toggleFactor (vertex: AAG.Vertex) (model: Model) =
     let factors =
@@ -85,9 +86,6 @@ let cancel model =
         graph = AAG.removeAllProvisionalAccesses model.graph
         page = Endpoint.MainMenu
         step = None }
-
-let exit model graph =
-    cancel {model with graph = graph}
 
 let openFactorsSelection model = { model with step = Some "factors" }
 
@@ -116,14 +114,14 @@ let updateAccessName name (model: Model) = { model with addAccessInput = name }
 
 let addNewAccess (model: Model) =
     match model.subjectId with
-    | Some subjectId ->
-        if isValidNewAccess model then
-            let access: AAG.Access = AAG.Access.Default model.addAccessInput model.factorsInput
-            let graph = AAG.addAccessToGraph subjectId access (AAG.removeAllProvisionalAccesses model.graph) // TODO make more efficient
-            exit model graph
-        else
-            model // TODO
-    | None -> model // TODO replace with is ERROR?!
+    | Some subjectId when isValidNewAccess model ->
+        let access: AAG.Access = AAG.Access.Default model.addAccessInput model.factorsInput
+
+        let graph =
+            AAG.addAccessToGraph subjectId access (AAG.removeAllProvisionalAccesses model.graph) // TODO make more efficient
+
+        cancel { model with graph = graph }
+    | _ -> model // TODO
 
 let view jsRuntime (model: Model) dispatch =
     Utility.toggleButtonEnabled "ContinueButton" (isSubjectValid model) jsRuntime
