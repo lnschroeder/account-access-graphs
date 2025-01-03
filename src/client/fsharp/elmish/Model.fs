@@ -33,7 +33,8 @@ type Model =
       addAccessInput: Input
       subjectInput: Input
       subjectId: Guid option
-      factorsInput: Guid Set }
+      factorsInput: Guid Set
+      factorsInputHint: Hint }
     static member Init =
         { page = Endpoint.MainMenu
           step = None
@@ -42,6 +43,7 @@ type Model =
           addAccessInput = Input.AddAccessInput
           subjectInput = Input.SubjectInput
           subjectId = None
-          factorsInput = Set.empty }
+          factorsInput = Set.empty
+          factorsInputHint = Hint.Required }
 
     static member Example = { Model.Init with graph = AAG.Graph.Example }

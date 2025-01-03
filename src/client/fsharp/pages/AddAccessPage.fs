@@ -2,6 +2,17 @@ module AAG.Client.AddAccessPage
 
 open Model
 
+let private getFactorsHint (model: Model) =
+    match model.subjectId with
+    | Some subjectId ->
+        if model.factorsInput.IsEmpty then
+            Hint.Error "Select at least one factor"
+        elif AAG.isAccessPresentWithFactors subjectId model.factorsInput model.graph then
+            Hint.Error "There is already an access with the same factors"
+        else
+            Hint.Info
+    | None -> Hint.Error "No subject vertex selected yet"
+
 let private getAccessNameHint name (model: Model) =
     match model.subjectId with
     | Some subjectId ->
@@ -19,26 +30,33 @@ let private getUpdatedAccessNameInput (model: Model) =
     { model.addAccessInput with hint = getAccessNameHint model.addAccessInput.value model }
 
 let private deselectSubject (model: Model) =
-    { model with
-        subjectId = None
-        subjectInput = Input.SubjectInput
-        addAccessInput = getUpdatedAccessNameInput model
-        graph = AAG.removeAllProvisionalAccesses model.graph }
+    let model =
+        { model with
+            subjectId = None
+            subjectInput = Input.SubjectInput
+            addAccessInput = getUpdatedAccessNameInput model
+            factorsInputHint = getFactorsHint model
+            graph = AAG.removeAllProvisionalAccesses model.graph }
+
+    { model with factorsInputHint = getFactorsHint model }
 
 let private selectSubject (vertex: AAG.Vertex) (model: Model) =
-    { model with
-        step = None
-        subjectId = Some vertex.id
-        graph =
-            AAG.setProvisionalAccess
-                vertex.id
-                model.addAccessInput.value
-                model.factorsInput
-                (AAG.removeAllProvisionalAccesses model.graph)
-        addAccessInput = getUpdatedAccessNameInput model
-        subjectInput =
-            { value = vertex.name
-              hint = Hint.Info } }
+    let model =
+        { model with
+            step = None
+            subjectId = Some vertex.id
+            graph =
+                AAG.setProvisionalAccess
+                    vertex.id
+                    model.addAccessInput.value
+                    model.factorsInput
+                    (AAG.removeAllProvisionalAccesses model.graph)
+            addAccessInput = getUpdatedAccessNameInput model
+            subjectInput =
+                { value = vertex.name
+                  hint = Hint.Info } }
+
+    { model with factorsInputHint = getFactorsHint model }
 
 let selectSubjectByName name (model: Model) =
     let vertex = AAG.findVertexByName name model.graph
@@ -46,12 +64,15 @@ let selectSubjectByName name (model: Model) =
     match vertex with
     | Some vertex -> selectSubject vertex model
     | None ->
-        { model with
-            subjectId = None
-            subjectInput =
-                { value = name
-                  hint = Hint.Error "Vertex does not exist" }
-            addAccessInput = getUpdatedAccessNameInput model }
+        let model =
+            { model with
+                subjectId = None
+                subjectInput =
+                    { value = name
+                      hint = Hint.Error "Vertex does not exist" }
+                addAccessInput = getUpdatedAccessNameInput model }
+        { model with factorsInputHint = getFactorsHint model }
+
 
 let toggleFactor (vertex: AAG.Vertex) (model: Model) =
     let factors =
@@ -62,10 +83,12 @@ let toggleFactor (vertex: AAG.Vertex) (model: Model) =
 
     match model.subjectId with
     | Some id ->
-        { model with
-            addAccessInput = getUpdatedAccessNameInput model
-            factorsInput = factors
-            graph = AAG.setProvisionalAccess id model.addAccessInput.value factors model.graph }
+        let model =
+            { model with
+                addAccessInput = getUpdatedAccessNameInput model
+                factorsInput = factors
+                graph = AAG.setProvisionalAccess id model.addAccessInput.value factors model.graph }
+        { model with factorsInputHint = getFactorsHint model }
     | None -> model
 
 let cancel model =
@@ -81,6 +104,7 @@ let cancel model =
 let openFactorsSelection model =
     { model with
         step = Some "factors"
+        factorsInputHint = getFactorsHint model
         addAccessInput = getUpdatedAccessNameInput model }
 
 let openSubjectSelection model = { model with step = None }
@@ -100,15 +124,12 @@ let handleClickedVertex (vertex: AAG.Vertex option) (model: Model) =
 let private isSubjectValid (model: Model) = model.subjectId.IsSome
 // TODO add checking name for save - also update temporary access / delete and add
 let private isValidNewAccess (model: Model) =
-    match model.subjectId with
-    | Some subjectId ->
-        not model.factorsInput.IsEmpty
-        && not (AAG.isAccessPresentWithFactors subjectId model.factorsInput model.graph)
-        && model.addAccessInput.hint.level <> Error
-    | None -> false
+    model.factorsInputHint.level <> Error
+    && model.addAccessInput.hint.level <> Error
 
 let updateAccessName name (model: Model) =
     { model with
+        factorsInputHint = getFactorsHint model
         addAccessInput =
             { model.addAccessInput with
                 value = name
@@ -128,7 +149,8 @@ let view jsRuntime (model: Model) dispatch =
             .BackButton(fun _ -> dispatch (Msg.ClickedBackFromFactors))
             .SaveButton(fun _ -> dispatch (Msg.ClickedSaveAddAccessButton))
             .AccessNameInput(model.addAccessInput.value, (fun v -> dispatch (Msg.TypedAccessName v)))
-            .AccessNameHint(model.addAccessInput.hint.value)
+            .AccessNameHint(model.addAccessInput.hint.value) // TODO maybe use a function here instead of a raw value to a model
+            .FactorsHint(model.factorsInputHint.value)
             .Elt()
     | _ ->
         Template
