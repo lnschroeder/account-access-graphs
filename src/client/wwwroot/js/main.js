@@ -159,9 +159,6 @@ function updateNetwork(networkDTO) {
       });
     });
   });
-  // data.edges.update(edges);
-  // data.nodes.update(nodes);
-  network.stabilize();
 }
 window.updateNetwork = updateNetwork;
 

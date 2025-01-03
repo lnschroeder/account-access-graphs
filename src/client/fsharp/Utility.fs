@@ -2,5 +2,5 @@ module AAG.Client.Utility
 
 open Microsoft.JSInterop
 
-let disableButton (id: string) (state: bool) (jsRuntime: IJSRuntime) =
-    jsRuntime.InvokeVoidAsync("setButtonDisabled", id, state)
+let toggleButtonEnabled (id: string) (enable: bool) (jsRuntime: IJSRuntime) =
+    jsRuntime.InvokeVoidAsync("setButtonDisabled", id, not enable)

@@ -35,7 +35,7 @@ let cancel model =
         page = Endpoint.MainMenu }
 
 let view jsRuntime (model: Model) dispatch =
-    Utility.disableButton "SaveButton" (isInvalidInput model.addVertexInput) jsRuntime
+    Utility.toggleButtonEnabled "SaveButton" (isValidInput model.addVertexInput) jsRuntime
     |> ignore
 
     Template

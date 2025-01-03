@@ -24,7 +24,7 @@ type Input =
     static member AddVertexInput = Input.Required
     static member SubjectInput = Input.Required
 
-let isInvalidInput (input: Input) = input.hint.level = Error
+let isValidInput (input: Input) = input.hint.level <> Error
 
 type Model =
     { page: Endpoint.Page

@@ -78,10 +78,10 @@ let private isValidNewAccess (model: Model) =
     | None -> false
 
 let view jsRuntime (model: Model) dispatch =
-    Utility.disableButton "ContinueButton" (not (isSubjectValid model)) jsRuntime
+    Utility.toggleButtonEnabled "ContinueButton" (isSubjectValid model) jsRuntime
     |> ignore
 
-    Utility.disableButton "SaveButton" (not (isValidNewAccess model)) jsRuntime
+    Utility.toggleButtonEnabled "SaveButton" (isValidNewAccess model) jsRuntime
     |> ignore
 
     match model.step with
