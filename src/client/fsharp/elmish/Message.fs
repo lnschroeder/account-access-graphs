@@ -9,6 +9,7 @@ type Message =
     | TypedSubjectName of string
     | ClickedContinueSubject
     | ClickedCancelAddAccessButton
+    | ClickedBackFromFactors
     | ClickedCancelAddVertexButton
     | ClickedClearGraphButton
     | ClickedExampleGraphButton

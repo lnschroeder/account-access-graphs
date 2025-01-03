@@ -30,6 +30,10 @@ const options = () => ({
       face: getCssVariable("--bulma-body-family"),
     },
   },
+  edges: {
+    arrows: "to",
+    arrowStrikethrough: false,
+  },
   interaction: {
     selectable: false,
     selectConnectedEdges: false,
@@ -42,7 +46,6 @@ let network = new vis.Network(container, data, options());
 function updateNetwork(networkDTO) {
   let nodes = networkDTO.nodes;
   let edges = networkDTO.edges;
-
   let oldNodeIds = data.nodes.map((item) => item.id);
   let oldEdgeIds = data.edges.map((item) => item.id);
   let newNodeIds = nodes.map((item) => item.id);
@@ -63,13 +66,11 @@ function updateNetwork(networkDTO) {
   });
   data.edges.remove(removedEdgeIds);
   data.nodes.remove(removedNodeIds);
-  data.edges.update(edges);
-  data.nodes.update(nodes);
 
   nodes.forEach((node) => {
     let borderWidth = 1;
     let borderColor = getCssVariable("--bulma-link");
-    let backgroundColor = "#00000000";
+    let backgroundColor = getCssVariable("--bulma-text-bold-invert");
     let fontColor = getCssVariable("--bulma-text-bold");
 
     if (node.isSelected) {
@@ -83,6 +84,7 @@ function updateNetwork(networkDTO) {
 
     data.nodes.update({
       id: node.id,
+      label: node.label,
       borderWidth: borderWidth,
       color: {
         border: borderColor,
@@ -98,7 +100,46 @@ function updateNetwork(networkDTO) {
         color: fontColor,
       },
     });
+
+    // reorders edges such that the provisional edges come last
+    // i.e. they get rendered on top of all other edges
+    edges.sort((a, b) => {
+      if (a.isProvisional && !b.isProvisional) {
+        return 1;
+      } else {
+        return -1;
+      }
+    });
+
+    edges.forEach((edge) => {
+      let dashes = false;
+      let physics = true;
+      let color = getCssVariable("--bulma-link");
+      let width = 1;
+
+      if (edge.isProvisional) {
+        dashes = true;
+        physics = false;
+        color = getCssVariable("--bulma-warning-on-scheme");
+        width = 2;
+      }
+
+      data.edges.update({
+        id: edge.id,
+        from: edge.from,
+        to: edge.to,
+        dashes: dashes,
+        physics: physics,
+        color: {
+          color: color,
+        },
+        width: width,
+      });
+    });
   });
+  // data.edges.update(edges);
+  // data.nodes.update(nodes);
+  network.stabilize();
 }
 window.updateNetwork = updateNetwork;
 

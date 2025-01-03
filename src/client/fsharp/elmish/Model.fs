@@ -1,5 +1,7 @@
 module AAG.Client.Model
 
+open System
+
 /// The Elmish application's model.
 type HintLevel =
     | Info
@@ -30,13 +32,15 @@ type Model =
       graph: AAG.Graph
       addVertexInput: Input
       subjectInput: Input
-      factorsInput: string list }
+      subjectId: Guid option
+      factorsInput: Guid Set }
     static member Init =
         { page = Endpoint.MainMenu
           step = None
           graph = AAG.Graph.Empty
           addVertexInput = Input.AddVertexInput
           subjectInput = Input.SubjectInput
-          factorsInput = [] }
+          subjectId = None
+          factorsInput = Set.empty }
 
     static member Example = { Model.Init with graph = AAG.Graph.Example }

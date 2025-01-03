@@ -1,14 +1,18 @@
 module AAG.Client.AddAccessPage
 
 open Model
-open System
 
 let private deselectSubject (model: Model) =
-    { model with subjectInput = Input.SubjectInput }
+    { model with
+        subjectId = None
+        subjectInput = Input.SubjectInput
+        graph = AAG.removeAllProvisionalAccesses model.graph }
 
 let private selectSubject (vertex: AAG.Vertex) (model: Model) =
     { model with
         step = None
+        subjectId = Some vertex.id
+        graph = AAG.setProvisionalAccess vertex.id model.factorsInput (AAG.removeAllProvisionalAccesses model.graph)
         subjectInput =
             { value = vertex.name
               hint = Hint.Info } }
@@ -20,27 +24,37 @@ let selectSubjectByName name (model: Model) =
     | Some vertex -> selectSubject vertex model
     | None ->
         { model with
+            subjectId = None
             subjectInput =
                 { value = name
                   hint = Hint.Error "Vertex does not exist" } }
 
 let toggleFactor (vertex: AAG.Vertex) (model: Model) =
     let factors =
-        if List.contains vertex.name model.factorsInput then
-            List.filter ((<>) vertex.name) model.factorsInput
+        if Set.contains vertex.id model.factorsInput then
+            Set.remove vertex.id model.factorsInput
         else
-            vertex.name :: model.factorsInput
+            Set.add vertex.id model.factorsInput
 
-    { model with factorsInput = factors }
+    match model.subjectId with
+    | Some id ->
+        { model with
+            factorsInput = factors
+            graph = AAG.setProvisionalAccess id factors model.graph }
+    | None -> model
 
 let cancel model =
     { model with
+        subjectId = None
         subjectInput = Input.SubjectInput
-        factorsInput = []
+        factorsInput = Set.empty
+        graph = AAG.removeAllProvisionalAccesses model.graph
         page = Endpoint.MainMenu
         step = None }
 
 let continueSubject model = { model with step = Some "factors" }
+
+let openSubjectSelection model = { model with step = None }
 
 let handleClickedVertex (vertex: AAG.Vertex option) (model: Model) =
     match model.step with
@@ -54,15 +68,17 @@ let handleClickedVertex (vertex: AAG.Vertex option) (model: Model) =
         | _ -> model
     | _ -> model
 
+let private isSubjectValid (model: Model) = model.subjectId.IsSome
+
 let view jsRuntime (model: Model) dispatch =
-    Utility.disableButton "ContinueButton" (isInvalidInput model.subjectInput) jsRuntime
+    Utility.disableButton "ContinueButton" (not (isSubjectValid model)) jsRuntime
     |> ignore
 
     match model.step with
     | Some "factors" ->
         Template
             .AddAccessFactors()
-            .BackButton(fun _ -> dispatch (Msg.TypedSubjectName model.subjectInput.value))
+            .BackButton(fun _ -> dispatch (Msg.ClickedBackFromFactors))
             .Elt()
     | _ ->
         Template
