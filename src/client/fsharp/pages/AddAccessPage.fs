@@ -104,7 +104,7 @@ let handleClickedVertex (vertex: AAG.Vertex option) (model: Model) =
 
 let private isSubjectValid (model: Model) =
     (getSubjectNameHint model).level <> Error
-// TODO add checking name for save - also update temporary access / delete and add
+// TODO update temporary access / delete and add new one on save
 let private isValidNewAccess (model: Model) =
     (getFactorsHint model).level <> Error
     && (getAccessNameHint model).level <> Error
@@ -125,7 +125,7 @@ let view jsRuntime (model: Model) dispatch =
             .BackButton(fun _ -> dispatch (Msg.ClickedBackFromFactors))
             .SaveButton(fun _ -> dispatch (Msg.ClickedSaveAddAccessButton))
             .AccessNameInput(model.addAccessInput, (fun v -> dispatch (Msg.TypedAccessName v)))
-            .AccessNameHint((getAccessNameHint model).value) // TODO maybe use a function here instead of a raw value to a model
+            .AccessNameHint((getAccessNameHint model).value)
             .FactorsHint((getFactorsHint model).value)
             .Elt()
     | _ ->

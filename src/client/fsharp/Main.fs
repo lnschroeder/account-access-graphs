@@ -18,12 +18,12 @@ let private update message model =
         | Msg.ClickedClearGraphButton -> MainMenuPage.clearGraph
         | Msg.ClickedExampleGraphButton -> MainMenuPage.exampleGraph
         // AddVertexPage
-        | Msg.ClickedSaveAddVertexButton value -> AddVertexPage.addVertex value model
+        | Msg.ClickedSaveAddVertexButton -> AddVertexPage.addNewVertex model
         | Msg.TypedVertexName value -> AddVertexPage.updateVertexName value model
         | Msg.ClickedCancelAddVertexButton -> AddVertexPage.cancel model
         // AddAccessPage
         | Msg.TypedAccessName name -> AddAccessPage.updateAccessName name model
-        | Msg.ClickedSaveAddAccessButton -> model // TODO
+        | Msg.ClickedSaveAddAccessButton -> model
         | Msg.ClickedBackFromFactors  -> AddAccessPage.openSubjectSelection model
         | Msg.ClickedVisNodeOnAddAccessPage vertex -> AddAccessPage.handleClickedVertex vertex model
         | Msg.TypedSubjectName name -> AddAccessPage.selectSubjectByName name model

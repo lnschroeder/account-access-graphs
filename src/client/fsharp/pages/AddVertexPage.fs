@@ -12,14 +12,14 @@ let private getVertexNameHint (model: Model) =
     else
         Hint.Info
 
-let addVertex name (model: Model) =
-    if AAG.isInvalidVertexName name then
+let addNewVertex (model: Model) =
+    if AAG.isInvalidVertexName model.addVertexInput then
         model
-    elif AAG.isVertexWithNameInGraph name model.graph then
+    elif AAG.isVertexWithNameInGraph model.addVertexInput model.graph then
         model
     else
         { model with
-            graph = AAG.addVertex name model.graph
+            graph = AAG.addVertex model.addVertexInput model.graph
             addVertexInput = Model.Init.addVertexInput }
 
 let updateVertexName name (model: Model) = { model with addVertexInput = name }
@@ -36,7 +36,7 @@ let view jsRuntime (model: Model) dispatch =
     Template
         .AddVertex()
         .CancelButton(fun _ -> dispatch Msg.ClickedCancelAddVertexButton)
-        .SaveButton(fun _ -> dispatch (Msg.ClickedSaveAddVertexButton model.addVertexInput))
+        .SaveButton(fun _ -> dispatch (Msg.ClickedSaveAddVertexButton))
         .VertexNameInput(model.addVertexInput, (fun v -> dispatch (Msg.TypedVertexName v)))
         .VertexNameHint((getVertexNameHint model).value)
         .Elt()
