@@ -1,4 +1,21 @@
 <h1 class="title">Adding new access</h1>
+
+<div class="field">
+  <label class="label"
+    >Name of access</label
+  >
+  <div class="control">
+    <input
+      type="text"
+      id="AccessNameInput"
+      class="input"
+      bind="${AccessNameInput}"
+      placeholder="Access name"
+    />
+  </div>
+  <p class="help is-danger">${AccessNameHint}</p>
+</div>
+
 <div class="field">
   <label class="label">Which factors are needed for the access method?</label>
   <div class="tags">

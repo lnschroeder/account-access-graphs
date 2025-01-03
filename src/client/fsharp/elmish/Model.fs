@@ -22,6 +22,7 @@ type Input =
     static member private Optional = { value = ""; hint = Hint.Info }
     // Defaults
     static member AddVertexInput = Input.Required
+    static member AddAccessInput = Input.Required
     static member SubjectInput = Input.Required
 
 let isValidInput (input: Input) = input.hint.level <> Error
@@ -31,6 +32,7 @@ type Model =
       step: string option
       graph: AAG.Graph
       addVertexInput: Input
+      addAccessInput: Input
       subjectInput: Input
       subjectId: Guid option
       factorsInput: Guid Set }
@@ -39,6 +41,7 @@ type Model =
           step = None
           graph = AAG.Graph.Empty
           addVertexInput = Input.AddVertexInput
+          addAccessInput = Input.AddAccessInput
           subjectInput = Input.SubjectInput
           subjectId = None
           factorsInput = Set.empty }

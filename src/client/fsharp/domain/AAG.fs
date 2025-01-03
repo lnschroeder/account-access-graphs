@@ -9,15 +9,18 @@ type Vertex =
 
 and Access =
     { id: Guid
+      name: string
       factors: Guid Set
       isProvisional: bool }
-    static member Provisional factors =
+    static member Provisional name factors =
         { id = Guid.NewGuid()
+          name = name
           factors = factors
           isProvisional = true }
 
-    static member Default factors =
+    static member Default name factors =
         { id = Guid.NewGuid()
+          name = name
           factors = factors
           isProvisional = false }
 
@@ -33,12 +36,12 @@ and Graph =
               { id = Guid.Parse("1578d946-7c48-41a6-baf2-0386979c9de2")
                 name = "test2"
                 accesses =
-                  [ (Access.Default(
-                        Set
+                  [ (Access.Default
+                        "access1"
+                        (Set
                             .empty
                             .Add(Guid.Parse("1578d946-7c48-41a6-baf2-0386979c9de1"))
-                            .Add(Guid.Parse("1578d946-7c48-41a6-baf2-0386979c9de3"))
-                    )) ] }
+                            .Add(Guid.Parse("1578d946-7c48-41a6-baf2-0386979c9de3")))) ] }
               { id = Guid.Parse("1578d946-7c48-41a6-baf2-0386979c9de3")
                 name = "test222"
                 accesses = [] } ] }
@@ -58,6 +61,7 @@ let isVertexWithNameInGraph vertexName graph =
          |> Seq.map (fun vertex -> vertex.name))
 
 let isInvalidVertexName value = String.IsNullOrWhiteSpace(value)
+let isInvalidAccessName value = String.IsNullOrWhiteSpace(value)
 
 let addVertex vertexName graph =
     let vertex: Vertex =
@@ -68,9 +72,16 @@ let addVertex vertexName graph =
     { graph with vertices = vertex :: graph.vertices }
 
 let removeAllProvisionalAccesses graph =
-    {graph with vertices = graph.vertices |> List.map (fun vertex -> { vertex with accesses = vertex.accesses |> List.filter (fun access -> not access.isProvisional)})}
+    { graph with
+        vertices =
+            graph.vertices
+            |> List.map (fun vertex ->
+                { vertex with
+                    accesses =
+                        vertex.accesses
+                        |> List.filter (fun access -> not access.isProvisional) }) }
 
-let setProvisionalAccess vertexId factors graph =
+let setProvisionalAccess vertexId name factors graph =
     { graph with
         vertices =
             graph.vertices
@@ -78,7 +89,7 @@ let setProvisionalAccess vertexId factors graph =
                 if vertex.id = vertexId then
                     { vertex with
                         accesses =
-                            Access.Provisional factors
+                            Access.Provisional name factors
                             :: (vertex.accesses
                                 |> List.filter (fun access -> not access.isProvisional)) }
                 else
@@ -88,5 +99,14 @@ let isAccessPresentWithFactors vertexId factors graph =
     match findVertexById vertexId graph with
     | Some vertex ->
         vertex.accesses
-        |> List.exists (fun access -> access.factors = factors && access.isProvisional = false)
+        |> List.exists (fun access ->
+            access.factors = factors
+            && access.isProvisional = false)
+    | None -> false
+
+let isAccessPresentWithName vertexId name graph =
+    match findVertexById vertexId graph with
+    | Some vertex ->
+        vertex.accesses
+        |> List.exists (fun access -> access.name = name && access.isProvisional = false)
     | None -> false
