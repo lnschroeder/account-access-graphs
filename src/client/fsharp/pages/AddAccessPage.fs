@@ -104,7 +104,7 @@ let private isValidNewAccess (model: Model) =
     | Some subjectId ->
         not model.factorsInput.IsEmpty
         && not (AAG.isAccessPresentWithFactors subjectId model.factorsInput model.graph)
-        && isValidInput model.addAccessInput
+        && model.addAccessInput.hint.level <> Error
     | None -> false
 
 let updateAccessName name (model: Model) =

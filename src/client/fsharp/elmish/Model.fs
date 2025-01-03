@@ -25,8 +25,6 @@ type Input =
     static member AddAccessInput = Input.Required
     static member SubjectInput = Input.Required
 
-let isValidInput (input: Input) = input.hint.level <> Error
-
 type Model =
     { page: Endpoint.Page
       step: string option
