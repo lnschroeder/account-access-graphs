@@ -83,3 +83,10 @@ let setProvisionalAccess vertexId factors graph =
                                 |> List.filter (fun access -> not access.isProvisional)) }
                 else
                     vertex) }
+
+let isAccessPresentWithFactors vertexId factors graph =
+    match findVertexById vertexId graph with
+    | Some vertex ->
+        vertex.accesses
+        |> List.exists (fun access -> access.factors = factors && access.isProvisional = false)
+    | None -> false

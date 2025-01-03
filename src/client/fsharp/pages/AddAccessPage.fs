@@ -70,8 +70,18 @@ let handleClickedVertex (vertex: AAG.Vertex option) (model: Model) =
 
 let private isSubjectValid (model: Model) = model.subjectId.IsSome
 
+let private isValidNewAccess (model: Model) =
+    match model.subjectId with
+    | Some subjectId ->
+        not model.factorsInput.IsEmpty
+        && not (AAG.isAccessPresentWithFactors subjectId model.factorsInput model.graph)
+    | None -> false
+
 let view jsRuntime (model: Model) dispatch =
     Utility.disableButton "ContinueButton" (not (isSubjectValid model)) jsRuntime
+    |> ignore
+
+    Utility.disableButton "SaveButton" (not (isValidNewAccess model)) jsRuntime
     |> ignore
 
     match model.step with
@@ -79,6 +89,7 @@ let view jsRuntime (model: Model) dispatch =
         Template
             .AddAccessFactors()
             .BackButton(fun _ -> dispatch (Msg.ClickedBackFromFactors))
+            .SaveButton(fun _ -> dispatch (Msg.ClickedSaveAddAccessButton))
             .Elt()
     | _ ->
         Template

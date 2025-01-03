@@ -10,6 +10,7 @@ type Message =
     | ClickedContinueSubject
     | ClickedCancelAddAccessButton
     | ClickedBackFromFactors
+    | ClickedSaveAddAccessButton
     | ClickedCancelAddVertexButton
     | ClickedClearGraphButton
     | ClickedExampleGraphButton

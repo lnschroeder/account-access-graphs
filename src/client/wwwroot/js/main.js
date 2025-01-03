@@ -1,6 +1,28 @@
 // utility
+/**
+ * Sets the disabled state of a button with the given ID. If the button is not
+ * yet in the DOM, it observes the DOM for changes and sets the disabled state
+ * once the button is available.
+ */
 function setButtonDisabled(buttonId, isDisabled) {
-  document.getElementById(buttonId).disabled = isDisabled;
+  const observer = new MutationObserver((mutations, obs) => {
+    const button = document.getElementById(buttonId);
+    if (button) {
+      button.disabled = isDisabled;
+      obs.disconnect();
+    }
+  });
+
+  observer.observe(document.body, {
+    childList: true,
+    subtree: true,
+  });
+
+  const button = document.getElementById(buttonId);
+  if (button) {
+    button.disabled = isDisabled;
+    observer.disconnect();
+  }
 }
 window.setButtonDisabled = setButtonDisabled;
 
