@@ -13,27 +13,31 @@ let private getFactorsHint (model: Model) =
             Hint.Info
     | None -> Hint.Error "No subject vertex selected yet"
 
-let private getAccessNameHint name (model: Model) =
+let private getAccessNameHint (model: Model) =
     match model.subjectId with
     | Some subjectId ->
-        if name = "" then
-            Input.AddAccessInput.hint
-        elif AAG.isInvalidAccessName name then
+        if model.addAccessInput = "" then
+            Hint.Required
+        elif AAG.isInvalidAccessName model.addAccessInput then
             Hint.Error "Invalid name"
-        elif AAG.isAccessPresentWithName subjectId name model.graph then
+        elif AAG.isAccessPresentWithName subjectId model.addAccessInput model.graph then
             Hint.Error "Access name already taken for that vertex"
         else
             Hint.Info
     | None -> Hint.Error "Select a subject vertex first!"
 
-let private getUpdatedAccessNameInput (model: Model) =
-    { model.addAccessInput with hint = getAccessNameHint model.addAccessInput.value model }
+let private getSubjectNameHint (model: Model) =
+    if model.subjectInput = "" then
+        Hint.Required
+    else
+        match AAG.findVertexByName model.subjectInput model.graph with
+        | Some _ -> Hint.Info
+        | None -> Hint.Error "Vertex does not exist"
 
 let private deselectSubject (model: Model) =
     { model with
         subjectId = None
-        subjectInput = Input.SubjectInput
-        addAccessInput = getUpdatedAccessNameInput model
+        subjectInput = ""
         graph = AAG.removeAllProvisionalAccesses model.graph }
 
 let private selectSubject (vertex: AAG.Vertex) (model: Model) =
@@ -43,13 +47,10 @@ let private selectSubject (vertex: AAG.Vertex) (model: Model) =
         graph =
             AAG.setProvisionalAccess
                 vertex.id
-                model.addAccessInput.value
+                model.addAccessInput
                 model.factorsInput
                 (AAG.removeAllProvisionalAccesses model.graph)
-        addAccessInput = getUpdatedAccessNameInput model
-        subjectInput =
-            { value = vertex.name
-              hint = Hint.Info } }
+        subjectInput = vertex.name }
 
 let selectSubjectByName name (model: Model) =
     let vertex = AAG.findVertexByName name model.graph
@@ -59,10 +60,7 @@ let selectSubjectByName name (model: Model) =
     | None ->
         { model with
             subjectId = None
-            subjectInput =
-                { value = name
-                  hint = Hint.Error "Vertex does not exist" }
-            addAccessInput = getUpdatedAccessNameInput model }
+            subjectInput = name }
 
 let toggleFactor (vertex: AAG.Vertex) (model: Model) =
     let factors =
@@ -74,25 +72,21 @@ let toggleFactor (vertex: AAG.Vertex) (model: Model) =
     match model.subjectId with
     | Some id ->
         { model with
-            addAccessInput = getUpdatedAccessNameInput model
             factorsInput = factors
-            graph = AAG.setProvisionalAccess id model.addAccessInput.value factors model.graph }
+            graph = AAG.setProvisionalAccess id model.addAccessInput factors model.graph }
     | None -> model
 
 let cancel model =
     { model with
         subjectId = None
-        subjectInput = Input.SubjectInput
+        subjectInput = ""
         factorsInput = Set.empty
-        addAccessInput = Input.AddAccessInput
+        addAccessInput = ""
         graph = AAG.removeAllProvisionalAccesses model.graph
         page = Endpoint.MainMenu
         step = None }
 
-let openFactorsSelection model =
-    { model with
-        step = Some "factors"
-        addAccessInput = getUpdatedAccessNameInput model }
+let openFactorsSelection model = { model with step = Some "factors" }
 
 let openSubjectSelection model = { model with step = None }
 
@@ -108,18 +102,14 @@ let handleClickedVertex (vertex: AAG.Vertex option) (model: Model) =
         | _ -> model
     | _ -> model
 
-let private isSubjectValid (model: Model) = model.subjectId.IsSome
+let private isSubjectValid (model: Model) =
+    (getSubjectNameHint model).level <> Error
 // TODO add checking name for save - also update temporary access / delete and add
 let private isValidNewAccess (model: Model) =
     (getFactorsHint model).level <> Error
-    && model.addAccessInput.hint.level <> Error
+    && (getAccessNameHint model).level <> Error
 
-let updateAccessName name (model: Model) =
-    { model with
-        addAccessInput =
-            { model.addAccessInput with
-                value = name
-                hint = getAccessNameHint name model } }
+let updateAccessName name (model: Model) = { model with addAccessInput = name }
 
 let view jsRuntime (model: Model) dispatch =
     Utility.toggleButtonEnabled "ContinueButton" (isSubjectValid model) jsRuntime
@@ -134,8 +124,8 @@ let view jsRuntime (model: Model) dispatch =
             .AddAccessFactors()
             .BackButton(fun _ -> dispatch (Msg.ClickedBackFromFactors))
             .SaveButton(fun _ -> dispatch (Msg.ClickedSaveAddAccessButton))
-            .AccessNameInput(model.addAccessInput.value, (fun v -> dispatch (Msg.TypedAccessName v)))
-            .AccessNameHint(model.addAccessInput.hint.value) // TODO maybe use a function here instead of a raw value to a model
+            .AccessNameInput(model.addAccessInput, (fun v -> dispatch (Msg.TypedAccessName v)))
+            .AccessNameHint((getAccessNameHint model).value) // TODO maybe use a function here instead of a raw value to a model
             .FactorsHint((getFactorsHint model).value)
             .Elt()
     | _ ->
@@ -143,6 +133,6 @@ let view jsRuntime (model: Model) dispatch =
             .AddAccessSubject()
             .CancelButton(fun _ -> dispatch Msg.ClickedCancelAddAccessButton)
             .ContinueButton(fun _ -> dispatch Msg.ClickedContinueSubject)
-            .VertexNameInput(model.subjectInput.value, (fun v -> dispatch (Msg.TypedSubjectName v)))
-            .VertexNameHint(model.subjectInput.hint.value)
+            .VertexNameInput(model.subjectInput, (fun v -> dispatch (Msg.TypedSubjectName v)))
+            .VertexNameHint((getSubjectNameHint model).value)
             .Elt()

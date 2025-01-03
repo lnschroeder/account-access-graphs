@@ -2,6 +2,16 @@ module AAG.Client.AddVertexPage
 
 open Model
 
+let private getVertexNameHint (model: Model) =
+    if model.addVertexInput = "" then
+        Hint.Required
+    elif AAG.isInvalidVertexName model.addVertexInput then
+        Hint.Error "Invalid name"
+    elif AAG.isVertexWithNameInGraph model.addVertexInput model.graph then
+        Hint.Error "Vertex already exists"
+    else
+        Hint.Info
+
 let addVertex name (model: Model) =
     if AAG.isInvalidVertexName name then
         model
@@ -12,36 +22,21 @@ let addVertex name (model: Model) =
             graph = AAG.addVertex name model.graph
             addVertexInput = Model.Init.addVertexInput }
 
-let updateVertexName name (model: Model) =
-    let hint =
-        if name = "" then
-            Input.AddVertexInput.hint
-        elif AAG.isInvalidVertexName name then
-            Hint.Error "Invalid name"
-        elif AAG.isVertexWithNameInGraph name model.graph then
-            Hint.Error "Vertex already exists"
-        else
-            Hint.Info
-
-    { model with
-        addVertexInput =
-            { model.addVertexInput with
-                value = name
-                hint = hint } }
+let updateVertexName name (model: Model) = { model with addVertexInput = name }
 
 let cancel model =
     { model with
-        addVertexInput = Input.AddVertexInput
+        addVertexInput = ""
         page = Endpoint.MainMenu }
 
 let view jsRuntime (model: Model) dispatch =
-    Utility.toggleButtonEnabled "SaveButton" (model.addVertexInput.hint.level <> Error) jsRuntime
+    Utility.toggleButtonEnabled "SaveButton" ((getVertexNameHint model).level <> Error) jsRuntime
     |> ignore
 
     Template
         .AddVertex()
         .CancelButton(fun _ -> dispatch Msg.ClickedCancelAddVertexButton)
-        .SaveButton(fun _ -> dispatch (Msg.ClickedSaveAddVertexButton model.addVertexInput.value))
-        .VertexNameInput(model.addVertexInput.value, (fun v -> dispatch (Msg.TypedVertexName v)))
-        .VertexNameHint(model.addVertexInput.hint.value)
+        .SaveButton(fun _ -> dispatch (Msg.ClickedSaveAddVertexButton model.addVertexInput))
+        .VertexNameInput(model.addVertexInput, (fun v -> dispatch (Msg.TypedVertexName v)))
+        .VertexNameHint((getVertexNameHint model).value)
         .Elt()

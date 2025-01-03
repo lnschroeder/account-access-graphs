@@ -15,32 +15,22 @@ type Hint =
     static member Error value = { value = value; level = Error }
     static member Required = Hint.Error "Field is required"
 
-type Input =
-    { value: string
-      hint: Hint }
-    static member private Required = { value = ""; hint = Hint.Required }
-    static member private Optional = { value = ""; hint = Hint.Info }
-    // Defaults
-    static member AddVertexInput = Input.Required
-    static member AddAccessInput = Input.Required
-    static member SubjectInput = Input.Required
-
 type Model =
     { page: Endpoint.Page
       step: string option
       graph: AAG.Graph
-      addVertexInput: Input
-      addAccessInput: Input
-      subjectInput: Input
+      addVertexInput: string
+      addAccessInput: string
+      subjectInput: string
       subjectId: Guid option
       factorsInput: Guid Set }
     static member Init =
         { page = Endpoint.MainMenu
           step = None
           graph = AAG.Graph.Empty
-          addVertexInput = Input.AddVertexInput
-          addAccessInput = Input.AddAccessInput
-          subjectInput = Input.SubjectInput
+          addVertexInput = ""
+          addAccessInput = ""
+          subjectInput = ""
           subjectId = None
           factorsInput = Set.empty }
 
