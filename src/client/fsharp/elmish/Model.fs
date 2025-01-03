@@ -24,7 +24,7 @@ type Model =
       subjectInput: string
       subjectId: Guid option
       factorsInput: Guid Set }
-    static member Init =
+    static member Init = // TODO remove unnecessary Init usages
         { page = Endpoint.MainMenu
           step = None
           graph = AAG.Graph.Empty

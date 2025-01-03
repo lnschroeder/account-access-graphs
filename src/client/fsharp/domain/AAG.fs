@@ -81,6 +81,19 @@ let removeAllProvisionalAccesses graph =
                         vertex.accesses
                         |> List.filter (fun access -> not access.isProvisional) }) }
 
+let addAccessToVertex access vertex =
+    { vertex with accesses = access :: vertex.accesses }
+
+let addAccessToGraph vertexId access graph =
+    { graph with
+        vertices =
+            graph.vertices
+            |> List.map (fun vertex ->
+                if vertex.id = vertexId then
+                    addAccessToVertex access vertex
+                else
+                    vertex) }
+
 let setProvisionalAccess vertexId name factors graph =
     { graph with
         vertices =

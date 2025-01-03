@@ -12,7 +12,7 @@ let private getVertexNameHint (model: Model) =
     else
         Hint.Info
 
-let addNewVertex (model: Model) =
+let addNewVertex (model: Model) = // TODO replace with getVertexNameHint instead
     if AAG.isInvalidVertexName model.addVertexInput then
         model
     elif AAG.isVertexWithNameInGraph model.addVertexInput model.graph then
@@ -20,7 +20,7 @@ let addNewVertex (model: Model) =
     else
         { model with
             graph = AAG.addVertex model.addVertexInput model.graph
-            addVertexInput = Model.Init.addVertexInput }
+            addVertexInput = Model.Init.addVertexInput } // TODo use cancel instead
 
 let updateVertexName name (model: Model) = { model with addVertexInput = name }
 
