@@ -8,6 +8,8 @@ let private getFactorsHint (model: Model) = // TODO just pass minimal
     | Some subjectId ->
         if model.factorsInput.IsEmpty then
             Hint.Error "Select at least one factor"
+        elif Seq.contains subjectId model.factorsInput then
+            Hint.Error "Self-references are not allowed"
         elif AAG.isAccessPresentWithFactors subjectId (Set.ofList model.factorsInput) model.graph then
             Hint.Error "There is already an access with the same factors"
         else
@@ -31,7 +33,9 @@ let private getAccessNameInputPlaceholder (model: Model) =
     match model.subjectId with
     | Some subjectId ->
         match AAG.findVertexById subjectId model.graph with
-        | Some vertex -> "Defaults to: " + (AAG.findNextAvailableColor vertex).ToString()
+        | Some subject ->
+            "Defaults to: "
+            + (AAG.findNextAvailableColor subject).ToString()
         | None -> "Invalid subject vertex selected"
     | None -> "Select a subject vertex first"
 
@@ -40,7 +44,11 @@ let private getSubjectNameHint (model: Model) =
         Hint.Required
     else
         match AAG.findVertexByName model.subjectInput model.graph with
-        | Some _ -> Hint.Info
+        | Some vertex ->
+            if Seq.contains vertex.id model.factorsInput then
+                Hint.Error "Self-references are not allowed"
+            else
+                Hint.Info
         | None -> Hint.Error "Vertex does not exist"
 
 let private deselectSubject (model: Model) =
@@ -60,7 +68,6 @@ let private selectSubject (vertex: AAG.Vertex) (model: Model) =
                 (Set.ofList model.factorsInput)
                 (AAG.removeAllProvisionalAccesses model.graph)
         subjectInput = vertex.name }
-
 let selectSubjectByName name (model: Model) =
     let vertex = AAG.findVertexByName name model.graph
 
@@ -95,7 +102,9 @@ let addProvisionalFactor vertexId (model: Model) =
     | None -> model
 
 let toggleFactor vertexId (model: Model) =
-    if List.contains vertexId model.factorsInput then
+    if Some vertexId = model.subjectId then
+        model
+    elif List.contains vertexId model.factorsInput then
         removeProvisionalFactor vertexId model
     else
         addProvisionalFactor vertexId model
@@ -133,7 +142,8 @@ let private isValidNewAccess (model: Model) =
     (getFactorsHint model).level <> Error
     && (getAccessNameHint model).level <> Error
 
-let updateAccessName name (model: Model) = { model with addAccessNameInput = name }
+let updateAccessName name (model: Model) =
+    { model with addAccessNameInput = name }
 
 let addNewAccess name (model: Model) =
     match model.subjectId with
@@ -141,10 +151,7 @@ let addNewAccess name (model: Model) =
         match AAG.findVertexById subjectId model.graph with
         | Some vertex ->
             let access: AAG.Access =
-                AAG.Access.Default
-                    name
-                    (Set.ofList model.factorsInput)
-                    (AAG.findNextAvailableColor vertex)
+                AAG.Access.Default name (Set.ofList model.factorsInput) (AAG.findNextAvailableColor vertex)
 
             let graph =
                 AAG.addAccessToGraph subjectId access (AAG.removeAllProvisionalAccesses model.graph) // TODO make more efficient
@@ -182,7 +189,15 @@ let view jsRuntime (model: Model) dispatch =
         Template
             .AddAccessFactors()
             .BackButton(fun _ -> dispatch (Msg.ClickedBackFromFactors))
-            .SaveButton(fun _ -> dispatch (Msg.ClickedSaveAddAccessButton (if model.subjectInput = "" then None else Some model.subjectInput)))
+            .SaveButton(fun _ ->
+                dispatch (
+                    Msg.ClickedSaveAddAccessButton(
+                        if model.subjectInput = "" then
+                            None
+                        else
+                            Some model.subjectInput
+                    )
+                ))
             .AccessNameInput(model.addAccessNameInput, (fun v -> dispatch (Msg.TypedAccessName v)))
             .AccessNameInputPlaceholder(getAccessNameInputPlaceholder model)
             .AccessNameHint((getAccessNameHint model).value)
