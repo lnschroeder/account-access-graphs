@@ -129,14 +129,20 @@ let updateAccessName name (model: Model) = { model with addAccessInput = name }
 
 let addNewAccess (model: Model) =
     match model.subjectId with
-    | Some subjectId when isValidNewAccess model ->
-        let access: AAG.Access =
-            AAG.Access.Default model.addAccessInput (Set.ofList model.factorsInput)
+    | Some subjectId ->
+        match AAG.findVertexById subjectId model.graph with
+        | Some vertex ->
+            let access: AAG.Access =
+                AAG.Access.Default
+                    model.addAccessInput
+                    (Set.ofList model.factorsInput)
+                    (AAG.findNextAvailableColor vertex)
 
-        let graph =
-            AAG.addAccessToGraph subjectId access (AAG.removeAllProvisionalAccesses model.graph) // TODO make more efficient
+            let graph =
+                AAG.addAccessToGraph subjectId access (AAG.removeAllProvisionalAccesses model.graph) // TODO make more efficient
 
-        cancel { model with graph = graph }
+            cancel { model with graph = graph }
+        | None -> model
     | _ -> model // TODO
 
 let private showFactor (model: Model) dispatch id =

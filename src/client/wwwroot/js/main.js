@@ -132,20 +132,10 @@ function updateNetwork(networkDTO) {
       },
     });
 
-    // reorders edges such that the provisional edges come last
-    // i.e. they get rendered on top of all other edges
-    edges.sort((a, b) => {
-      if (a.isProvisional && !b.isProvisional) {
-        return 1;
-      } else {
-        return -1;
-      }
-    });
-
     edges.forEach((edge) => {
       let dashes = false;
       let physics = true;
-      let color = getCssVariable(colors[edge.index]);
+      let color = getCssVariable(colors[edge.color]);
       let width = 1;
 
       if (edge.isProvisional) {

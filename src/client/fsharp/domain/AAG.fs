@@ -18,18 +18,21 @@ and Access =
     { id: Guid
       name: string
       factors: Factor Set
+      colorIndex: byte
       isProvisional: bool }
-    static member Provisional name factors =
+    static member Provisional name factors color =
         { id = Guid.NewGuid()
           name = name
           factors = factors |> Set.map Factor.Default
-          isProvisional = true }
+          isProvisional = true
+          colorIndex = color }
 
-    static member Default name factors =
+    static member Default name factors colorIndex =
         { id = Guid.NewGuid()
           name = name
           factors = factors |> Set.map Factor.Default
-          isProvisional = false }
+          isProvisional = false
+          colorIndex = colorIndex }
 
 and Graph =
     { vertices: Vertex list }
@@ -48,10 +51,20 @@ and Graph =
                         (Set
                             .empty
                             .Add(Guid.Parse("1578d946-7c48-41a6-baf2-0386979c9de1"))
-                            .Add(Guid.Parse("1578d946-7c48-41a6-baf2-0386979c9de3")))) ] }
+                            .Add(Guid.Parse("1578d946-7c48-41a6-baf2-0386979c9de3")))
+                        1uy) ] }
               { id = Guid.Parse("1578d946-7c48-41a6-baf2-0386979c9de3")
                 name = "test222"
                 accesses = [] } ] }
+
+let findNextAvailableColor (vertex: Vertex) =
+    let usedColors =
+        vertex.accesses
+        |> Seq.map (fun access -> access.colorIndex)
+        |> Seq.sort
+
+    Seq.zip usedColors (Seq.initInfinite byte)
+    |> Seq.find (fun (a, b) -> a <> b)
 
 let findVertexById id graph =
     graph.vertices
@@ -114,7 +127,7 @@ let setProvisionalAccess vertexId name (factors: Guid Set) graph =
                             accesses =
                                 (vertex.accesses
                                  |> List.filter (fun access -> not access.isProvisional))
-                                @ [ Access.Provisional name factors ] }
+                                @ [ Access.Provisional name factors (findNextAvailableColor vertex) ] }
                     else
                         vertex) }
 
@@ -123,7 +136,8 @@ let isAccessPresentWithFactors vertexId factors graph =
     | Some vertex ->
         vertex.accesses
         |> List.exists (fun access ->
-            access.factors |> Set.map (fun factor -> factor.vertexId) = factors
+            access.factors
+            |> Set.map (fun factor -> factor.vertexId) = factors
             && access.isProvisional = false)
     | None -> false
 
