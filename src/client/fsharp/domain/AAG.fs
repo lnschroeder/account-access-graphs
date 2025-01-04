@@ -29,7 +29,9 @@ and Access =
 
     static member Default name factors colorIndex =
         { id = Guid.NewGuid()
-          name = name
+          name =
+            name
+            |> Option.defaultValue (colorIndex.ToString())
           factors = factors |> Set.map Factor.Default
           isProvisional = false
           colorIndex = colorIndex }
@@ -47,7 +49,7 @@ and Graph =
                 name = "test2"
                 accesses =
                   [ (Access.Default
-                        "access1"
+                        None
                         (Set
                             .empty
                             .Add(Guid.Parse("1578d946-7c48-41a6-baf2-0386979c9de1"))
@@ -64,8 +66,10 @@ let findNextAvailableColor (vertex: Vertex) =
         |> Seq.sort
 
     Seq.zip usedColors (Seq.initInfinite byte)
-    |> Seq.find (fun (a, b) -> a <> b)
-    |> snd
+    |> Seq.tryFind (fun (a, b) -> a <> b)
+    |> function
+        | Some (_, b) -> b
+        | None -> Seq.length usedColors |> byte
 
 let findVertexById id graph =
     graph.vertices

@@ -23,7 +23,7 @@ let private update message model =
         | Msg.ClickedCancelAddVertexButton -> AddVertexPage.cancel model
         // AddAccessPage
         | Msg.TypedAccessName name -> AddAccessPage.updateAccessName name model
-        | Msg.ClickedSaveAddAccessButton -> AddAccessPage.addNewAccess model
+        | Msg.ClickedSaveAddAccessButton name -> AddAccessPage.addNewAccess name model
         | Msg.ClickedBackFromFactors  -> AddAccessPage.openSubjectSelection model
         | Msg.ClickedVisNodeOnAddAccessPage vertex -> AddAccessPage.handleClickedVertex vertex model
         | Msg.TypedSubjectName name -> AddAccessPage.selectSubjectByName name model

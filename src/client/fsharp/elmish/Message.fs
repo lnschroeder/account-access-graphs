@@ -14,7 +14,7 @@ type Message =
     | ClickedCancelAddAccessButton
     | ClickedRemoveProvisionalFactor of Guid
     | ClickedBackFromFactors
-    | ClickedSaveAddAccessButton
+    | ClickedSaveAddAccessButton of string option
     | ClickedCancelAddVertexButton
     | ClickedClearGraphButton
     | ClickedExampleGraphButton

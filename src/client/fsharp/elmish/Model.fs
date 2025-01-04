@@ -20,7 +20,7 @@ type Model =
       step: string option
       graph: AAG.Graph
       addVertexInput: string
-      addAccessInput: string
+      addAccessNameInput: string
       subjectInput: string
       subjectId: Guid option
       factorsInput: Guid list }
@@ -29,7 +29,7 @@ type Model =
           step = None
           graph = AAG.Graph.Empty
           addVertexInput = ""
-          addAccessInput = ""
+          addAccessNameInput = ""
           subjectInput = ""
           subjectId = None
           factorsInput = [] }
