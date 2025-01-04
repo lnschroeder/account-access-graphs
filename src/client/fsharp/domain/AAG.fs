@@ -105,9 +105,8 @@ let setProvisionalAccess vertexId name (factors: Guid Set ) graph =
                     if vertex.id = vertexId then
                         { vertex with
                             accesses =
-                                Access.Provisional name factors
-                                :: (vertex.accesses
-                                    |> List.filter (fun access -> not access.isProvisional)) }
+                                (vertex.accesses
+                                    |> List.filter (fun access -> not access.isProvisional)) @ [Access.Provisional name factors] }
                     else
                         vertex) }
 
