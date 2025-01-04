@@ -36,8 +36,8 @@ let transform (model: Model) =
              |> List.collect (fun (index, access) ->
                  access.factors
                  |> Set.map (fun factor ->
-                     { id = Guid.NewGuid()
-                       from = factor
+                     { id = factor.id
+                       from = factor.vertexId
                        ``to`` = vertex.id
                        isProvisional = access.isProvisional
                        index = index })

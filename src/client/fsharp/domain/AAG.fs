@@ -7,21 +7,28 @@ type Vertex =
       name: string
       accesses: Access list }
 
+and Factor =
+    { id: Guid // equivalent to the edge id
+      vertexId: Guid }
+    static member Default vertexId =
+        { id = Guid.NewGuid()
+          vertexId = vertexId }
+
 and Access =
     { id: Guid
       name: string
-      factors: Guid Set
+      factors: Factor Set
       isProvisional: bool }
     static member Provisional name factors =
         { id = Guid.NewGuid()
           name = name
-          factors = factors
+          factors = factors |> Set.map Factor.Default
           isProvisional = true }
 
     static member Default name factors =
         { id = Guid.NewGuid()
           name = name
-          factors = factors
+          factors = factors |> Set.map Factor.Default
           isProvisional = false }
 
 and Graph =
@@ -94,7 +101,7 @@ let addAccessToGraph vertexId access graph =
                 else
                     vertex) }
 
-let setProvisionalAccess vertexId name (factors: Guid Set ) graph =
+let setProvisionalAccess vertexId name (factors: Guid Set) graph =
     if factors.IsEmpty then
         removeAllProvisionalAccesses graph
     else
@@ -106,7 +113,8 @@ let setProvisionalAccess vertexId name (factors: Guid Set ) graph =
                         { vertex with
                             accesses =
                                 (vertex.accesses
-                                    |> List.filter (fun access -> not access.isProvisional)) @ [Access.Provisional name factors] }
+                                 |> List.filter (fun access -> not access.isProvisional))
+                                @ [ Access.Provisional name factors ] }
                     else
                         vertex) }
 
@@ -115,7 +123,7 @@ let isAccessPresentWithFactors vertexId factors graph =
     | Some vertex ->
         vertex.accesses
         |> List.exists (fun access ->
-            access.factors = factors
+            access.factors |> Set.map (fun factor -> factor.vertexId) = factors
             && access.isProvisional = false)
     | None -> false
 
