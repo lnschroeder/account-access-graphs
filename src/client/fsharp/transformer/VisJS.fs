@@ -14,7 +14,7 @@ type Edge =
       from: Guid
       ``to``: Guid
       isProvisional: bool
-      color: byte }
+      colorIndex: byte }
 
 type Network = { nodes: Node list; edges: Edge list }
 
@@ -39,5 +39,5 @@ let transform (model: Model) =
                        from = factor.vertexId
                        ``to`` = vertex.id
                        isProvisional = access.isProvisional
-                       color = access.colorIndex })
+                       colorIndex = access.colorIndex })
                  |> Seq.toList))) }

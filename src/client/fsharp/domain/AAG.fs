@@ -20,12 +20,12 @@ and Access =
       factors: Factor Set
       colorIndex: byte
       isProvisional: bool }
-    static member Provisional name factors color =
+    static member Provisional name factors =
         { id = Guid.NewGuid()
           name = name
           factors = factors |> Set.map Factor.Default
           isProvisional = true
-          colorIndex = color }
+          colorIndex = Byte.MaxValue }
 
     static member Default name factors colorIndex =
         { id = Guid.NewGuid()
@@ -65,6 +65,7 @@ let findNextAvailableColor (vertex: Vertex) =
 
     Seq.zip usedColors (Seq.initInfinite byte)
     |> Seq.find (fun (a, b) -> a <> b)
+    |> snd
 
 let findVertexById id graph =
     graph.vertices
@@ -127,7 +128,7 @@ let setProvisionalAccess vertexId name (factors: Guid Set) graph =
                             accesses =
                                 (vertex.accesses
                                  |> List.filter (fun access -> not access.isProvisional))
-                                @ [ Access.Provisional name factors (findNextAvailableColor vertex) ] }
+                                @ [ Access.Provisional name factors ] }
                     else
                         vertex) }
 

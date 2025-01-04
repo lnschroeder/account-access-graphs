@@ -64,13 +64,15 @@ const options = () => ({
 });
 let network = new vis.Network(container, data, options());
 
+// "Vibrant qualitative color-blind safe color scheme" by Paul Tol
+// source: https://personal.sron.nl/~pault/#sec:qualitative
 const colors = [
-  "--bulma-text",
-  "--bulma-link",
-  "--bulma-primary",
-  "--bulma-info",
-  "--bulma-success",
-  "--bulma-danger",
+  "#EE7733",
+  "#0077BB",
+  "#EE3377",
+  "#009988",
+  "#CC3311",
+  "#33BBEE",
 ];
 
 // removes, updates, and adds nodes and edges to the network
@@ -135,7 +137,7 @@ function updateNetwork(networkDTO) {
     edges.forEach((edge) => {
       let dashes = false;
       let physics = true;
-      let color = getCssVariable(colors[edge.color]);
+      let color = colors[edge.colorIndex % colors.length]; // TODO use random color instead
       let width = 1;
 
       if (edge.isProvisional) {
