@@ -106,7 +106,7 @@ function updateNetwork(networkDTO) {
     let backgroundColor = getCssVariable("--bulma-text-bold-invert");
     let fontColor = getCssVariable("--bulma-text-bold");
 
-    if (node.isSelected) {
+    if (node.isSubject) {
       borderWidth = 3;
     }
 
