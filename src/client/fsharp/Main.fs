@@ -28,6 +28,7 @@ let private update message model =
         | Msg.ClickedVisNodeOnAddAccessPage vertex -> AddAccessPage.handleClickedVertex vertex model
         | Msg.TypedSubjectName name -> AddAccessPage.selectSubjectByName name model
         | Msg.ClickedCancelAddAccessButton -> AddAccessPage.cancel model
+        | Msg.ClickedRemoveProvisionalFactor id -> AddAccessPage.removeProvisionalFactor id model
         | Msg.ClickedContinueSubject -> AddAccessPage.openFactorsSelection model
 
     model, Cmd.none

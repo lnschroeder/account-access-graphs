@@ -64,19 +64,33 @@ let selectSubjectByName name (model: Model) =
             subjectInput = name
             graph = AAG.removeAllProvisionalAccesses model.graph }
 
-let toggleFactor (vertex: AAG.Vertex) (model: Model) =
-    let factors =
-        if List.contains vertex.id model.factorsInput then
-            model.factorsInput |> List.filter (fun id -> id <> vertex.id)
-        else
-            model.factorsInput @ [vertex.id]
-
+let removeProvisionalFactor vertexId (model: Model) =
     match model.subjectId with
-    | Some id ->
+    | Some subjectId ->
+        let factors =
+            model.factorsInput
+            |> List.filter (fun id -> id <> vertexId)
+
         { model with
             factorsInput = factors
-            graph = AAG.setProvisionalAccess id model.addAccessInput (Set.ofList factors) model.graph }
+            graph = AAG.setProvisionalAccess subjectId model.addAccessInput (Set.ofList factors) model.graph }
     | None -> model
+
+let addProvisionalFactor vertexId (model: Model) =
+    match model.subjectId with
+    | Some subjectId ->
+        let factors = model.factorsInput @ [ vertexId ]
+
+        { model with
+            factorsInput = factors
+            graph = AAG.setProvisionalAccess subjectId model.addAccessInput (Set.ofList factors) model.graph }
+    | None -> model
+
+let toggleFactor vertexId (model: Model) =
+    if List.contains vertexId model.factorsInput then
+        removeProvisionalFactor vertexId model
+    else
+        addProvisionalFactor vertexId model
 
 let cancel model =
     { model with
@@ -100,7 +114,7 @@ let handleClickedVertex (vertex: AAG.Vertex option) (model: Model) =
         | None -> deselectSubject model
     | Some "factors" ->
         match vertex with
-        | Some vertex -> toggleFactor vertex model
+        | Some vertex -> toggleFactor vertex.id model
         | _ -> model
     | _ -> model
 
@@ -116,7 +130,8 @@ let updateAccessName name (model: Model) = { model with addAccessInput = name }
 let addNewAccess (model: Model) =
     match model.subjectId with
     | Some subjectId when isValidNewAccess model ->
-        let access: AAG.Access = AAG.Access.Default model.addAccessInput (Set.ofList model.factorsInput)
+        let access: AAG.Access =
+            AAG.Access.Default model.addAccessInput (Set.ofList model.factorsInput)
 
         let graph =
             AAG.addAccessToGraph subjectId access (AAG.removeAllProvisionalAccesses model.graph) // TODO make more efficient
@@ -124,17 +139,22 @@ let addNewAccess (model: Model) =
         cancel { model with graph = graph }
     | _ -> model // TODO
 
-let private showFactor (model: Model) id =
-    let name =
-        match AAG.findVertexById id model.graph with
-        | Some vertex -> vertex.name
-        | None -> "INVALID"
-
-    Template
-        .AddAccessFactors
-        .Factor()
-        .Name(name)
-        .Elt()
+let private showFactor (model: Model) dispatch id =
+    match AAG.findVertexById id model.graph with
+    | Some vertex ->
+        Template
+            .AddAccessFactors
+            .Factor()
+            .Name(vertex.name)
+            .DeleteButton(fun _ -> dispatch (Msg.ClickedRemoveProvisionalFactor vertex.id))
+            .Elt()
+    | None ->
+        Template
+            .AddAccessFactors
+            .Factor()
+            .Name("INVALID")
+            .DeleteButton(fun _ -> ())
+            .Elt()
 
 let view jsRuntime (model: Model) dispatch =
     Utility.toggleButtonEnabled "ContinueButton" (isSubjectValid model) jsRuntime
@@ -151,7 +171,7 @@ let view jsRuntime (model: Model) dispatch =
             .SaveButton(fun _ -> dispatch (Msg.ClickedSaveAddAccessButton))
             .AccessNameInput(model.addAccessInput, (fun v -> dispatch (Msg.TypedAccessName v)))
             .AccessNameHint((getAccessNameHint model).value)
-            .Factors(forEach model.factorsInput (showFactor model))
+            .Factors(forEach model.factorsInput (showFactor model dispatch))
             .FactorsHint((getFactorsHint model).value)
             .Elt()
     | _ ->

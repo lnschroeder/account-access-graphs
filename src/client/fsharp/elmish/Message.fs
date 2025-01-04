@@ -1,5 +1,7 @@
 module AAG.Client.Msg
 
+open System
+
 /// The Elmish application's update messages.
 type Message =
     | SetPage of Endpoint.Page
@@ -10,6 +12,7 @@ type Message =
     | TypedSubjectName of string
     | ClickedContinueSubject
     | ClickedCancelAddAccessButton
+    | ClickedRemoveProvisionalFactor of Guid
     | ClickedBackFromFactors
     | ClickedSaveAddAccessButton
     | ClickedCancelAddVertexButton
