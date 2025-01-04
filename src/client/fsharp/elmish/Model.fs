@@ -23,8 +23,8 @@ type Model =
       addAccessInput: string
       subjectInput: string
       subjectId: Guid option
-      factorsInput: Guid Set }
-    static member Init = // TODO remove unnecessary Init usages
+      factorsInput: Guid list }
+    static member Init =
         { page = Endpoint.MainMenu
           step = None
           graph = AAG.Graph.Empty
@@ -32,6 +32,6 @@ type Model =
           addAccessInput = ""
           subjectInput = ""
           subjectId = None
-          factorsInput = Set.empty }
+          factorsInput = [] }
 
     static member Example = { Model.Init with graph = AAG.Graph.Example }

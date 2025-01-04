@@ -19,23 +19,12 @@
 <div class="field">
   <label class="label">Which factors are needed for the access method?</label>
   <div class="tags">
-    <span class="tag is-warning">
-      Cucumber <button class="delete is-small"></button>
-    </span>
-    <span class="tag is-success">
-      Apple <button class="delete is-small"></button>
-    </span>
-    <span class="tag is-success">
-      Banana <button class="delete is-small"></button>
-    </span>
-    <span class="tag is-success">
-      Pineapple <button class="delete is-small"></button>
-    </span>
-    <span class="tag is-success">
-      Coconut <button class="delete is-small"></button> </span
-    ><span class="tag is-success">
-      Kiwi <button class="delete is-small"></button>
-    </span>
+    ${Factors}
+    <template id="Factor">
+      <span class="tag is-warning">
+        ${Name} <button class="delete is-small"></button>
+      </span>
+    </template>
   </div>
   <p class="help is-danger">${FactorsHint}</p>
 </div>

@@ -1,13 +1,14 @@
 module AAG.Client.AddAccessPage
 
 open Model
+open Bolero.Html
 
 let private getFactorsHint (model: Model) = // TODO just pass minimal
     match model.subjectId with
     | Some subjectId ->
         if model.factorsInput.IsEmpty then
             Hint.Error "Select at least one factor"
-        elif AAG.isAccessPresentWithFactors subjectId model.factorsInput model.graph then
+        elif AAG.isAccessPresentWithFactors subjectId (Set.ofList model.factorsInput) model.graph then
             Hint.Error "There is already an access with the same factors"
         else
             Hint.Info
@@ -48,7 +49,7 @@ let private selectSubject (vertex: AAG.Vertex) (model: Model) =
             AAG.setProvisionalAccess
                 vertex.id
                 model.addAccessInput
-                model.factorsInput
+                (Set.ofList model.factorsInput)
                 (AAG.removeAllProvisionalAccesses model.graph)
         subjectInput = vertex.name }
 
@@ -65,23 +66,23 @@ let selectSubjectByName name (model: Model) =
 
 let toggleFactor (vertex: AAG.Vertex) (model: Model) =
     let factors =
-        if Set.contains vertex.id model.factorsInput then
-            Set.remove vertex.id model.factorsInput
+        if List.contains vertex.id model.factorsInput then
+            model.factorsInput |> List.filter (fun id -> id <> vertex.id)
         else
-            Set.add vertex.id model.factorsInput
+            model.factorsInput @ [vertex.id]
 
     match model.subjectId with
     | Some id ->
         { model with
             factorsInput = factors
-            graph = AAG.setProvisionalAccess id model.addAccessInput factors model.graph }
+            graph = AAG.setProvisionalAccess id model.addAccessInput (Set.ofList factors) model.graph }
     | None -> model
 
 let cancel model =
     { model with
         subjectId = None
         subjectInput = ""
-        factorsInput = Set.empty
+        factorsInput = []
         addAccessInput = ""
         graph = AAG.removeAllProvisionalAccesses model.graph
         page = Endpoint.MainMenu
@@ -115,13 +116,25 @@ let updateAccessName name (model: Model) = { model with addAccessInput = name }
 let addNewAccess (model: Model) =
     match model.subjectId with
     | Some subjectId when isValidNewAccess model ->
-        let access: AAG.Access = AAG.Access.Default model.addAccessInput model.factorsInput
+        let access: AAG.Access = AAG.Access.Default model.addAccessInput (Set.ofList model.factorsInput)
 
         let graph =
             AAG.addAccessToGraph subjectId access (AAG.removeAllProvisionalAccesses model.graph) // TODO make more efficient
 
         cancel { model with graph = graph }
     | _ -> model // TODO
+
+let private showFactor (model: Model) id =
+    let name =
+        match AAG.findVertexById id model.graph with
+        | Some vertex -> vertex.name
+        | None -> "INVALID"
+
+    Template
+        .AddAccessFactors
+        .Factor()
+        .Name(name)
+        .Elt()
 
 let view jsRuntime (model: Model) dispatch =
     Utility.toggleButtonEnabled "ContinueButton" (isSubjectValid model) jsRuntime
@@ -138,6 +151,7 @@ let view jsRuntime (model: Model) dispatch =
             .SaveButton(fun _ -> dispatch (Msg.ClickedSaveAddAccessButton))
             .AccessNameInput(model.addAccessInput, (fun v -> dispatch (Msg.TypedAccessName v)))
             .AccessNameHint((getAccessNameHint model).value)
+            .Factors(forEach model.factorsInput (showFactor model))
             .FactorsHint((getFactorsHint model).value)
             .Elt()
     | _ ->
