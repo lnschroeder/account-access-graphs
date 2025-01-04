@@ -64,6 +64,15 @@ const options = () => ({
 });
 let network = new vis.Network(container, data, options());
 
+const colors = [
+  "--bulma-text",
+  "--bulma-link",
+  "--bulma-primary",
+  "--bulma-info",
+  "--bulma-success",
+  "--bulma-danger",
+];
+
 // removes, updates, and adds nodes and edges to the network
 function updateNetwork(networkDTO) {
   let nodes = networkDTO.nodes;
@@ -136,7 +145,7 @@ function updateNetwork(networkDTO) {
     edges.forEach((edge) => {
       let dashes = false;
       let physics = true;
-      let color = getCssVariable("--bulma-link");
+      let color = getCssVariable(colors[edge.index]);
       let width = 1;
 
       if (edge.isProvisional) {

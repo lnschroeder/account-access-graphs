@@ -94,19 +94,22 @@ let addAccessToGraph vertexId access graph =
                 else
                     vertex) }
 
-let setProvisionalAccess vertexId name factors graph =
-    { graph with
-        vertices =
-            graph.vertices
-            |> List.map (fun vertex ->
-                if vertex.id = vertexId then
-                    { vertex with
-                        accesses =
-                            Access.Provisional name factors
-                            :: (vertex.accesses
-                                |> List.filter (fun access -> not access.isProvisional)) }
-                else
-                    vertex) }
+let setProvisionalAccess vertexId name (factors: Guid Set ) graph =
+    if factors.IsEmpty then
+        removeAllProvisionalAccesses graph
+    else
+        { graph with
+            vertices =
+                graph.vertices
+                |> List.map (fun vertex ->
+                    if vertex.id = vertexId then
+                        { vertex with
+                            accesses =
+                                Access.Provisional name factors
+                                :: (vertex.accesses
+                                    |> List.filter (fun access -> not access.isProvisional)) }
+                    else
+                        vertex) }
 
 let isAccessPresentWithFactors vertexId factors graph =
     match findVertexById vertexId graph with
