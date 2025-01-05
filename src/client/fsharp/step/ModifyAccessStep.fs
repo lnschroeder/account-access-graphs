@@ -1,4 +1,4 @@
-module AAG.Client.AddAccessStep
+module AAG.Client.ModifyAccessStep
 
 open Model
 open Bolero.Html
@@ -125,14 +125,14 @@ let private showFactor (model: Model) dispatch id =
     match AAG.findVertexById id model.graph with
     | Some vertex ->
         Template
-            .AddAccessFactors
+            .ModifyAccess
             .Factor()
             .Name(vertex.name)
             .DeleteButton(fun _ -> dispatch (Msg.ClickedRemoveProvisionalFactor vertex.id))
             .Elt()
     | None ->
         Template
-            .AddAccessFactors
+            .ModifyAccess
             .Factor()
             .Name("INVALID")
             .DeleteButton(fun _ -> ())
@@ -143,7 +143,7 @@ let view jsRuntime (model: Model) dispatch =
     |> ignore
 
     Template
-        .AddAccessFactors()
+        .ModifyAccess()
         .BackButton(fun _ -> dispatch (Msg.ClickedBackFromFactors))
         .SaveButton(fun _ ->
             dispatch (

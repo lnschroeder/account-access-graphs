@@ -12,7 +12,6 @@ open Bolero.Html
 let private init _ = MainMenuStep.clearGraph, Cmd.none
 
 let private handleClickedVisNode idAsString model =
-    printfn "%A" model.step
     let vertex =
         if idAsString = "undefined" then
             None
@@ -21,7 +20,7 @@ let private handleClickedVisNode idAsString model =
             AAG.findVertexById guid model.graph
 
     match model.step with
-    | AddAccessFactors -> AddAccessStep.handleClickedVertexOnFactors vertex model
+    | AddAccessFactors -> ModifyAccessStep.handleClickedVertexOnFactors vertex model
     | MainMenu -> MainMenuStep.handleClickedVertex vertex model
     | _ -> model
 
@@ -40,10 +39,10 @@ let private update message model =
         | Msg.TypedVertexName value -> AddVertexStep.updateVertexName value model
         | Msg.ClickedCancelAddVertex -> AddVertexStep.cancel model
         // AddAccessStep
-        | Msg.TypedAccessName name -> AddAccessStep.updateAccessName name model
-        | Msg.ClickedSaveAddAccess name -> AddAccessStep.addNewAccess name model
-        | Msg.ClickedBackFromFactors -> AddAccessStep.openModifyVertex model
-        | Msg.ClickedRemoveProvisionalFactor id -> AddAccessStep.removeProvisionalFactor id model
+        | Msg.TypedAccessName name -> ModifyAccessStep.updateAccessName name model
+        | Msg.ClickedSaveAddAccess name -> ModifyAccessStep.addNewAccess name model
+        | Msg.ClickedBackFromFactors -> ModifyAccessStep.openModifyVertex model
+        | Msg.ClickedRemoveProvisionalFactor id -> ModifyAccessStep.removeProvisionalFactor id model
         // ModifyVertex
         | Msg.ModifiedVertexName (subjectId, name) -> ModifyVertexStep.updateVertexName subjectId name model
         | Msg.ClickedModifyAccess -> ModifyVertexStep.openFactorsSelection model
@@ -64,7 +63,7 @@ let private view (jsRuntime: IJSRuntime) model dispatch =
                     match model.step with
                     | MainMenu -> MainMenuStep.view dispatch
                     | AddVertex -> AddVertexStep.view jsRuntime model dispatch
-                    | AddAccessFactors -> AddAccessStep.view jsRuntime model dispatch
+                    | AddAccessFactors -> ModifyAccessStep.view jsRuntime model dispatch
                     | ModifyVertex -> ModifyVertexStep.view jsRuntime model dispatch
         )
         .ClickedNodeInput("", (fun idAsString -> dispatch (Msg.ClickedVisNode idAsString)))
