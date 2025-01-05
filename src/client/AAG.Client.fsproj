@@ -10,9 +10,7 @@
     <Compile Include="fsharp/elmish/Endpoint.fs" />
     <Compile Include="fsharp/elmish/Message.fs" />
     <Compile Include="fsharp/elmish/Model.fs" />
-    <Compile Include="fsharp/step/AddAccessStep.fs" />
-    <Compile Include="fsharp/step/AddVertexStep.fs" />
-    <Compile Include="fsharp/step/MainMenuStep.fs" />
+    <Compile Include="fsharp/step/*.fs" />
     <Compile Include="fsharp/transformer/VisJS.fs" />
     <Compile Include="fsharp/Main.fs" />
     <Compile Include="fsharp/Startup.fs" />
