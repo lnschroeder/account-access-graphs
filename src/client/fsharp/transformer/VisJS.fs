@@ -18,10 +18,10 @@ type Edge =
 
 type Network = { nodes: Node list; edges: Edge list }
 
-let private transformVertex model (vertex: AAG.Vertex) =
+let private transformVertex (model: Model) (vertex: AAG.Vertex) =
     { id = vertex.id
       label = vertex.name
-      isSubject = vertex.name = model.subjectInput
+      isSubject = Some vertex.id = model.subjectId
       isFactor = Seq.contains vertex.id model.factorsInput }
 
 let transform (model: Model) =

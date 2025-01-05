@@ -10,6 +10,17 @@ let openAddVertex model = { model with step = AddVertex }
 
 let openAddAccess model = { model with step = AddAccessSubject }
 
+let openModifyVertex (vertex: AAG.Vertex) model =
+    { model with
+        step = ModifyVertex
+        subjectId = Some vertex.id
+        modifyVertexNameInput = vertex.name }
+
+let handleClickedVertex (vertex: AAG.Vertex option) (model: Model) =
+    match vertex with
+    | Some vertex -> openModifyVertex vertex model
+    | None -> model
+
 let view dispatch =
     Template
         .MainMenu()

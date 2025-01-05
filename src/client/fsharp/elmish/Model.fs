@@ -20,6 +20,7 @@ and Step =
     | AddVertex
     | AddAccessSubject
     | AddAccessFactors
+    | ModifyVertex
 
 and Model =
     { page: Endpoint.Page
@@ -27,6 +28,7 @@ and Model =
       graph: AAG.Graph
       addVertexInput: string
       addAccessNameInput: string
+      modifyVertexNameInput: string
       subjectInput: string
       subjectId: Guid option
       factorsInput: Guid list }
@@ -37,6 +39,7 @@ and Model =
           addVertexInput = ""
           addAccessNameInput = ""
           subjectInput = ""
+          modifyVertexNameInput = ""
           subjectId = None
           factorsInput = [] }
 

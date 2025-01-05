@@ -22,6 +22,7 @@ let private handleClickedVisNode idAsString model =
     match model.step with
     | AddAccessSubject -> AddAccessStep.handleClickedVertexOnSubject vertex model
     | AddAccessFactors -> AddAccessStep.handleClickedVertexOnFactors vertex model
+    | MainMenu -> MainMenuStep.handleClickedVertex vertex model
     | _ -> model
 
 let private update message model =
@@ -47,6 +48,9 @@ let private update message model =
         | Msg.ClickedCancelAddAccess -> AddAccessStep.cancel model
         | Msg.ClickedRemoveProvisionalFactor id -> AddAccessStep.removeProvisionalFactor id model
         | Msg.ClickedContinueSubject -> AddAccessStep.openFactorsSelection model
+        // ModifyVertex
+        | Msg.ModifiedVertexName (subjectId, name) -> ModifyVertexStep.updateVertexName subjectId name model
+        | Msg.ClickedModifyAccess -> model // TODO
 
     model, Cmd.none
 
@@ -65,6 +69,7 @@ let private view (jsRuntime: IJSRuntime) model dispatch =
                     | AddVertex -> AddVertexStep.view jsRuntime model dispatch
                     | AddAccessSubject -> AddAccessStep.view jsRuntime model dispatch
                     | AddAccessFactors -> AddAccessStep.view jsRuntime model dispatch
+                    | ModifyVertex -> ModifyVertexStep.view jsRuntime model dispatch
         )
         .ClickedNodeInput("", (fun idAsString -> dispatch (Msg.ClickedVisNode idAsString)))
         .Elt()

@@ -79,11 +79,8 @@ let findVertexByName name graph =
     graph.vertices
     |> List.tryFind (fun vertex -> vertex.name = name)
 
-let isVertexWithNameInGraph vertexName graph =
-    Seq.contains
-        vertexName
-        (graph.vertices
-         |> Seq.map (fun vertex -> vertex.name))
+let getVerticesWithName vertexName graph =
+    graph.vertices |> Seq.filter (fun vertex -> vertex.name = vertexName)
 
 let isInvalidVertexName value = String.IsNullOrWhiteSpace(value)
 let isInvalidAccessName value = String.IsNullOrWhiteSpace(value)
@@ -152,3 +149,13 @@ let isAccessPresentWithName vertexId name graph =
         vertex.accesses
         |> List.exists (fun access -> access.name = name && access.isProvisional = false)
     | None -> false
+
+let changeVertexName vertexId name graph =
+    { graph with
+        vertices =
+            graph.vertices
+            |> List.map (fun vertex ->
+                if vertex.id = vertexId then
+                    { vertex with name = name }
+                else
+                    vertex) }

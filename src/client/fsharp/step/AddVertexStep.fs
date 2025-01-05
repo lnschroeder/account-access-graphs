@@ -7,7 +7,7 @@ let private getVertexNameHint (model: Model) =
         Hint.Required
     elif AAG.isInvalidVertexName model.addVertexInput then
         Hint.Error "Invalid name"
-    elif AAG.isVertexWithNameInGraph model.addVertexInput model.graph then
+    elif Seq.isEmpty(AAG.getVerticesWithName model.addVertexInput model.graph) then
         Hint.Error "Vertex already exists"
     else
         Hint.Info

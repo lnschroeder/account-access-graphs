@@ -13,10 +13,12 @@ type Message =
     | ClickedClearGraph
     | ClickedContinueSubject
     | ClickedExampleGraph
+    | ClickedModifyAccess
     | ClickedRemoveProvisionalFactor of Guid
     | ClickedSaveAddAccess of string option
     | ClickedSaveAddVertex // TODO remove Clicked Messages
     | ClickedVisNode of string
+    | ModifiedVertexName of Guid * string
     | TypedAccessName of string
     | TypedSubjectName of string
     | TypedVertexName of string
