@@ -190,7 +190,7 @@ let view jsRuntime (model: Model) dispatch =
             .BackButton(fun _ -> dispatch (Msg.ClickedBackFromFactors))
             .SaveButton(fun _ ->
                 dispatch (
-                    Msg.ClickedSaveAddAccessButton(
+                    Msg.ClickedSaveAddAccess(
                         if model.subjectInput = "" then
                             None
                         else
@@ -206,7 +206,7 @@ let view jsRuntime (model: Model) dispatch =
     | _ ->
         Template
             .AddAccessSubject()
-            .CancelButton(fun _ -> dispatch Msg.ClickedCancelAddAccessButton)
+            .CancelButton(fun _ -> dispatch Msg.ClickedCancelAddAccess)
             .ContinueButton(fun _ -> dispatch Msg.ClickedContinueSubject)
             .VertexNameInput(model.subjectInput, (fun v -> dispatch (Msg.TypedSubjectName v)))
             .VertexNameHint((getSubjectNameHint model).value)

@@ -15,19 +15,19 @@ let private update message model =
         // MainPage
         | Msg.SetPage page -> MainPage.setPage model page
         // MainMenuPage
-        | Msg.ClickedClearGraphButton -> MainMenuPage.clearGraph
-        | Msg.ClickedExampleGraphButton -> MainMenuPage.exampleGraph
+        | Msg.ClickedClearGraph -> MainMenuPage.clearGraph
+        | Msg.ClickedExampleGraph -> MainMenuPage.exampleGraph
         // AddVertexPage
-        | Msg.ClickedSaveAddVertexButton -> AddVertexPage.addNewVertex model
+        | Msg.ClickedSaveAddVertex -> AddVertexPage.addNewVertex model
         | Msg.TypedVertexName value -> AddVertexPage.updateVertexName value model
-        | Msg.ClickedCancelAddVertexButton -> AddVertexPage.cancel model
+        | Msg.ClickedCancelAddVertex -> AddVertexPage.cancel model
         // AddAccessPage
         | Msg.TypedAccessName name -> AddAccessPage.updateAccessName name model
-        | Msg.ClickedSaveAddAccessButton name -> AddAccessPage.addNewAccess name model
+        | Msg.ClickedSaveAddAccess name -> AddAccessPage.addNewAccess name model
         | Msg.ClickedBackFromFactors  -> AddAccessPage.openSubjectSelection model
         | Msg.ClickedVisNodeOnAddAccessPage vertex -> AddAccessPage.handleClickedVertex vertex model
         | Msg.TypedSubjectName name -> AddAccessPage.selectSubjectByName name model
-        | Msg.ClickedCancelAddAccessButton -> AddAccessPage.cancel model
+        | Msg.ClickedCancelAddAccess -> AddAccessPage.cancel model
         | Msg.ClickedRemoveProvisionalFactor id -> AddAccessPage.removeProvisionalFactor id model
         | Msg.ClickedContinueSubject -> AddAccessPage.openFactorsSelection model
 

@@ -35,8 +35,8 @@ let view jsRuntime (model: Model) dispatch =
 
     Template
         .AddVertex()
-        .CancelButton(fun _ -> dispatch Msg.ClickedCancelAddVertexButton)
-        .SaveButton(fun _ -> dispatch (Msg.ClickedSaveAddVertexButton))
+        .CancelButton(fun _ -> dispatch Msg.ClickedCancelAddVertex)
+        .SaveButton(fun _ -> dispatch (Msg.ClickedSaveAddVertex))
         .VertexNameInput(model.addVertexInput, (fun v -> dispatch (Msg.TypedVertexName v)))
         .VertexNameHint((getVertexNameHint model).value)
         .Elt()

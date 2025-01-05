@@ -11,6 +11,6 @@ let view dispatch =
         .MainMenu()
         .AddVertexButton(fun _ -> dispatch (Msg.SetPage Endpoint.AddVertex))
         .AddAccessButton(fun _ -> dispatch (Msg.SetPage Endpoint.AddAccess))
-        .ClearGraphButton(fun _ -> dispatch (Msg.ClickedClearGraphButton))
-        .ExampleGraphButton(fun _ -> dispatch (Msg.ClickedExampleGraphButton))
+        .ClearGraphButton(fun _ -> dispatch (Msg.ClickedClearGraph))
+        .ExampleGraphButton(fun _ -> dispatch (Msg.ClickedExampleGraph))
         .Elt()
