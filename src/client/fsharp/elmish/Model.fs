@@ -17,7 +17,6 @@ and Hint =
 
 and Step =
     | MainMenu
-    | AddVertex
     | ModifyAccess
     | ModifyVertex
 
@@ -25,7 +24,6 @@ and Model =
     { page: Endpoint.Page
       step: Step
       graph: AAG.Graph
-      addVertexInput: string
       addAccessNameInput: string
       modifyVertexNameInput: string
       subjectVertexId: Guid option
@@ -35,7 +33,6 @@ and Model =
         { page = Endpoint.Main
           step = MainMenu
           graph = AAG.Graph.Empty
-          addVertexInput = ""
           addAccessNameInput = ""
           modifyVertexNameInput = ""
           subjectVertexId = None

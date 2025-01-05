@@ -23,7 +23,6 @@ let private handleClickedVisNode idAsString model =
     | ModifyAccess -> ModifyAccessStep.handleClickedVertex vertex model
     | MainMenu -> MainMenuStep.handleClickedVertex vertex model
     | ModifyVertex -> MainMenuStep.handleClickedVertex vertex model
-    | _ -> model
 
 let private update message model =
     let model =
@@ -35,10 +34,6 @@ let private update message model =
         | Msg.ClickedClearGraph -> MainMenuStep.clearGraph
         | Msg.ClickedExampleGraph -> MainMenuStep.exampleGraph
         | Msg.ClickedAddVertex -> MainMenuStep.openAddVertex model
-        // AddVertexStep
-        | Msg.ClickedSaveAddVertex -> AddVertexStep.addNewVertex model
-        | Msg.TypedVertexName value -> AddVertexStep.updateVertexName value model
-        | Msg.ClickedCancelAddVertex -> AddVertexStep.cancel model
         // AddAccessStep
         | Msg.TypedAccessName name -> ModifyAccessStep.updateAccessName name model
         | Msg.ClickedBackFromSubjectAccess -> ModifyAccessStep.saveSubjectAccess model
@@ -64,7 +59,6 @@ let private view (jsRuntime: IJSRuntime) model dispatch =
                 | Endpoint.Main ->
                     match model.step with
                     | MainMenu -> MainMenuStep.view dispatch
-                    | AddVertex -> AddVertexStep.view jsRuntime model dispatch
                     | ModifyAccess -> ModifyAccessStep.view jsRuntime model dispatch
                     | ModifyVertex -> ModifyVertexStep.view jsRuntime model dispatch
         )

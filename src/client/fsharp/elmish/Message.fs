@@ -8,15 +8,12 @@ type Message =
     | ClickedAddAccess
     | ClickedAddVertex
     | ClickedDeleteAccess
-    | ClickedCancelAddVertex
     | ClickedClearGraph
     | ClickedExampleGraph
     | ClickedModifyAccess
     | ClickedRemoveProvisionalFactor of Guid
     | ClickedBackFromSubjectAccess
-    | ClickedSaveAddVertex // TODO remove Clicked Messages
     | ClickedBackFromSubjectVertex
     | ClickedVisNode of string
     | ModifiedVertexName of Guid * string
     | TypedAccessName of string
-    | TypedVertexName of string

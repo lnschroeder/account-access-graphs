@@ -6,7 +6,10 @@ let clearGraph = Model.Init
 
 let exampleGraph = Model.Example
 
-let openAddVertex model = { model with step = AddVertex }
+let openAddVertex model =
+    let vertex = AAG.Vertex.Default ""
+
+    { model with step = ModifyVertex ; subjectVertexId = Some vertex.id ; graph = AAG.addVertex vertex model.graph}
 
 let openModifyVertex (vertex: AAG.Vertex) model =
     { model with

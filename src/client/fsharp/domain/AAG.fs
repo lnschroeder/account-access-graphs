@@ -6,6 +6,10 @@ type Vertex =
     { id: Guid
       name: string
       accesses: Access list }
+    static member Default name =
+        { id = Guid.NewGuid()
+          name = name
+          accesses = [] }
 
 and Factor =
     { id: Guid // equivalent to the edge id
@@ -84,12 +88,7 @@ let getVerticesWithName vertexName graph =
 let isInvalidVertexName value = String.IsNullOrWhiteSpace(value)
 let isInvalidAccessName value = String.IsNullOrWhiteSpace(value)
 
-let addVertex vertexName graph =
-    let vertex: Vertex =
-        { id = Guid.NewGuid()
-          name = vertexName
-          accesses = [] }
-
+let addVertex vertex graph =
     { graph with vertices = vertex :: graph.vertices }
 
 let removeAllProvisionalAccesses graph =
