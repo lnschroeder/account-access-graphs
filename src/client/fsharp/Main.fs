@@ -11,26 +11,25 @@ open Bolero.Html
 
 let private init _ = MainMenuStep.clearGraph, Cmd.none
 
-let private findVertexById idAsString graph =
-    if idAsString = "undefined" then
-        None
-    else
-        let guid = Guid.Parse idAsString
-        AAG.findVertexById guid graph
+let private handleClickedVisNode idAsString model =
+    let vertex =
+        if idAsString = "undefined" then
+            None
+        else
+            let guid = Guid.Parse idAsString
+            AAG.findVertexById guid model.graph
+
+    match model.step with
+    | AddAccessSubject -> AddAccessStep.handleClickedVertexOnSubject vertex model
+    | AddAccessFactors -> AddAccessStep.handleClickedVertexOnFactors vertex model
+    | _ -> model
 
 let private update message model =
     let model =
         match message with
         // Main
         | Msg.SetPage page -> { model with page = page }
-        | Msg.ClickedVisNode idAsString ->
-            let vertex = findVertexById idAsString model.graph
-
-            match model.step with
-            | AddAccessSubject -> AddAccessStep.handleClickedVertexOnSubject vertex model
-            | AddAccessFactors -> AddAccessStep.handleClickedVertexOnFactors vertex model
-            | _ -> model
-
+        | Msg.ClickedVisNode idAsString -> handleClickedVisNode idAsString model
         // MainMenuStep
         | Msg.ClickedClearGraph -> MainMenuStep.clearGraph
         | Msg.ClickedExampleGraph -> MainMenuStep.exampleGraph
@@ -62,14 +61,7 @@ let private view (jsRuntime: IJSRuntime) model dispatch =
             <| function
                 | Endpoint.Main ->
                     match model.step with
-                    | Main ->
-                        Template
-                            .MainMenu()
-                            .AddVertexButton(fun _ -> dispatch (Msg.ClickedAddVertex))
-                            .AddAccessButton(fun _ -> dispatch (Msg.ClickedAddAccess))
-                            .ClearGraphButton(fun _ -> dispatch (Msg.ClickedClearGraph))
-                            .ExampleGraphButton(fun _ -> dispatch (Msg.ClickedExampleGraph))
-                            .Elt()
+                    | MainMenu -> MainMenuStep.view jsRuntime model dispatch
                     | AddVertex -> AddVertexStep.view jsRuntime model dispatch
                     | AddAccessSubject -> AddAccessStep.view jsRuntime model dispatch
                     | AddAccessFactors -> AddAccessStep.view jsRuntime model dispatch

@@ -16,7 +16,7 @@ and Hint =
     static member Required = Hint.Error "Field is required"
 
 and Step =
-  | Main
+  | MainMenu
   | AddVertex
   | AddAccessSubject
   | AddAccessFactors
@@ -32,7 +32,7 @@ and Model =
       factorsInput: Guid list }
     static member Init =
         { page = Endpoint.Main
-          step = Main
+          step = MainMenu
           graph = AAG.Graph.Empty
           addVertexInput = ""
           addAccessNameInput = ""

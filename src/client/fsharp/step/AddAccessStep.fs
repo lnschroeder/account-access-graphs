@@ -116,7 +116,7 @@ let cancel model =
         factorsInput = []
         addAccessNameInput = ""
         graph = AAG.removeAllProvisionalAccesses model.graph
-        step = Main }
+        step = MainMenu }
 
 let openFactorsSelection model = { model with step = AddAccessFactors }
 
