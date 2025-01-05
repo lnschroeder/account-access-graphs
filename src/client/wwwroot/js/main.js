@@ -107,12 +107,13 @@ function updateNetwork(networkDTO) {
     let fontColor = getCssVariable("--bulma-text-bold");
 
     if (node.isSubject) {
-      borderWidth = 3;
+      backgroundColor = getCssVariable("--bulma-warning-on-scheme");
+      fontColor = getCssVariable("--bulma-text-bold-invert");
     }
 
     if (node.isFactor) {
-      backgroundColor = getCssVariable("--bulma-warning-on-scheme");
-      fontColor = getCssVariable("--bulma-text-bold-invert");
+      borderColor = getCssVariable("--bulma-warning-on-scheme");
+      borderWidth = 3;
     }
 
     data.nodes.update({
