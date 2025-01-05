@@ -59,7 +59,6 @@ let private deselectSubject (model: Model) =
 
 let private selectSubject (vertex: AAG.Vertex) (model: Model) =
     { model with
-        step = None
         subjectId = Some vertex.id
         graph =
             AAG.setProvisionalAccess
