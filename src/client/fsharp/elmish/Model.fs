@@ -18,7 +18,6 @@ and Hint =
 and Step =
     | MainMenu
     | AddVertex
-    | AddAccessSubject
     | AddAccessFactors
     | ModifyVertex
 
@@ -29,7 +28,6 @@ and Model =
       addVertexInput: string
       addAccessNameInput: string
       modifyVertexNameInput: string
-      subjectInput: string
       subjectId: Guid option
       factorsInput: Guid list }
     static member Init =
@@ -38,7 +36,6 @@ and Model =
           graph = AAG.Graph.Empty
           addVertexInput = ""
           addAccessNameInput = ""
-          subjectInput = ""
           modifyVertexNameInput = ""
           subjectId = None
           factorsInput = [] }

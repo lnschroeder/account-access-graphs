@@ -39,45 +39,20 @@ let private getAccessNameInputPlaceholder (model: Model) =
         | None -> "Invalid subject vertex selected"
     | None -> "Select a subject vertex first"
 
-let private getSubjectNameHint (model: Model) =
-    if model.subjectInput = "" then
-        Hint.Required
-    else
-        match AAG.findVertexByName model.subjectInput model.graph with
-        | Some vertex ->
-            if Seq.contains vertex.id model.factorsInput then
-                Hint.Error "Self-references are not allowed"
-            else
-                Hint.Info
-        | None -> Hint.Error "Vertex does not exist"
+// let private deselectSubject (model: Model) =
+//     { model with
+//         subjectId = None
+//         graph = AAG.removeAllProvisionalAccesses model.graph }
 
-let private deselectSubject (model: Model) =
-    { model with
-        subjectId = None
-        subjectInput = ""
-        graph = AAG.removeAllProvisionalAccesses model.graph }
-
-let private selectSubject (vertex: AAG.Vertex) (model: Model) =
-    { model with
-        subjectId = Some vertex.id
-        graph =
-            AAG.setProvisionalAccess
-                vertex.id
-                model.addAccessNameInput
-                (Set.ofList model.factorsInput)
-                (AAG.removeAllProvisionalAccesses model.graph)
-        subjectInput = vertex.name }
-
-let selectSubjectByName name (model: Model) =
-    let vertex = AAG.findVertexByName name model.graph
-
-    match vertex with
-    | Some vertex -> selectSubject vertex model
-    | None ->
-        { model with
-            subjectId = None
-            subjectInput = name
-            graph = AAG.removeAllProvisionalAccesses model.graph }
+// let private selectSubject (vertex: AAG.Vertex) (model: Model) =
+//     { model with
+//         subjectId = Some vertex.id
+//         graph =
+//             AAG.setProvisionalAccess
+//                 vertex.id
+//                 model.addAccessNameInput
+//                 (Set.ofList model.factorsInput)
+//                 (AAG.removeAllProvisionalAccesses model.graph) }
 
 let removeProvisionalFactor vertexId (model: Model) =
     match model.subjectId with
@@ -112,28 +87,17 @@ let toggleFactor vertexId (model: Model) =
 let cancel model =
     { model with
         subjectId = None
-        subjectInput = ""
         factorsInput = []
         addAccessNameInput = ""
         graph = AAG.removeAllProvisionalAccesses model.graph
         step = MainMenu }
 
-let openFactorsSelection model = { model with step = AddAccessFactors }
-
-let openSubjectSelection model = { model with step = AddAccessSubject }
-
-let handleClickedVertexOnSubject (vertex: AAG.Vertex option) (model: Model) =
-    match vertex with
-    | Some vertex -> selectSubject vertex model
-    | None -> deselectSubject model
+let openModifyVertex model = { model with step = ModifyVertex }
 
 let handleClickedVertexOnFactors (vertex: AAG.Vertex option) (model: Model) =
     match vertex with
     | Some vertex -> toggleFactor vertex.id model
     | _ -> model
-
-let private isSubjectValid (model: Model) =
-    (getSubjectNameHint model).level <> Error
 
 let private isValidNewAccess (model: Model) =
     (getFactorsHint model).level <> Error
@@ -175,37 +139,24 @@ let private showFactor (model: Model) dispatch id =
             .Elt()
 
 let view jsRuntime (model: Model) dispatch =
-    Utility.toggleButtonEnabled "ContinueButton" (isSubjectValid model) jsRuntime
-    |> ignore
-
     Utility.toggleButtonEnabled "SaveButton" (isValidNewAccess model) jsRuntime
     |> ignore
 
-    match model.step with
-    | AddAccessFactors ->
-        Template
-            .AddAccessFactors()
-            .BackButton(fun _ -> dispatch (Msg.ClickedBackFromFactors))
-            .SaveButton(fun _ ->
-                dispatch (
-                    Msg.ClickedSaveAddAccess(
-                        if model.addAccessNameInput = "" then
-                            None
-                        else
-                            Some model.addAccessNameInput
-                    )
-                ))
-            .AccessNameInput(model.addAccessNameInput, (fun v -> dispatch (Msg.TypedAccessName v)))
-            .AccessNameInputPlaceholder(getAccessNameInputPlaceholder model)
-            .AccessNameHint((getAccessNameHint model).value)
-            .Factors(forEach model.factorsInput (showFactor model dispatch))
-            .FactorsHint((getFactorsHint model).value)
-            .Elt()
-    | _ ->
-        Template
-            .AddAccessSubject()
-            .CancelButton(fun _ -> dispatch Msg.ClickedCancelAddAccess)
-            .ContinueButton(fun _ -> dispatch Msg.ClickedContinueSubject)
-            .VertexNameInput(model.subjectInput, (fun v -> dispatch (Msg.TypedSubjectName v)))
-            .VertexNameHint((getSubjectNameHint model).value)
-            .Elt()
+    Template
+        .AddAccessFactors()
+        .BackButton(fun _ -> dispatch (Msg.ClickedBackFromFactors))
+        .SaveButton(fun _ ->
+            dispatch (
+                Msg.ClickedSaveAddAccess(
+                    if model.addAccessNameInput = "" then
+                        None
+                    else
+                        Some model.addAccessNameInput
+                )
+            ))
+        .AccessNameInput(model.addAccessNameInput, (fun v -> dispatch (Msg.TypedAccessName v)))
+        .AccessNameInputPlaceholder(getAccessNameInputPlaceholder model)
+        .AccessNameHint((getAccessNameHint model).value)
+        .Factors(forEach model.factorsInput (showFactor model dispatch))
+        .FactorsHint((getFactorsHint model).value)
+        .Elt()

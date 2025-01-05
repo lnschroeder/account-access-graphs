@@ -8,10 +8,8 @@ type Message =
     | ClickedAddAccess
     | ClickedAddVertex
     | ClickedBackFromFactors
-    | ClickedCancelAddAccess
     | ClickedCancelAddVertex
     | ClickedClearGraph
-    | ClickedContinueSubject
     | ClickedExampleGraph
     | ClickedModifyAccess
     | ClickedRemoveProvisionalFactor of Guid
@@ -20,5 +18,4 @@ type Message =
     | ClickedVisNode of string
     | ModifiedVertexName of Guid * string
     | TypedAccessName of string
-    | TypedSubjectName of string
     | TypedVertexName of string

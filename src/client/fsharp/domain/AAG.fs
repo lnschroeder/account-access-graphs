@@ -75,10 +75,6 @@ let findVertexById id graph =
     graph.vertices
     |> List.tryFind (fun vertex -> vertex.id = id)
 
-let findVertexByName name graph =
-    graph.vertices
-    |> List.tryFind (fun vertex -> vertex.name = name)
-
 let getVerticesWithName vertexName graph =
     graph.vertices |> Seq.filter (fun vertex -> vertex.name = vertexName)
 

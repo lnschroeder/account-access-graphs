@@ -20,6 +20,8 @@ let updateVertexName subjectId name (model: Model) =
         modifyVertexNameInput = name
         graph = AAG.changeVertexName subjectId name model.graph }
 
+let openFactorsSelection model = { model with step = AddAccessFactors }
+
 let private showAccess (model: Model) dispatch (access: AAG.Access) =
     Template
         .ModifyVertex
@@ -41,7 +43,7 @@ let view jsRuntime (model: Model) dispatch =
                 )
                 .SubjectNameHint((getVertexNameHint subject.name model).value)
                 .Accesses(forEach subject.accesses (showAccess model dispatch))
-                .AddAccessButton(fun _ -> dispatch Msg.ClickedContinueSubject)
+                .AddAccessButton(fun _ -> dispatch Msg.ClickedAddAccess)
                 .Elt()
         | None -> Template.ModifyVertex().Elt()
     | None -> Template.ModifyVertex().Elt()
