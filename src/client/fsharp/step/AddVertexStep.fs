@@ -3,11 +3,12 @@ module AAG.Client.AddVertexStep
 open Model
 
 let private getVertexNameHint (model: Model) =
-    if model.addVertexInput = "" then
+    let name = model.addVertexInput
+    if name = "" then
         Hint.Required
-    elif AAG.isInvalidVertexName model.addVertexInput then
+    elif AAG.isInvalidVertexName name then
         Hint.Error "Invalid name"
-    elif Seq.isEmpty(AAG.getVerticesWithName model.addVertexInput model.graph) then
+    elif not (Seq.isEmpty(AAG.getVerticesWithName name model.graph)) then
         Hint.Error "Vertex already exists"
     else
         Hint.Info
