@@ -189,10 +189,10 @@ let view jsRuntime (model: Model) dispatch =
             .SaveButton(fun _ ->
                 dispatch (
                     Msg.ClickedSaveAddAccess(
-                        if model.subjectInput = "" then
+                        if model.addAccessNameInput = "" then
                             None
                         else
-                            Some model.subjectInput
+                            Some model.addAccessNameInput
                     )
                 ))
             .AccessNameInput(model.addAccessNameInput, (fun v -> dispatch (Msg.TypedAccessName v)))
