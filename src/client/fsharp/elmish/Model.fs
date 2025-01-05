@@ -16,10 +16,10 @@ and Hint =
     static member Required = Hint.Error "Field is required"
 
 and Step =
-  | MainMenu
-  | AddVertex
-  | AddAccessSubject
-  | AddAccessFactors
+    | MainMenu
+    | AddVertex
+    | AddAccessSubject
+    | AddAccessFactors
 
 and Model =
     { page: Endpoint.Page

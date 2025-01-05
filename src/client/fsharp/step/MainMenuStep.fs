@@ -10,7 +10,7 @@ let openAddVertex model = { model with step = AddVertex }
 
 let openAddAccess model = { model with step = AddAccessSubject }
 
-let view jsRuntime (model: Model) dispatch =
+let view dispatch =
     Template
         .MainMenu()
         .AddVertexButton(fun _ -> dispatch (Msg.ClickedAddVertex))

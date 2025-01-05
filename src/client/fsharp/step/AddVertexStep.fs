@@ -24,7 +24,7 @@ let isValidNewVertex model =
 
 let addNewVertex (model: Model) =
     if isValidNewVertex model then
-        let graph =  AAG.addVertex model.addVertexInput model.graph
+        let graph = AAG.addVertex model.addVertexInput model.graph
         cancel { model with graph = graph }
     else
         model // TODO

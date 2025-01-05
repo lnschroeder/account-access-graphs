@@ -61,7 +61,7 @@ let private view (jsRuntime: IJSRuntime) model dispatch =
             <| function
                 | Endpoint.Main ->
                     match model.step with
-                    | MainMenu -> MainMenuStep.view jsRuntime model dispatch
+                    | MainMenu -> MainMenuStep.view dispatch
                     | AddVertex -> AddVertexStep.view jsRuntime model dispatch
                     | AddAccessSubject -> AddAccessStep.view jsRuntime model dispatch
                     | AddAccessFactors -> AddAccessStep.view jsRuntime model dispatch
