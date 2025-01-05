@@ -41,12 +41,13 @@ let private update message model =
         // AddAccessStep
         | Msg.TypedAccessName name -> ModifyAccessStep.updateAccessName name model
         | Msg.ClickedSaveAddAccess name -> ModifyAccessStep.addNewAccess name model
-        | Msg.ClickedBackFromFactors -> ModifyAccessStep.openModifyVertex model
+        | Msg.ClickedDeleteAccess -> ModifyAccessStep.exitDeletingProvisionalAccesses model
         | Msg.ClickedRemoveProvisionalFactor id -> ModifyAccessStep.removeProvisionalFactor id model
         // ModifyVertex
         | Msg.ModifiedVertexName (subjectId, name) -> ModifyVertexStep.updateVertexName subjectId name model
         | Msg.ClickedModifyAccess -> ModifyVertexStep.openFactorsSelection model
         | Msg.ClickedAddAccess -> ModifyVertexStep.openFactorsSelection model
+        | Msg.ClickedSaveSubjectVertex -> ModifyVertexStep.saveAndExit model
 
     model, Cmd.none
 

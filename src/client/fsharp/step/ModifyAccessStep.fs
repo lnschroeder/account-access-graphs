@@ -84,15 +84,12 @@ let toggleFactor vertexId (model: Model) =
     else
         addProvisionalFactor vertexId model
 
-let cancel model =
+let exitDeletingProvisionalAccesses model =
     { model with
-        subjectId = None
         factorsInput = []
         addAccessNameInput = ""
         graph = AAG.removeAllProvisionalAccesses model.graph
-        step = MainMenu }
-
-let openModifyVertex model = { model with step = ModifyVertex }
+        step = ModifyVertex }
 
 let handleClickedVertexOnFactors (vertex: AAG.Vertex option) (model: Model) =
     match vertex with
@@ -117,7 +114,7 @@ let addNewAccess name (model: Model) =
             let graph =
                 AAG.addAccessToGraph subjectId access (AAG.removeAllProvisionalAccesses model.graph) // TODO make more efficient
 
-            cancel { model with graph = graph }
+            exitDeletingProvisionalAccesses { model with graph = graph }
         | None -> model
     | _ -> model // TODO
 
@@ -139,12 +136,12 @@ let private showFactor (model: Model) dispatch id =
             .Elt()
 
 let view jsRuntime (model: Model) dispatch =
-    Utility.toggleButtonEnabled "SaveButton" (isValidNewAccess model) jsRuntime
+    Utility.toggleButtonEnabled "ModifyAccessSaveButton" (isValidNewAccess model) jsRuntime
     |> ignore
 
     Template
         .ModifyAccess()
-        .BackButton(fun _ -> dispatch (Msg.ClickedBackFromFactors))
+        .DeleteButton(fun _ -> dispatch (Msg.ClickedDeleteAccess))
         .SaveButton(fun _ ->
             dispatch (
                 Msg.ClickedSaveAddAccess(

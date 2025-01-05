@@ -31,7 +31,7 @@ let addNewVertex (model: Model) =
         model // TODO
 
 let view jsRuntime (model: Model) dispatch =
-    Utility.toggleButtonEnabled "SaveButton" (isValidNewVertex model) jsRuntime
+    Utility.toggleButtonEnabled "AddVertexSaveButton" (isValidNewVertex model) jsRuntime
     |> ignore
 
     Template

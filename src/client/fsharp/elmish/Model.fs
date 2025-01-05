@@ -29,6 +29,7 @@ and Model =
       addAccessNameInput: string
       modifyVertexNameInput: string
       subjectId: Guid option
+      subjectAccessId: Guid option
       factorsInput: Guid list }
     static member Init =
         { page = Endpoint.Main
@@ -38,6 +39,7 @@ and Model =
           addAccessNameInput = ""
           modifyVertexNameInput = ""
           subjectId = None
+          subjectAccessId = None
           factorsInput = [] }
 
     static member Example = { Model.Init with graph = AAG.Graph.Example }

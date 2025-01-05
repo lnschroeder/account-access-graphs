@@ -7,7 +7,7 @@ type Message =
     | SetPage of Endpoint.Page
     | ClickedAddAccess
     | ClickedAddVertex
-    | ClickedBackFromFactors
+    | ClickedDeleteAccess
     | ClickedCancelAddVertex
     | ClickedClearGraph
     | ClickedExampleGraph
@@ -15,6 +15,7 @@ type Message =
     | ClickedRemoveProvisionalFactor of Guid
     | ClickedSaveAddAccess of string option
     | ClickedSaveAddVertex // TODO remove Clicked Messages
+    | ClickedSaveSubjectVertex
     | ClickedVisNode of string
     | ModifiedVertexName of Guid * string
     | TypedAccessName of string
