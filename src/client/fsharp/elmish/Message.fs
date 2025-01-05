@@ -13,7 +13,7 @@ type Message =
     | ClickedExampleGraph
     | ClickedModifyAccess
     | ClickedRemoveProvisionalFactor of Guid
-    | ClickedSaveAddAccess of string option
+    | ClickedSaveSubjectAccess
     | ClickedSaveAddVertex // TODO remove Clicked Messages
     | ClickedSaveSubjectVertex
     | ClickedVisNode of string

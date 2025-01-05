@@ -15,10 +15,10 @@ let private getVertexNameHint (model: Model) =
     else
         Hint.Info
 
-let updateVertexName subjectId name (model: Model) =
+let updateVertexName subjectVertexId name (model: Model) =
     { model with
         modifyVertexNameInput = name
-        graph = AAG.changeVertexName subjectId name model.graph }
+        graph = AAG.changeVertexName subjectVertexId name model.graph }
 
 let openFactorsSelection model = { model with step = AddAccessFactors }
 
@@ -36,22 +36,22 @@ let isValidVertex model =
 let saveAndExit (model: Model) =
     { model with
         modifyVertexNameInput = ""
-        subjectId = None
+        subjectVertexId = None
         step = MainMenu }
 
 let view jsRuntime (model: Model) dispatch =
     Utility.toggleButtonEnabled "ModifyVertexSaveButton" (isValidVertex model) jsRuntime
     |> ignore
 
-    match model.subjectId with
-    | Some subjectId ->
-        match AAG.findVertexById subjectId model.graph with
+    match model.subjectVertexId with
+    | Some subjectVertexId ->
+        match AAG.findVertexById subjectVertexId model.graph with
         | Some subject ->
             Template
                 .ModifyVertex()
                 .SubjectNameInput(
                     model.modifyVertexNameInput,
-                    (fun v -> dispatch (Msg.ModifiedVertexName(subjectId, v)))
+                    (fun v -> dispatch (Msg.ModifiedVertexName(subjectVertexId, v)))
                 )
                 .SubjectNameHint((getVertexNameHint model).value)
                 .Accesses(forEach subject.accesses (showAccess dispatch))

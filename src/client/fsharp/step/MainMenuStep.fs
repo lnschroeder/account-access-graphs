@@ -11,7 +11,7 @@ let openAddVertex model = { model with step = AddVertex }
 let openModifyVertex (vertex: AAG.Vertex) model =
     { model with
         step = ModifyVertex
-        subjectId = Some vertex.id
+        subjectVertexId = Some vertex.id
         modifyVertexNameInput = vertex.name }
 
 let handleClickedVertex (vertex: AAG.Vertex option) (model: Model) =

@@ -21,7 +21,7 @@ type Network = { nodes: Node list; edges: Edge list }
 let private transformVertex (model: Model) (vertex: AAG.Vertex) =
     { id = vertex.id
       label = vertex.name
-      isSubject = Some vertex.id = model.subjectId
+      isSubject = Some vertex.id = model.subjectVertexId
       isFactor = Seq.contains vertex.id model.factorsInput }
 
 let transform (model: Model) =

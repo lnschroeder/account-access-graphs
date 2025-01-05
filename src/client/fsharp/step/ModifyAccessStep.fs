@@ -4,35 +4,35 @@ open Model
 open Bolero.Html
 
 let private getFactorsHint (model: Model) = // TODO just pass minimal
-    match model.subjectId with
-    | Some subjectId ->
+    match model.subjectVertexId with
+    | Some subjectVertexId ->
         if model.factorsInput.IsEmpty then
             Hint.Error "Select at least one factor"
-        elif Seq.contains subjectId model.factorsInput then
+        elif Seq.contains subjectVertexId model.factorsInput then
             Hint.Error "Self-references are not allowed"
-        elif AAG.isAccessPresentWithFactors subjectId (Set.ofList model.factorsInput) model.graph then
+        elif AAG.isAccessPresentWithFactors subjectVertexId (Set.ofList model.factorsInput) model.graph then
             Hint.Error "There is already an access with the same factors"
         else
             Hint.Info
     | None -> Hint.Error "No subject vertex selected yet"
 
 let private getAccessNameHint (model: Model) =
-    match model.subjectId with
-    | Some subjectId ->
+    match model.subjectVertexId with
+    | Some subjectVertexId ->
         if model.addAccessNameInput = "" then
             Hint.Info
         elif AAG.isInvalidAccessName model.addAccessNameInput then
             Hint.Error "Invalid name"
-        elif AAG.isAccessPresentWithName subjectId model.addAccessNameInput model.graph then
+        elif AAG.isAccessPresentWithName subjectVertexId model.addAccessNameInput model.graph then
             Hint.Error "Access name already taken for that vertex"
         else
             Hint.Info
     | None -> Hint.Error "Select a subject vertex first!"
 
 let private getAccessNameInputPlaceholder (model: Model) =
-    match model.subjectId with
-    | Some subjectId ->
-        match AAG.findVertexById subjectId model.graph with
+    match model.subjectVertexId with
+    | Some subjectVertexId ->
+        match AAG.findVertexById subjectVertexId model.graph with
         | Some subject ->
             "Defaults to: "
             + (AAG.findNextAvailableColor subject).ToString()
@@ -55,29 +55,29 @@ let private getAccessNameInputPlaceholder (model: Model) =
 //                 (AAG.removeAllProvisionalAccesses model.graph) }
 
 let removeProvisionalFactor vertexId (model: Model) =
-    match model.subjectId with
-    | Some subjectId ->
+    match model.subjectVertexId with
+    | Some subjectVertexId ->
         let factors =
             model.factorsInput
             |> List.filter (fun id -> id <> vertexId)
 
         { model with
             factorsInput = factors
-            graph = AAG.setProvisionalAccess subjectId model.addAccessNameInput (Set.ofList factors) model.graph }
+            graph = AAG.setProvisionalAccess subjectVertexId model.addAccessNameInput (Set.ofList factors) model.graph }
     | None -> model
 
 let addProvisionalFactor vertexId (model: Model) =
-    match model.subjectId with
-    | Some subjectId ->
+    match model.subjectVertexId with
+    | Some subjectVertexId ->
         let factors = model.factorsInput @ [ vertexId ]
 
         { model with
             factorsInput = factors
-            graph = AAG.setProvisionalAccess subjectId model.addAccessNameInput (Set.ofList factors) model.graph }
+            graph = AAG.setProvisionalAccess subjectVertexId model.addAccessNameInput (Set.ofList factors) model.graph }
     | None -> model
 
 let toggleFactor vertexId (model: Model) =
-    if Some vertexId = model.subjectId then
+    if Some vertexId = model.subjectVertexId then
         model
     elif List.contains vertexId model.factorsInput then
         removeProvisionalFactor vertexId model
@@ -103,16 +103,16 @@ let private isValidNewAccess (model: Model) =
 let updateAccessName name (model: Model) =
     { model with addAccessNameInput = name }
 
-let addNewAccess name (model: Model) =
-    match model.subjectId with
-    | Some subjectId ->
-        match AAG.findVertexById subjectId model.graph with
-        | Some vertex ->
+let saveSubjectAccess (model: Model) =
+    match model.subjectVertexId with
+    | Some subjectVertexId ->
+        match AAG.findVertexById subjectVertexId model.graph with
+        | Some subjectVertex ->
             let access: AAG.Access =
-                AAG.Access.Default name (Set.ofList model.factorsInput) (AAG.findNextAvailableColor vertex)
+                AAG.Access.Default model.addAccessNameInput (Set.ofList model.factorsInput) (AAG.findNextAvailableColor subjectVertex)
 
             let graph =
-                AAG.addAccessToGraph subjectId access (AAG.removeAllProvisionalAccesses model.graph) // TODO make more efficient
+                AAG.addAccessToGraph subjectVertexId access (AAG.removeAllProvisionalAccesses model.graph) // TODO make more efficient
 
             exitDeletingProvisionalAccesses { model with graph = graph }
         | None -> model
@@ -144,12 +144,7 @@ let view jsRuntime (model: Model) dispatch =
         .DeleteButton(fun _ -> dispatch (Msg.ClickedDeleteAccess))
         .SaveButton(fun _ ->
             dispatch (
-                Msg.ClickedSaveAddAccess(
-                    if model.addAccessNameInput = "" then
-                        None
-                    else
-                        Some model.addAccessNameInput
-                )
+                Msg.ClickedSaveSubjectAccess
             ))
         .AccessNameInput(model.addAccessNameInput, (fun v -> dispatch (Msg.TypedAccessName v)))
         .AccessNameInputPlaceholder(getAccessNameInputPlaceholder model)

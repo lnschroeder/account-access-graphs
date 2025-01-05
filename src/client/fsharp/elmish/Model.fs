@@ -28,7 +28,7 @@ and Model =
       addVertexInput: string
       addAccessNameInput: string
       modifyVertexNameInput: string
-      subjectId: Guid option
+      subjectVertexId: Guid option
       subjectAccessId: Guid option
       factorsInput: Guid list }
     static member Init =
@@ -38,7 +38,7 @@ and Model =
           addVertexInput = ""
           addAccessNameInput = ""
           modifyVertexNameInput = ""
-          subjectId = None
+          subjectVertexId = None
           subjectAccessId = None
           factorsInput = [] }
 

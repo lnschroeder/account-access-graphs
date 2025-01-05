@@ -30,8 +30,10 @@ and Access =
     static member Default name factors colorIndex =
         { id = Guid.NewGuid()
           name =
-            name
-            |> Option.defaultValue (colorIndex.ToString())
+            if name = "" then
+                colorIndex.ToString()
+            else
+                name
           factors = factors |> Set.map Factor.Default
           isProvisional = false
           colorIndex = colorIndex }
@@ -49,7 +51,7 @@ and Graph =
                 name = "test2"
                 accesses =
                   [ (Access.Default
-                        None
+                        ""
                         (Set
                             .empty
                             .Add(Guid.Parse("1578d946-7c48-41a6-baf2-0386979c9de1"))
@@ -76,7 +78,8 @@ let findVertexById id graph =
     |> List.tryFind (fun vertex -> vertex.id = id)
 
 let getVerticesWithName vertexName graph =
-    graph.vertices |> Seq.filter (fun vertex -> vertex.name = vertexName)
+    graph.vertices
+    |> Seq.filter (fun vertex -> vertex.name = vertexName)
 
 let isInvalidVertexName value = String.IsNullOrWhiteSpace(value)
 let isInvalidAccessName value = String.IsNullOrWhiteSpace(value)
