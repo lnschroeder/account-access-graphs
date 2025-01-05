@@ -1,4 +1,4 @@
-module AAG.Client.AddAccessPage
+module AAG.Client.AddAccessStep
 
 open Model
 open Bolero.Html

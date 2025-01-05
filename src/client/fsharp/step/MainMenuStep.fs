@@ -1,4 +1,4 @@
-module AAG.Client.MainMenuPage
+module AAG.Client.MainMenuStep
 
 open Model
 

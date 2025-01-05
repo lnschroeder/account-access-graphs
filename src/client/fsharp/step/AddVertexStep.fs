@@ -1,4 +1,4 @@
-module AAG.Client.AddVertexPage
+module AAG.Client.AddVertexStep
 
 open Model
 
