@@ -5,6 +5,8 @@ open System
 /// The Elmish application's update messages.
 type Message =
     | SetPage of Endpoint.Page
+    | ClickedAddAccess
+    | ClickedAddVertex
     | ClickedBackFromFactors
     | ClickedCancelAddAccess
     | ClickedCancelAddVertex
@@ -14,7 +16,7 @@ type Message =
     | ClickedRemoveProvisionalFactor of Guid
     | ClickedSaveAddAccess of string option
     | ClickedSaveAddVertex // TODO remove Clicked Messages
-    | ClickedVisNodeOnAddAccessPage of AAG.Vertex option
+    | ClickedVisNode of string
     | TypedAccessName of string
     | TypedSubjectName of string
     | TypedVertexName of string

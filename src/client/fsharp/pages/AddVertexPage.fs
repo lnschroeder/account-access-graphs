@@ -17,7 +17,7 @@ let updateVertexName name (model: Model) = { model with addVertexInput = name }
 let cancel model =
     { model with
         addVertexInput = ""
-        page = Endpoint.MainMenu }
+        step = Main }
 
 let isValidNewVertex model =
     (getVertexNameHint model).level <> Error

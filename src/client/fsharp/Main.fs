@@ -6,17 +6,36 @@ open Elmish
 open Bolero
 open Model
 open Microsoft.JSInterop
+open System
+open Bolero.Html
 
 let private init _ = MainMenuPage.clearGraph, Cmd.none
+
+let private findVertexById idAsString graph =
+    if idAsString = "undefined" then
+        None
+    else
+        let guid = Guid.Parse idAsString
+        AAG.findVertexById guid graph
 
 let private update message model =
     let model =
         match message with
-        // MainPage
-        | Msg.SetPage page -> MainPage.setPage model page
+        // Main
+        | Msg.SetPage page -> { model with page = page }
+        | Msg.ClickedVisNode idAsString ->
+            let vertex = findVertexById idAsString model.graph
+
+            match model.step with
+            | AddAccessSubject -> AddAccessPage.handleClickedVertexOnSubject vertex model
+            | AddAccessFactors -> AddAccessPage.handleClickedVertexOnFactors vertex model
+            | _ -> model
+
         // MainMenuPage
         | Msg.ClickedClearGraph -> MainMenuPage.clearGraph
         | Msg.ClickedExampleGraph -> MainMenuPage.exampleGraph
+        | Msg.ClickedAddAccess -> MainMenuPage.openAddAccess model
+        | Msg.ClickedAddVertex -> MainMenuPage.openAddVertex model
         // AddVertexPage
         | Msg.ClickedSaveAddVertex -> AddVertexPage.addNewVertex model
         | Msg.TypedVertexName value -> AddVertexPage.updateVertexName value model
@@ -24,8 +43,7 @@ let private update message model =
         // AddAccessPage
         | Msg.TypedAccessName name -> AddAccessPage.updateAccessName name model
         | Msg.ClickedSaveAddAccess name -> AddAccessPage.addNewAccess name model
-        | Msg.ClickedBackFromFactors  -> AddAccessPage.openSubjectSelection model
-        | Msg.ClickedVisNodeOnAddAccessPage vertex -> AddAccessPage.handleClickedVertex vertex model
+        | Msg.ClickedBackFromFactors -> AddAccessPage.openSubjectSelection model
         | Msg.TypedSubjectName name -> AddAccessPage.selectSubjectByName name model
         | Msg.ClickedCancelAddAccess -> AddAccessPage.cancel model
         | Msg.ClickedRemoveProvisionalFactor id -> AddAccessPage.removeProvisionalFactor id model
@@ -37,7 +55,28 @@ let private view (jsRuntime: IJSRuntime) model dispatch =
     jsRuntime.InvokeVoidAsync("updateNetwork", VisJSTransformer.transform model)
     |> ignore
 
-    MainPage.view jsRuntime model dispatch
+    Template
+        .Main()
+        .LeftColumn(
+            cond model.page
+            <| function
+                | Endpoint.Main ->
+                    match model.step with
+                    | Main ->
+                        Template
+                            .MainMenu()
+                            .AddVertexButton(fun _ -> dispatch (Msg.ClickedAddVertex))
+                            .AddAccessButton(fun _ -> dispatch (Msg.ClickedAddAccess))
+                            .ClearGraphButton(fun _ -> dispatch (Msg.ClickedClearGraph))
+                            .ExampleGraphButton(fun _ -> dispatch (Msg.ClickedExampleGraph))
+                            .Elt()
+                    | AddVertex -> AddVertexPage.view jsRuntime model dispatch
+                    | AddAccessSubject -> AddAccessPage.view jsRuntime model dispatch
+                    | AddAccessFactors -> AddAccessPage.view jsRuntime model dispatch
+        )
+        .ClickedNodeInput("", (fun idAsString -> dispatch (Msg.ClickedVisNode idAsString)))
+        .Elt()
+
 
 let private router = Router.infer Msg.SetPage (fun (model: Model) -> model.page)
 

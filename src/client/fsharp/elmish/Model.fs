@@ -8,16 +8,22 @@ type HintLevel =
     | Warning
     | Error
 
-type Hint =
+and Hint =
     { value: string
       level: HintLevel }
     static member Info = { value = ""; level = Info }
     static member Error value = { value = value; level = Error }
     static member Required = Hint.Error "Field is required"
 
-type Model =
+and Step =
+  | Main
+  | AddVertex
+  | AddAccessSubject
+  | AddAccessFactors
+
+and Model =
     { page: Endpoint.Page
-      step: string option
+      step: Step
       graph: AAG.Graph
       addVertexInput: string
       addAccessNameInput: string
@@ -25,8 +31,8 @@ type Model =
       subjectId: Guid option
       factorsInput: Guid list }
     static member Init =
-        { page = Endpoint.MainMenu
-          step = None
+        { page = Endpoint.Main
+          step = Main
           graph = AAG.Graph.Empty
           addVertexInput = ""
           addAccessNameInput = ""

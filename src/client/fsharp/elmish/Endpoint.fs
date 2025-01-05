@@ -4,6 +4,4 @@ open Bolero
 
 /// Routing endpoints definition.
 type Page =
-    | [<EndPoint "/">] MainMenu
-    | [<EndPoint "/vertex">] AddVertex
-    | [<EndPoint "/access">] AddAccess
+    | [<EndPoint "/">] Main

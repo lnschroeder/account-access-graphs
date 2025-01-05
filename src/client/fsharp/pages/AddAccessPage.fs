@@ -67,6 +67,7 @@ let private selectSubject (vertex: AAG.Vertex) (model: Model) =
                 (Set.ofList model.factorsInput)
                 (AAG.removeAllProvisionalAccesses model.graph)
         subjectInput = vertex.name }
+
 let selectSubjectByName name (model: Model) =
     let vertex = AAG.findVertexByName name model.graph
 
@@ -115,23 +116,20 @@ let cancel model =
         factorsInput = []
         addAccessNameInput = ""
         graph = AAG.removeAllProvisionalAccesses model.graph
-        page = Endpoint.MainMenu
-        step = None }
+        step = Main }
 
-let openFactorsSelection model = { model with step = Some "factors" }
+let openFactorsSelection model = { model with step = AddAccessFactors }
 
-let openSubjectSelection model = { model with step = None }
+let openSubjectSelection model = { model with step = AddAccessSubject }
 
-let handleClickedVertex (vertex: AAG.Vertex option) (model: Model) =
-    match model.step with
-    | None ->
-        match vertex with
-        | Some vertex -> selectSubject vertex model
-        | None -> deselectSubject model
-    | Some "factors" ->
-        match vertex with
-        | Some vertex -> toggleFactor vertex.id model
-        | _ -> model
+let handleClickedVertexOnSubject (vertex: AAG.Vertex option) (model: Model) =
+    match vertex with
+    | Some vertex -> selectSubject vertex model
+    | None -> deselectSubject model
+
+let handleClickedVertexOnFactors (vertex: AAG.Vertex option) (model: Model) =
+    match vertex with
+    | Some vertex -> toggleFactor vertex.id model
     | _ -> model
 
 let private isSubjectValid (model: Model) =
@@ -184,7 +182,7 @@ let view jsRuntime (model: Model) dispatch =
     |> ignore
 
     match model.step with
-    | Some "factors" ->
+    | AddAccessFactors ->
         Template
             .AddAccessFactors()
             .BackButton(fun _ -> dispatch (Msg.ClickedBackFromFactors))
