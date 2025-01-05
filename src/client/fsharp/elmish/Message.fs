@@ -13,9 +13,9 @@ type Message =
     | ClickedExampleGraph
     | ClickedModifyAccess
     | ClickedRemoveProvisionalFactor of Guid
-    | ClickedSaveSubjectAccess
+    | ClickedBackFromSubjectAccess
     | ClickedSaveAddVertex // TODO remove Clicked Messages
-    | ClickedSaveSubjectVertex
+    | ClickedBackFromSubjectVertex
     | ClickedVisNode of string
     | ModifiedVertexName of Guid * string
     | TypedAccessName of string

@@ -20,7 +20,7 @@ let updateVertexName subjectVertexId name (model: Model) =
         modifyVertexNameInput = name
         graph = AAG.changeVertexName subjectVertexId name model.graph }
 
-let openFactorsSelection model = { model with step = AddAccessFactors }
+let openModifyAccess model = { model with step = ModifyAccess }
 
 let private showAccess dispatch (access: AAG.Access) =
     Template
@@ -40,7 +40,7 @@ let saveAndExit (model: Model) =
         step = MainMenu }
 
 let view jsRuntime (model: Model) dispatch =
-    Utility.toggleButtonEnabled "ModifyVertexSaveButton" (isValidVertex model) jsRuntime
+    Utility.toggleButtonEnabled "ModifyVertexBackButton" (isValidVertex model) jsRuntime
     |> ignore
 
     match model.subjectVertexId with
@@ -56,7 +56,7 @@ let view jsRuntime (model: Model) dispatch =
                 .SubjectNameHint((getVertexNameHint model).value)
                 .Accesses(forEach subject.accesses (showAccess dispatch))
                 .AddAccessButton(fun _ -> dispatch Msg.ClickedAddAccess)
-                .SaveButton(fun _ -> dispatch Msg.ClickedSaveSubjectVertex)
+                .BackButton(fun _ -> dispatch Msg.ClickedBackFromSubjectVertex)
                 .Elt()
         | None -> Template.ModifyVertex().Elt()
     | None -> Template.ModifyVertex().Elt()

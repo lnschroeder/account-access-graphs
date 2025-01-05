@@ -91,7 +91,7 @@ let exitDeletingProvisionalAccesses model =
         graph = AAG.removeAllProvisionalAccesses model.graph
         step = ModifyVertex }
 
-let handleClickedVertexOnFactors (vertex: AAG.Vertex option) (model: Model) =
+let handleClickedVertex (vertex: AAG.Vertex option) (model: Model) =
     match vertex with
     | Some vertex -> toggleFactor vertex.id model
     | _ -> model
@@ -109,7 +109,10 @@ let saveSubjectAccess (model: Model) =
         match AAG.findVertexById subjectVertexId model.graph with
         | Some subjectVertex ->
             let access: AAG.Access =
-                AAG.Access.Default model.addAccessNameInput (Set.ofList model.factorsInput) (AAG.findNextAvailableColor subjectVertex)
+                AAG.Access.Default
+                    model.addAccessNameInput
+                    (Set.ofList model.factorsInput)
+                    (AAG.findNextAvailableColor subjectVertex)
 
             let graph =
                 AAG.addAccessToGraph subjectVertexId access (AAG.removeAllProvisionalAccesses model.graph) // TODO make more efficient
@@ -136,16 +139,13 @@ let private showFactor (model: Model) dispatch id =
             .Elt()
 
 let view jsRuntime (model: Model) dispatch =
-    Utility.toggleButtonEnabled "ModifyAccessSaveButton" (isValidNewAccess model) jsRuntime
+    Utility.toggleButtonEnabled "ModifyAccessBackButton" (isValidNewAccess model) jsRuntime
     |> ignore
 
     Template
         .ModifyAccess()
         .DeleteButton(fun _ -> dispatch (Msg.ClickedDeleteAccess))
-        .SaveButton(fun _ ->
-            dispatch (
-                Msg.ClickedSaveSubjectAccess
-            ))
+        .BackButton(fun _ -> dispatch (Msg.ClickedBackFromSubjectAccess))
         .AccessNameInput(model.addAccessNameInput, (fun v -> dispatch (Msg.TypedAccessName v)))
         .AccessNameInputPlaceholder(getAccessNameInputPlaceholder model)
         .AccessNameHint((getAccessNameHint model).value)

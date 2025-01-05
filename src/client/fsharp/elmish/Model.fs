@@ -18,7 +18,7 @@ and Hint =
 and Step =
     | MainMenu
     | AddVertex
-    | AddAccessFactors
+    | ModifyAccess
     | ModifyVertex
 
 and Model =
