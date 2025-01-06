@@ -76,42 +76,38 @@ let private getAccessNameInputPlaceholder (model: Model) =
 //             graph = AAG.setProvisionalAccess subjectVertexId model.addAccessNameInput (Set.ofList factors) model.graph }
 //     | None -> model
 
-let removeFactorFromSubject vertexId (model: Model) =
-    match model.subjectAccessId with
-    | Some subjectAccessId ->
-        { model with
-            graph = AAG.removeFactorFromGraph subjectAccessId vertexId model.graph
-            selectedFactors = Set.remove vertexId model.selectedFactors }
-    | None -> model
+let removeFactorFromSubject accessId vertexId (model: Model) =
+    { model with
+        graph = AAG.removeFactorFromGraph accessId vertexId model.graph
+        selectedFactors = Set.remove vertexId model.selectedFactors }
 
-let addFactorFromSubject vertexId (model: Model) =
-    match model.subjectAccessId with
-    | Some subjectAccessId ->
-        { model with
-            graph = AAG.addFactorToGraph subjectAccessId vertexId model.graph
-            selectedFactors = Set.add vertexId model.selectedFactors }
-    | None -> model
+let addFactorFromSubject accessId vertexId (model: Model) =
+    { model with
+        graph = AAG.addFactorToGraph accessId vertexId model.graph
+        selectedFactors = Set.add vertexId model.selectedFactors }
 
-let toggleFactor (vertex: AAG.Vertex) (model: Model) =
+let toggleFactor accessId (vertex: AAG.Vertex) (model: Model) =
     if Some vertex.id = model.subjectVertexId then
         model
     elif Set.contains vertex.id model.selectedFactors then
-        removeFactorFromSubject vertex.id model
+        removeFactorFromSubject accessId vertex.id model
     else
-        addFactorFromSubject vertex.id model
+        addFactorFromSubject accessId vertex.id model
 
-let exitDeletingProvisionalAccesses model =
+let exitDeletingProvisionalAccesses subjectAccessId model =
     { model with
         selectedFactors = Set.empty
         addAccessNameInput = ""
-        graph = AAG.removeAllProvisionalAccesses model.graph
+        graph = AAG.deleteAccess subjectAccessId model.graph
         step = ModifyVertex }
 
 let handleClickedVertex (vertex: AAG.Vertex option) (model: Model) dispatch =
-    match vertex with
-    | Some vertex -> dispatch (Msg.ToggleFactorOfSubjectAccess vertex)
-    | _ -> dispatch Msg.IgnoreAction
-
+    match model.subjectAccessId with
+    | Some subjectAccessId ->
+        match vertex with
+        | Some vertex -> dispatch (Msg.ToggleFactorOfSubjectAccess (subjectAccessId, vertex))
+        | _ -> dispatch Msg.IgnoreAction
+    | None -> dispatch Msg.IgnoreAction
 let private isValidNewAccess (model: Model) =
     (getFactorsHint model).level <> Error
     && (getAccessNameHint model).level <> Error
@@ -154,12 +150,15 @@ let private openModifyAccess (vertex: AAG.Vertex) (access: AAG.Access) model =
     | None -> model // TODO throw error if the vertex is invalid
 
 let private createNewAccessForSubjectVertex (model: Model) =
+    printfn "Creating new model"
     match model.subjectVertexId with
     | Some subjectVertexId ->
         match AAG.findVertexById subjectVertexId model.graph with
         | Some subjectVertex ->
             let access = AAG.Access.New(AAG.findNextAvailableColor subjectVertex)
-            openModifyAccess subjectVertex access model
+            let graph = AAG.addAccessToGraph subjectVertexId access model.graph
+
+            openModifyAccess subjectVertex access {model with graph = graph}
         | None -> model
     | None -> model
 
@@ -179,7 +178,7 @@ let view jsRuntime (model: Model) dispatch =
     | Some subjectAccessId ->
         Template
             .ModifyAccess()
-            .DeleteButton(fun _ -> dispatch (Msg.ClickedDeleteAccess))
+            .DeleteButton(fun _ -> dispatch (Msg.ClickedDeleteAccess subjectAccessId))
             .BackButton(fun _ -> dispatch (Msg.OpenModifyVertexStep model.subjectVertexId))
             .AccessNameInput(model.addAccessNameInput, (fun v -> dispatch (Msg.ModifiedAccessName (subjectAccessId, v))))
             .AccessNameInputPlaceholder(getAccessNameInputPlaceholder model)

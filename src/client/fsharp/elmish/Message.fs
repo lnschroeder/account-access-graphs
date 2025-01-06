@@ -9,8 +9,8 @@ type Message =
     | OpenMainMenuStep
     | OpenModifyVertexStep of Guid option
     | OpenModifyAccessStep of Guid option
-    | ToggleFactorOfSubjectAccess of AAG.Vertex
-    | ClickedDeleteAccess
+    | ToggleFactorOfSubjectAccess of Guid * AAG.Vertex
+    | ClickedDeleteAccess of Guid
     | ClickedClearGraph
     | ClickedExampleGraph
     | ClickedRemoveProvisionalFactor of Guid

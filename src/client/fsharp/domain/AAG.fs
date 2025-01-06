@@ -105,7 +105,7 @@ let private removeFactorFromAccess vertexId (access: Access) =
     { access with
         factors =
             access.factors
-            |> Set.filter (fun factor -> factor.vertexId = vertexId) }
+            |> Set.filter (fun factor -> factor.vertexId <> vertexId) }
 
 let addFactorToGraph accessId vertexId graph =
     { graph with
@@ -195,6 +195,16 @@ let addAccessToGraph vertexId access graph =
 //                                 @ [ Access.Provisional name factors ] }
 //                     else
 //                         vertex) }
+
+let deleteAccess accessId graph =
+    { graph with
+        vertices =
+            graph.vertices
+            |> List.map (fun v ->
+                { v with
+                    accesses =
+                        v.accesses
+                        |> List.filter (fun a -> a.id <> accessId) }) }
 
 let getAccessesWithFactors vertexId factors graph = // TODO rename factors to vertices?!
     match findVertexById vertexId graph with
