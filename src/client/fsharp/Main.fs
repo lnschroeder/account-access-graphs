@@ -35,7 +35,7 @@ let private update message model =
         | Msg.ClickedExampleGraph -> MainMenuStep.exampleGraph
         // ModifyAccessStep
         | Msg.OpenModifyAccessStep accessId -> ModifyAccessStep.``open`` accessId model
-        | Msg.ModifiedAccessName (subjectAccessId, name) -> ModifyAccessStep.updateAccessName subjectAccessId name model
+        | Msg.ModifiedAccessName (access, name) -> ModifyAccessStep.updateAccessName access name model
         | Msg.ToggleFactorOfSubjectAccess (accessId, vertex) -> ModifyAccessStep.toggleFactor accessId vertex model
         | Msg.ClickedDeleteAccess subjectAccessId -> ModifyAccessStep.exitDeletingProvisionalAccesses subjectAccessId model
         | Msg.ClickedRemoveProvisionalFactor id -> model // TODO or remove this feature ModifyAccessStep.removeProvisionalFactor id model
@@ -48,7 +48,7 @@ let private update message model =
 let private view (jsRuntime: IJSRuntime) model dispatch =
     jsRuntime.InvokeVoidAsync("updateNetwork", VisJSTransformer.transform model)
     |> ignore
-
+    printfn "%A" model
     Template
         .Main()
         .LeftColumn(

@@ -15,4 +15,4 @@ type Message =
     | ClickedExampleGraph
     | ClickedRemoveProvisionalFactor of Guid
     | ModifiedVertexName of Guid * string
-    | ModifiedAccessName of Guid * string
+    | ModifiedAccessName of AAG.Access * string

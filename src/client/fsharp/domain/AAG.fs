@@ -23,28 +23,19 @@ and Access =
       name: string
       factors: Factor Set
       colorIndex: byte
-      isProvisional: bool }
-    static member Provisional name factors =
-        { id = Guid.NewGuid()
-          name = name
-          factors = factors |> Set.map Factor.Default
-          isProvisional = true
-          colorIndex = Byte.MaxValue }
+      isProvisional: bool } // TODO remove ?!
 
-    static member Default name factors colorIndex =
-        { id = Guid.NewGuid()
-          name =
-            if name = "" then
-                colorIndex.ToString()
-            else
-                name
+    static member INTERNAL_ONLY factors colorIndex =
+        let id = Guid.NewGuid()
+        { id = id
+          name = id.ToString()
           factors = factors |> Set.map Factor.Default
           isProvisional = false
           colorIndex = colorIndex }
 
-    static member New colorIndex =
+    static member New name colorIndex =
         { id = Guid.NewGuid()
-          name = colorIndex.ToString()
+          name = name
           factors = Set.empty
           isProvisional = false
           colorIndex = colorIndex }
@@ -61,14 +52,13 @@ and Graph =
               { id = Guid.Parse("1578d946-7c48-41a6-baf2-0386979c9de2")
                 name = "test2"
                 accesses =
-                  [ (Access.Default
-                        ""
+                  [ (Access.INTERNAL_ONLY
                         (Set
                             .empty
                             .Add(Guid.Parse("1578d946-7c48-41a6-baf2-0386979c9de1"))
                             .Add(Guid.Parse("1578d946-7c48-41a6-baf2-0386979c9de3")))
                         1uy)
-                    (Access.Default "" (Set.empty.Add(Guid.Parse("1578d946-7c48-41a6-baf2-0386979c9de3"))) 11uy) ] }
+                    (Access.INTERNAL_ONLY (Set.empty.Add(Guid.Parse("1578d946-7c48-41a6-baf2-0386979c9de3"))) 2uy) ] }
               { id = Guid.Parse("1578d946-7c48-41a6-baf2-0386979c9de3")
                 name = "test222"
                 accesses = [] } ] }
@@ -85,6 +75,18 @@ let findNextAvailableColor (vertex: Vertex) =
         | Some (_, b) -> b
         | None -> Seq.length usedColors |> byte
 
+let findNextAvailableName (vertex: Vertex) =
+    let usedNames =
+        vertex.accesses
+        |> Seq.map (fun access -> access.name)
+        |> Seq.sort
+
+    Seq.zip usedNames (Seq.initInfinite int)
+    |> Seq.tryFind (fun (a, b) -> a <> $"{b}")
+    |> function
+        | Some (_, b) -> $"{b}"
+        | None -> $"{Seq.length usedNames |> int}"
+
 let rec findInVertices vertices accessId =
     match vertices with
     | [] -> None
@@ -92,12 +94,6 @@ let rec findInVertices vertices accessId =
         match List.tryFind (fun access -> access.id = accessId) vertex.accesses with
         | Some access -> Some(access, vertex)
         | None -> findInVertices rest accessId
-
-// let findAccessById (accessId: Guid) (graph: Graph) : Access option * Vertex option =
-//     match findInVertices graph.vertices accessId with
-//     | Some (access, vertex) -> (Some access, Some vertex)
-//     | None -> (None, None)
-
 let private addFactorToAccess vertexId (access: Access) =
     { access with factors = Set.add (Factor.Default vertexId) access.factors }
 
@@ -144,27 +140,18 @@ let findAccessById accessId graph = // TODO change id to option
     |> List.tryPick (fun vertex ->
         vertex.accesses
         |> List.tryFind (fun access -> access.id = accessId)
-        |> Option.map (fun access -> access, vertex))
+        |> Option.map (fun access -> vertex.id, access))
 
 let getVerticesWithName vertexName graph =
     graph.vertices
     |> Seq.filter (fun vertex -> vertex.name = vertexName)
 
 let isInvalidVertexName value = String.IsNullOrWhiteSpace(value)
+
 let isInvalidAccessName value = String.IsNullOrWhiteSpace(value)
 
 let addVertex vertex graph =
     { graph with vertices = vertex :: graph.vertices }
-
-let removeAllProvisionalAccesses graph =
-    { graph with
-        vertices =
-            graph.vertices
-            |> List.map (fun vertex ->
-                { vertex with
-                    accesses =
-                        vertex.accesses
-                        |> List.filter (fun access -> not access.isProvisional) }) }
 
 let addAccessToVertex access vertex =
     { vertex with accesses = access :: vertex.accesses }
@@ -178,24 +165,6 @@ let addAccessToGraph vertexId access graph =
                     addAccessToVertex access vertex
                 else
                     vertex) }
-
-// let setProvisionalAccess vertexId name (factors: Guid Set) graph =
-//     if factors.IsEmpty then
-//         removeAllProvisionalAccesses graph
-//     else
-//         { graph with
-//             vertices =
-//                 graph.vertices
-//                 |> List.map (fun vertex ->
-//                     if vertex.id = vertexId then
-//                         { vertex with
-//                             accesses =
-//                                 (vertex.accesses
-//                                  |> List.filter (fun access -> not access.isProvisional))
-//                                 @ [ Access.Provisional name factors ] }
-//                     else
-//                         vertex) }
-
 let deleteAccess accessId graph =
     { graph with
         vertices =
@@ -212,8 +181,8 @@ let getAccessesWithFactors vertexId factors graph = // TODO rename factors to ve
         vertex.accesses
         |> Seq.filter (fun access ->
             (access.factors
-             |> Seq.map (fun factor -> factor.vertexId)) = factors)
-    | None -> Seq.empty
+             |> Set.map (fun factor -> factor.vertexId)) = factors)
+    | None -> Set.empty
 
 let getAccessesWithName vertexId name graph =
     match findVertexById vertexId graph with
