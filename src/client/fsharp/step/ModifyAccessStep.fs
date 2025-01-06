@@ -54,7 +54,7 @@ let toggleFactor accessId (vertex: AAG.Vertex) (model: Model) =
     else
         addFactorFromSubject accessId vertex.id model
 
-let exitDeletingProvisionalAccesses subjectAccessId model =
+let exitDeletingAccess subjectAccessId model =
     { model with
         selectedFactors = Set.empty
         addAccessNameInput = ""
@@ -97,14 +97,12 @@ let private showFactor (model: Model) dispatch id =
             .ModifyAccess
             .Factor()
             .Name(vertex.name)
-            .DeleteButton(fun _ -> dispatch (Msg.ClickedRemoveProvisionalFactor vertex.id))
             .Elt()
     | None ->
         Template
             .ModifyAccess
             .Factor()
             .Name("INVALID")
-            .DeleteButton(fun _ -> ())
             .Elt()
 
 let private openModifyAccess vertexId (access: AAG.Access) accessNameInput model =

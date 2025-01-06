@@ -38,6 +38,6 @@ let transform (model: Model) =
                      { id = factor.id
                        from = factor.vertexId
                        ``to`` = vertex.id
-                       isProvisional = access.isProvisional
+                       isProvisional = (model.subjectAccessId = Some access.id && (access.factors |> Set.map (fun f -> f.vertexId)) = model.selectedFactors)
                        colorIndex = access.colorIndex })
                  |> Seq.toList))) }

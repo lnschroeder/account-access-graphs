@@ -37,8 +37,7 @@ let private update message model =
         | Msg.OpenModifyAccessStep accessId -> ModifyAccessStep.``open`` accessId model
         | Msg.ModifiedAccessName (access, name) -> ModifyAccessStep.updateAccessName access name model
         | Msg.ToggleFactorOfSubjectAccess (accessId, vertex) -> ModifyAccessStep.toggleFactor accessId vertex model
-        | Msg.ClickedDeleteAccess subjectAccessId -> ModifyAccessStep.exitDeletingProvisionalAccesses subjectAccessId model
-        | Msg.ClickedRemoveProvisionalFactor id -> model // TODO or remove this feature ModifyAccessStep.removeProvisionalFactor id model
+        | Msg.ClickedDeleteAccess subjectAccessId -> ModifyAccessStep.exitDeletingAccess subjectAccessId model
         // ModifyVertex
         | Msg.OpenModifyVertexStep vertexId -> ModifyVertexStep.``open`` vertexId model
         | Msg.ModifiedVertexName (subjectVertexId, name) -> ModifyVertexStep.updateVertexName subjectVertexId name model

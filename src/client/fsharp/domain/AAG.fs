@@ -22,22 +22,19 @@ and Access =
     { id: Guid
       name: string
       factors: Factor Set
-      colorIndex: byte
-      isProvisional: bool } // TODO remove ?!
+      colorIndex: byte }
 
     static member INTERNAL_ONLY factors colorIndex =
         let id = Guid.NewGuid()
         { id = id
           name = id.ToString()
           factors = factors |> Set.map Factor.Default
-          isProvisional = false
           colorIndex = colorIndex }
 
     static member New name colorIndex =
         { id = Guid.NewGuid()
           name = name
           factors = Set.empty
-          isProvisional = false
           colorIndex = colorIndex }
 
 and Graph =
