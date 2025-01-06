@@ -20,30 +20,45 @@ let updateVertexName subjectVertexId name (model: Model) =
         modifyVertexNameInput = name
         graph = AAG.changeVertexName subjectVertexId name model.graph }
 
-let openModifyAccess model = { model with step = ModifyAccess }
+let private openInternal (vertex: AAG.Vertex) model =
+    { page = model.page
+      step = ModifyVertex
+      graph = model.graph
+      addAccessNameInput = model.addAccessNameInput
+      modifyVertexNameInput = vertex.name
+      subjectVertexId = Some vertex.id
+      subjectAccessId = model.subjectAccessId
+      factorsInput = [] }
+
+let ``open`` vertexId model =
+    match vertexId with
+    | Some vertexId ->
+        match AAG.findVertexById vertexId model.graph with
+        | Some vertex -> openInternal vertex model
+        | None -> model // TODO throw error if vertexId is not found
+    | None ->
+        let vertex = AAG.Vertex.Default
+        let graph = AAG.addVertex vertex model.graph
+        openInternal vertex { model with graph = graph }
 
 let private showAccess dispatch (access: AAG.Access) =
     Template
         .ModifyVertex
         .Access()
         .Name(access.name)
-        .Button(fun _ -> dispatch Msg.ClickedModifyAccess)
+        .Button(fun _ -> dispatch (Msg.OpenModifyAccessStep(Some access.id)))
         .Elt()
 
 let isValidVertex model =
     (getVertexNameHint model).level <> Error
 
-let handleClickedVertex (vertex: AAG.Vertex option) (model: Model) =
+let handleClickedVertex (vertex: AAG.Vertex option) (model: Model) dispatch =
     if isValidVertex model then
         match vertex with
-        | Some vertex ->
-            { model with
-                step = ModifyVertex
-                subjectVertexId = Some vertex.id
-                modifyVertexNameInput = vertex.name }
-        | None -> model
+        | Some vertex -> dispatch (Msg.OpenModifyVertexStep(Some vertex.id))
+        | None -> dispatch (Msg.OpenMainMenuStep)
     else
-        model
+        dispatch Msg.IgnoreAction
 
 let saveAndExit (model: Model) =
     { model with
@@ -67,7 +82,7 @@ let view jsRuntime (model: Model) dispatch =
                 )
                 .SubjectNameHint((getVertexNameHint model).value)
                 .Accesses(forEach subject.accesses (showAccess dispatch))
-                .AddAccessButton(fun _ -> dispatch Msg.ClickedAddAccess)
+                .AddAccessButton(fun _ -> dispatch (Msg.OpenModifyAccessStep None))
                 .BackButton(fun _ -> dispatch Msg.ClickedBackFromSubjectVertex)
                 .Elt()
         | None -> Template.ModifyVertex().Elt()

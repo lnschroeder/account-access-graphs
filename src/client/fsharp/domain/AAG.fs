@@ -6,9 +6,9 @@ type Vertex =
     { id: Guid
       name: string
       accesses: Access list }
-    static member Default name =
+    static member Default =
         { id = Guid.NewGuid()
-          name = name
+          name = ""
           accesses = [] }
 
 and Factor =
@@ -39,6 +39,13 @@ and Access =
             else
                 name
           factors = factors |> Set.map Factor.Default
+          isProvisional = false
+          colorIndex = colorIndex }
+
+    static member New colorIndex =
+        { id = Guid.NewGuid()
+          name = colorIndex.ToString()
+          factors = Set.empty
           isProvisional = false
           colorIndex = colorIndex }
 
@@ -77,9 +84,29 @@ let findNextAvailableColor (vertex: Vertex) =
         | Some (_, b) -> b
         | None -> Seq.length usedColors |> byte
 
-let findVertexById id graph =
+let rec findInVertices vertices accessId =
+    match vertices with
+    | [] -> None
+    | vertex :: rest ->
+        match List.tryFind (fun access -> access.id = accessId) vertex.accesses with
+        | Some access -> Some(access, vertex)
+        | None -> findInVertices rest accessId
+
+// let findAccessById (accessId: Guid) (graph: Graph) : Access option * Vertex option =
+//     match findInVertices graph.vertices accessId with
+//     | Some (access, vertex) -> (Some access, Some vertex)
+//     | None -> (None, None)
+
+let findVertexById id graph = // TODO change id to option
     graph.vertices
     |> List.tryFind (fun vertex -> vertex.id = id)
+
+let findAccessById accessId graph = // TODO change id to option
+    graph.vertices
+    |> List.tryPick (fun vertex ->
+        vertex.accesses
+        |> List.tryFind (fun access -> access.id = accessId)
+        |> Option.map (fun access -> access, vertex))
 
 let getVerticesWithName vertexName graph =
     graph.vertices

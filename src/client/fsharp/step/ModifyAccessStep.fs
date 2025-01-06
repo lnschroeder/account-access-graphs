@@ -2,6 +2,7 @@ module AAG.Client.ModifyAccessStep
 
 open Model
 open Bolero.Html
+open System
 
 let private getFactorsHint (model: Model) = // TODO just pass minimal
     match model.subjectVertexId with
@@ -76,13 +77,13 @@ let addProvisionalFactor vertexId (model: Model) =
             graph = AAG.setProvisionalAccess subjectVertexId model.addAccessNameInput (Set.ofList factors) model.graph }
     | None -> model
 
-let toggleFactor vertexId (model: Model) =
-    if Some vertexId = model.subjectVertexId then
+let toggleFactor (vertex: AAG.Vertex) (model: Model) =
+    if Some vertex.id = model.subjectVertexId then
         model
-    elif List.contains vertexId model.factorsInput then
-        removeProvisionalFactor vertexId model
+    elif List.contains vertex.id model.factorsInput then
+        removeProvisionalFactor vertex.id model
     else
-        addProvisionalFactor vertexId model
+        addProvisionalFactor vertex.id model
 
 let exitDeletingProvisionalAccesses model =
     { model with
@@ -91,10 +92,10 @@ let exitDeletingProvisionalAccesses model =
         graph = AAG.removeAllProvisionalAccesses model.graph
         step = ModifyVertex }
 
-let handleClickedVertex (vertex: AAG.Vertex option) (model: Model) =
+let handleClickedVertex (vertex: AAG.Vertex option) (model: Model) dispatch =
     match vertex with
-    | Some vertex -> toggleFactor vertex.id model
-    | _ -> model
+    | Some vertex -> dispatch (Msg.ToggleFactorOfSubjectAccess vertex)
+    | _ -> dispatch Msg.IgnoreAction
 
 let private isValidNewAccess (model: Model) =
     (getFactorsHint model).level <> Error
@@ -138,6 +139,40 @@ let private showFactor (model: Model) dispatch id =
             .DeleteButton(fun _ -> ())
             .Elt()
 
+let private openModifyAccess (vertex: AAG.Vertex) (access: AAG.Access) model =
+    match AAG.findVertexById vertex.id model.graph with
+    | Some subjectVertex ->
+        { page = Endpoint.Main
+          step = ModifyAccess
+          graph = model.graph
+          addAccessNameInput = access.name
+          modifyVertexNameInput = subjectVertex.name
+          subjectVertexId = Some subjectVertex.id
+          subjectAccessId = Some access.id
+          factorsInput =
+            access.factors
+            |> Set.map (fun factor -> factor.vertexId)
+            |> List.ofSeq }
+    | None -> model // TODO throw error if the vertex is invalid
+
+let private createNewAccessForSubjectVertex (model: Model) =
+    match model.subjectVertexId with
+    | Some subjectVertexId ->
+        match AAG.findVertexById subjectVertexId model.graph with
+        | Some subjectVertex ->
+            let access = AAG.Access.New(AAG.findNextAvailableColor subjectVertex)
+            openModifyAccess subjectVertex access model
+        | None -> model
+    | None -> model
+
+let ``open`` accessId model =
+    match accessId with
+    | Some accessId ->
+        match AAG.findAccessById accessId model.graph with
+        | Some (vertex, access) -> openModifyAccess access vertex model
+        | None -> model
+    | None -> createNewAccessForSubjectVertex model
+
 let view jsRuntime (model: Model) dispatch =
     Utility.toggleButtonEnabled "ModifyAccessBackButton" (isValidNewAccess model) jsRuntime
     |> ignore
@@ -145,7 +180,7 @@ let view jsRuntime (model: Model) dispatch =
     Template
         .ModifyAccess()
         .DeleteButton(fun _ -> dispatch (Msg.ClickedDeleteAccess))
-        .BackButton(fun _ -> dispatch (Msg.ClickedBackFromSubjectAccess))
+        .BackButton(fun _ -> dispatch (Msg.OpenModifyVertexStep model.subjectVertexId))
         .AccessNameInput(model.addAccessNameInput, (fun v -> dispatch (Msg.TypedAccessName v)))
         .AccessNameInputPlaceholder(getAccessNameInputPlaceholder model)
         .AccessNameHint((getAccessNameHint model).value)

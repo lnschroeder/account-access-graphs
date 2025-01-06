@@ -6,26 +6,25 @@ let clearGraph = Model.Init
 
 let exampleGraph = Model.Example
 
-let openAddVertex model =
-    let vertex = AAG.Vertex.Default ""
+let ``open`` model =
+    { page = Endpoint.Main
+      step = MainMenu
+      graph = model.graph
+      addAccessNameInput = ""
+      modifyVertexNameInput = ""
+      subjectVertexId = None
+      subjectAccessId = None
+      factorsInput = [] }
 
-    { model with step = ModifyVertex ; subjectVertexId = Some vertex.id ; graph = AAG.addVertex vertex model.graph}
-
-let openModifyVertex (vertex: AAG.Vertex) model =
-    { model with
-        step = ModifyVertex
-        subjectVertexId = Some vertex.id
-        modifyVertexNameInput = vertex.name }
-
-let handleClickedVertex (vertex: AAG.Vertex option) (model: Model) =
+let handleClickedVertex (vertex: AAG.Vertex option) (model: Model) dispatch =
     match vertex with
-    | Some vertex -> openModifyVertex vertex model
-    | None -> model
+    | Some vertex -> dispatch (Msg.OpenModifyVertexStep (Some vertex.id))
+    | None -> dispatch Msg.IgnoreAction
 
 let view dispatch =
     Template
         .MainMenu()
-        .AddVertexButton(fun _ -> dispatch (Msg.ClickedAddVertex))
+        .AddVertexButton(fun _ -> dispatch (Msg.OpenModifyVertexStep None))
         .ClearGraphButton(fun _ -> dispatch (Msg.ClickedClearGraph))
         .ExampleGraphButton(fun _ -> dispatch (Msg.ClickedExampleGraph))
         .Elt()

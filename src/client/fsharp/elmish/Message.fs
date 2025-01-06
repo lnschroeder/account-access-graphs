@@ -4,16 +4,17 @@ open System
 
 /// The Elmish application's update messages.
 type Message =
+    | IgnoreAction
     | SetPage of Endpoint.Page
-    | ClickedAddAccess
-    | ClickedAddVertex
+    | OpenMainMenuStep
+    | OpenModifyVertexStep of Guid option
+    | OpenModifyAccessStep of Guid option
+    | ToggleFactorOfSubjectAccess of AAG.Vertex
     | ClickedDeleteAccess
     | ClickedClearGraph
     | ClickedExampleGraph
-    | ClickedModifyAccess
     | ClickedRemoveProvisionalFactor of Guid
     | ClickedBackFromSubjectAccess
     | ClickedBackFromSubjectVertex
-    | ClickedVisNode of string
     | ModifiedVertexName of Guid * string
     | TypedAccessName of string

@@ -11,38 +11,38 @@ open Bolero.Html
 
 let private init _ = MainMenuStep.clearGraph, Cmd.none
 
-let private handleClickedVisNode idAsString model =
+let private handleClickedVisNode idAsString model dispatch =
     let vertex =
         if idAsString = "undefined" then
             None
         else
-            let guid = Guid.Parse idAsString
-            AAG.findVertexById guid model.graph
+            AAG.findVertexById (Guid.Parse idAsString) model.graph
 
     match model.step with
-    | ModifyAccess -> ModifyAccessStep.handleClickedVertex vertex model
-    | MainMenu -> MainMenuStep.handleClickedVertex vertex model
-    | ModifyVertex -> ModifyVertexStep.handleClickedVertex vertex model
+    | MainMenu -> MainMenuStep.handleClickedVertex vertex model dispatch
+    | ModifyVertex -> ModifyVertexStep.handleClickedVertex vertex model dispatch
+    | ModifyAccess -> ModifyAccessStep.handleClickedVertex vertex model dispatch
 
 let private update message model =
     let model =
         match message with
+        | Msg.IgnoreAction -> model
         // Main
         | Msg.SetPage page -> { model with page = page }
-        | Msg.ClickedVisNode idAsString -> handleClickedVisNode idAsString model
         // MainMenuStep
+        | Msg.OpenMainMenuStep -> MainMenuStep.``open`` model
         | Msg.ClickedClearGraph -> MainMenuStep.clearGraph
         | Msg.ClickedExampleGraph -> MainMenuStep.exampleGraph
-        | Msg.ClickedAddVertex -> MainMenuStep.openAddVertex model
-        // AddAccessStep
+        // ModifyAccessStep
+        | Msg.OpenModifyAccessStep accessId -> ModifyAccessStep.``open`` accessId model
         | Msg.TypedAccessName name -> ModifyAccessStep.updateAccessName name model
+        | Msg.ToggleFactorOfSubjectAccess vertex -> ModifyAccessStep.toggleFactor vertex model
         | Msg.ClickedBackFromSubjectAccess -> ModifyAccessStep.saveSubjectAccess model
         | Msg.ClickedDeleteAccess -> ModifyAccessStep.exitDeletingProvisionalAccesses model
         | Msg.ClickedRemoveProvisionalFactor id -> ModifyAccessStep.removeProvisionalFactor id model
         // ModifyVertex
+        | Msg.OpenModifyVertexStep vertexId -> ModifyVertexStep.``open`` vertexId model
         | Msg.ModifiedVertexName (subjectVertexId, name) -> ModifyVertexStep.updateVertexName subjectVertexId name model
-        | Msg.ClickedModifyAccess -> ModifyVertexStep.openModifyAccess model
-        | Msg.ClickedAddAccess -> ModifyVertexStep.openModifyAccess model
         | Msg.ClickedBackFromSubjectVertex -> ModifyVertexStep.saveAndExit model
 
     model, Cmd.none
@@ -62,7 +62,7 @@ let private view (jsRuntime: IJSRuntime) model dispatch =
                     | ModifyAccess -> ModifyAccessStep.view jsRuntime model dispatch
                     | ModifyVertex -> ModifyVertexStep.view jsRuntime model dispatch
         )
-        .ClickedNodeInput("", (fun idAsString -> dispatch (Msg.ClickedVisNode idAsString)))
+        .ClickedNodeInput("", (fun idAsString -> handleClickedVisNode idAsString model dispatch))
         .Elt()
 
 
