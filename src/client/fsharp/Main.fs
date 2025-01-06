@@ -22,7 +22,7 @@ let private handleClickedVisNode idAsString model =
     match model.step with
     | ModifyAccess -> ModifyAccessStep.handleClickedVertex vertex model
     | MainMenu -> MainMenuStep.handleClickedVertex vertex model
-    | ModifyVertex -> MainMenuStep.handleClickedVertex vertex model
+    | ModifyVertex -> ModifyVertexStep.handleClickedVertex vertex model
 
 let private update message model =
     let model =

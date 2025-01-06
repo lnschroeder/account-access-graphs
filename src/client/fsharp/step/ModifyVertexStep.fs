@@ -33,6 +33,18 @@ let private showAccess dispatch (access: AAG.Access) =
 let isValidVertex model =
     (getVertexNameHint model).level <> Error
 
+let handleClickedVertex (vertex: AAG.Vertex option) (model: Model) =
+    if isValidVertex model then
+        match vertex with
+        | Some vertex ->
+            { model with
+                step = ModifyVertex
+                subjectVertexId = Some vertex.id
+                modifyVertexNameInput = vertex.name }
+        | None -> model
+    else
+        model
+
 let saveAndExit (model: Model) =
     { model with
         modifyVertexNameInput = ""
