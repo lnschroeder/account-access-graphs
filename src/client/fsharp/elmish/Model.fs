@@ -28,7 +28,7 @@ and Model =
       modifyVertexNameInput: string
       subjectVertexId: Guid option
       subjectAccessId: Guid option
-      factorsInput: Guid list }
+      selectedFactors: Guid Set }
     static member Init =
         { page = Endpoint.Main
           step = MainMenu
@@ -37,6 +37,6 @@ and Model =
           modifyVertexNameInput = ""
           subjectVertexId = None
           subjectAccessId = None
-          factorsInput = [] }
+          selectedFactors = Set.empty }
 
     static member Example = { Model.Init with graph = AAG.Graph.Example }

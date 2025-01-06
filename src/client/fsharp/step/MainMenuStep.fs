@@ -14,7 +14,7 @@ let ``open`` model =
       modifyVertexNameInput = ""
       subjectVertexId = None
       subjectAccessId = None
-      factorsInput = [] }
+      selectedFactors = Set.empty }
 
 let handleClickedVertex (vertex: AAG.Vertex option) (model: Model) dispatch =
     match vertex with

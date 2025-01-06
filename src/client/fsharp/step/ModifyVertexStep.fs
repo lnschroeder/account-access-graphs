@@ -28,7 +28,7 @@ let private openInternal (vertex: AAG.Vertex) model =
       modifyVertexNameInput = vertex.name
       subjectVertexId = Some vertex.id
       subjectAccessId = model.subjectAccessId
-      factorsInput = [] }
+      selectedFactors = Set.empty }
 
 let ``open`` vertexId model =
     match vertexId with
@@ -83,7 +83,7 @@ let view jsRuntime (model: Model) dispatch =
                 .SubjectNameHint((getVertexNameHint model).value)
                 .Accesses(forEach subject.accesses (showAccess dispatch))
                 .AddAccessButton(fun _ -> dispatch (Msg.OpenModifyAccessStep None))
-                .BackButton(fun _ -> dispatch Msg.ClickedBackFromSubjectVertex)
+                .BackButton(fun _ -> dispatch Msg.OpenMainMenuStep)
                 .Elt()
         | None -> Template.ModifyVertex().Elt()
     | None -> Template.ModifyVertex().Elt()

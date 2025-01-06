@@ -22,7 +22,7 @@ let private transformVertex (model: Model) (vertex: AAG.Vertex) =
     { id = vertex.id
       label = vertex.name
       isSubject = Some vertex.id = model.subjectVertexId
-      isFactor = Seq.contains vertex.id model.factorsInput }
+      isFactor = Seq.contains vertex.id model.selectedFactors }
 
 let transform (model: Model) =
     { nodes =

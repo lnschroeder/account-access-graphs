@@ -35,15 +35,13 @@ let private update message model =
         | Msg.ClickedExampleGraph -> MainMenuStep.exampleGraph
         // ModifyAccessStep
         | Msg.OpenModifyAccessStep accessId -> ModifyAccessStep.``open`` accessId model
-        | Msg.TypedAccessName name -> ModifyAccessStep.updateAccessName name model
+        | Msg.ModifiedAccessName (subjectAccessId, name) -> ModifyAccessStep.updateAccessName subjectAccessId name model
         | Msg.ToggleFactorOfSubjectAccess vertex -> ModifyAccessStep.toggleFactor vertex model
-        | Msg.ClickedBackFromSubjectAccess -> ModifyAccessStep.saveSubjectAccess model
         | Msg.ClickedDeleteAccess -> ModifyAccessStep.exitDeletingProvisionalAccesses model
-        | Msg.ClickedRemoveProvisionalFactor id -> ModifyAccessStep.removeProvisionalFactor id model
+        | Msg.ClickedRemoveProvisionalFactor id -> model // TODO or remove this feature ModifyAccessStep.removeProvisionalFactor id model
         // ModifyVertex
         | Msg.OpenModifyVertexStep vertexId -> ModifyVertexStep.``open`` vertexId model
         | Msg.ModifiedVertexName (subjectVertexId, name) -> ModifyVertexStep.updateVertexName subjectVertexId name model
-        | Msg.ClickedBackFromSubjectVertex -> ModifyVertexStep.saveAndExit model
 
     model, Cmd.none
 

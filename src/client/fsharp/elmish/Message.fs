@@ -14,7 +14,5 @@ type Message =
     | ClickedClearGraph
     | ClickedExampleGraph
     | ClickedRemoveProvisionalFactor of Guid
-    | ClickedBackFromSubjectAccess
-    | ClickedBackFromSubjectVertex
     | ModifiedVertexName of Guid * string
-    | TypedAccessName of string
+    | ModifiedAccessName of Guid * string

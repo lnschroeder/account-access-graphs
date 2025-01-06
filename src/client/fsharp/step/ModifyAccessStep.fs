@@ -2,16 +2,15 @@ module AAG.Client.ModifyAccessStep
 
 open Model
 open Bolero.Html
-open System
 
 let private getFactorsHint (model: Model) = // TODO just pass minimal
     match model.subjectVertexId with
     | Some subjectVertexId ->
-        if model.factorsInput.IsEmpty then
+        if model.selectedFactors.IsEmpty then
             Hint.Error "Select at least one factor"
-        elif Seq.contains subjectVertexId model.factorsInput then
+        elif Seq.contains subjectVertexId model.selectedFactors then
             Hint.Error "Self-references are not allowed"
-        elif AAG.isAccessPresentWithFactors subjectVertexId (Set.ofList model.factorsInput) model.graph then
+        elif Seq.length (AAG.getAccessesWithFactors subjectVertexId model.selectedFactors model.graph) > 1 then
             Hint.Error "There is already an access with the same factors"
         else
             Hint.Info
@@ -24,7 +23,7 @@ let private getAccessNameHint (model: Model) =
             Hint.Info
         elif AAG.isInvalidAccessName model.addAccessNameInput then
             Hint.Error "Invalid name"
-        elif AAG.isAccessPresentWithName subjectVertexId model.addAccessNameInput model.graph then
+        elif Seq.length (AAG.getAccessesWithName subjectVertexId model.addAccessNameInput model.graph) > 1 then
             Hint.Error "Access name already taken for that vertex"
         else
             Hint.Info
@@ -55,39 +54,55 @@ let private getAccessNameInputPlaceholder (model: Model) =
 //                 (Set.ofList model.factorsInput)
 //                 (AAG.removeAllProvisionalAccesses model.graph) }
 
-let removeProvisionalFactor vertexId (model: Model) =
-    match model.subjectVertexId with
-    | Some subjectVertexId ->
-        let factors =
-            model.factorsInput
-            |> List.filter (fun id -> id <> vertexId)
+// let removeProvisionalFactor vertexId (model: Model) =
+//     match model.subjectVertexId with
+//     | Some subjectVertexId ->
+//         let factors =
+//             model.selectedFactors
+//             |> List.filter (fun id -> id <> vertexId)
 
+//         { model with
+//             factorsInput = factors
+//             graph = AAG.setProvisionalAccess subjectVertexId model.addAccessNameInput (Set.ofList factors) model.graph }
+//     | None -> model
+
+// let addProvisionalFactor vertexId (model: Model) =
+//     match model.subjectVertexId with
+//     | Some subjectVertexId ->
+//         let factors = model.factorsInput @ [ vertexId ]
+
+//         { model with
+//             factorsInput = factors
+//             graph = AAG.setProvisionalAccess subjectVertexId model.addAccessNameInput (Set.ofList factors) model.graph }
+//     | None -> model
+
+let removeFactorFromSubject vertexId (model: Model) =
+    match model.subjectAccessId with
+    | Some subjectAccessId ->
         { model with
-            factorsInput = factors
-            graph = AAG.setProvisionalAccess subjectVertexId model.addAccessNameInput (Set.ofList factors) model.graph }
+            graph = AAG.removeFactorFromGraph subjectAccessId vertexId model.graph
+            selectedFactors = Set.remove vertexId model.selectedFactors }
     | None -> model
 
-let addProvisionalFactor vertexId (model: Model) =
-    match model.subjectVertexId with
-    | Some subjectVertexId ->
-        let factors = model.factorsInput @ [ vertexId ]
-
+let addFactorFromSubject vertexId (model: Model) =
+    match model.subjectAccessId with
+    | Some subjectAccessId ->
         { model with
-            factorsInput = factors
-            graph = AAG.setProvisionalAccess subjectVertexId model.addAccessNameInput (Set.ofList factors) model.graph }
+            graph = AAG.addFactorToGraph subjectAccessId vertexId model.graph
+            selectedFactors = Set.add vertexId model.selectedFactors }
     | None -> model
 
 let toggleFactor (vertex: AAG.Vertex) (model: Model) =
     if Some vertex.id = model.subjectVertexId then
         model
-    elif List.contains vertex.id model.factorsInput then
-        removeProvisionalFactor vertex.id model
+    elif Set.contains vertex.id model.selectedFactors then
+        removeFactorFromSubject vertex.id model
     else
-        addProvisionalFactor vertex.id model
+        addFactorFromSubject vertex.id model
 
 let exitDeletingProvisionalAccesses model =
     { model with
-        factorsInput = []
+        selectedFactors = Set.empty
         addAccessNameInput = ""
         graph = AAG.removeAllProvisionalAccesses model.graph
         step = ModifyVertex }
@@ -101,26 +116,10 @@ let private isValidNewAccess (model: Model) =
     (getFactorsHint model).level <> Error
     && (getAccessNameHint model).level <> Error
 
-let updateAccessName name (model: Model) =
-    { model with addAccessNameInput = name }
-
-let saveSubjectAccess (model: Model) =
-    match model.subjectVertexId with
-    | Some subjectVertexId ->
-        match AAG.findVertexById subjectVertexId model.graph with
-        | Some subjectVertex ->
-            let access: AAG.Access =
-                AAG.Access.Default
-                    model.addAccessNameInput
-                    (Set.ofList model.factorsInput)
-                    (AAG.findNextAvailableColor subjectVertex)
-
-            let graph =
-                AAG.addAccessToGraph subjectVertexId access (AAG.removeAllProvisionalAccesses model.graph) // TODO make more efficient
-
-            exitDeletingProvisionalAccesses { model with graph = graph }
-        | None -> model
-    | _ -> model // TODO
+let updateAccessName subjectAccessId name (model: Model) =
+    { model with
+        graph = AAG.changeAccessName subjectAccessId name model.graph
+        addAccessNameInput = name }
 
 let private showFactor (model: Model) dispatch id =
     match AAG.findVertexById id model.graph with
@@ -149,10 +148,9 @@ let private openModifyAccess (vertex: AAG.Vertex) (access: AAG.Access) model =
           modifyVertexNameInput = subjectVertex.name
           subjectVertexId = Some subjectVertex.id
           subjectAccessId = Some access.id
-          factorsInput =
+          selectedFactors =
             access.factors
-            |> Set.map (fun factor -> factor.vertexId)
-            |> List.ofSeq }
+            |> Set.map (fun factor -> factor.vertexId) }
     | None -> model // TODO throw error if the vertex is invalid
 
 let private createNewAccessForSubjectVertex (model: Model) =
@@ -177,13 +175,16 @@ let view jsRuntime (model: Model) dispatch =
     Utility.toggleButtonEnabled "ModifyAccessBackButton" (isValidNewAccess model) jsRuntime
     |> ignore
 
-    Template
-        .ModifyAccess()
-        .DeleteButton(fun _ -> dispatch (Msg.ClickedDeleteAccess))
-        .BackButton(fun _ -> dispatch (Msg.OpenModifyVertexStep model.subjectVertexId))
-        .AccessNameInput(model.addAccessNameInput, (fun v -> dispatch (Msg.TypedAccessName v)))
-        .AccessNameInputPlaceholder(getAccessNameInputPlaceholder model)
-        .AccessNameHint((getAccessNameHint model).value)
-        .Factors(forEach model.factorsInput (showFactor model dispatch))
-        .FactorsHint((getFactorsHint model).value)
-        .Elt()
+    match model.subjectAccessId with
+    | Some subjectAccessId ->
+        Template
+            .ModifyAccess()
+            .DeleteButton(fun _ -> dispatch (Msg.ClickedDeleteAccess))
+            .BackButton(fun _ -> dispatch (Msg.OpenModifyVertexStep model.subjectVertexId))
+            .AccessNameInput(model.addAccessNameInput, (fun v -> dispatch (Msg.ModifiedAccessName (subjectAccessId, v))))
+            .AccessNameInputPlaceholder(getAccessNameInputPlaceholder model)
+            .AccessNameHint((getAccessNameHint model).value)
+            .Factors(forEach model.selectedFactors (showFactor model dispatch))
+            .FactorsHint((getFactorsHint model).value)
+            .Elt()
+    | None -> Template.ModifyAccess().Elt()
