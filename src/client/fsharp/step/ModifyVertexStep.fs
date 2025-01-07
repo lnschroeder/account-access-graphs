@@ -64,6 +64,12 @@ let handleClickedBackground (model: Model) dispatch =
     else
         dispatch Msg.IgnoreAction
 
+let handleClickedAccess vertexId (access: AAG.Access) (model: Model) dispatch =
+    if Some vertexId = model.subjectVertexId then
+        dispatch (Msg.OpenModifyAccessStep(Some access.id))
+    else
+        dispatch Msg.IgnoreAction
+
 let saveAndExit (model: Model) =
     { model with
         modifyVertexNameInput = ""

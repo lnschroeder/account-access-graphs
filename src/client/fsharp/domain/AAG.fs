@@ -54,6 +54,14 @@ and Graph =
                 |> Set.map Factor.Default
               colorIndex = 2uy }
 
+        let a3 =
+            { id = Guid.Parse("1578d946-7c48-41a6-baf2-0386979c9de3")
+              name = "access 3"
+              factors =
+                Set.empty.Add(Guid.Parse("1578d946-7c48-41a6-baf2-0386979c9de1"))
+                |> Set.map Factor.Default
+              colorIndex = 3uy }
+
         let v1 =
             { id = Guid.Parse("1578d946-7c48-41a6-baf2-0386979c9de1")
               name = "test"
@@ -67,7 +75,7 @@ and Graph =
         let v3 =
             { id = Guid.Parse("1578d946-7c48-41a6-baf2-0386979c9de3")
               name = "test222"
-              accesses = [] }
+              accesses = [a3] }
 
         { vertices = [ v1; v2; v3 ] }
 
@@ -149,6 +157,15 @@ let findAccessById accessId graph = // TODO change id to option
     |> List.tryPick (fun vertex ->
         vertex.accesses
         |> List.tryFind (fun access -> access.id = accessId)
+        |> Option.map (fun access -> vertex.id, access))
+
+let findAccessByEdgeId edgeId graph = // TODO change id to option
+    graph.vertices
+    |> List.tryPick (fun vertex ->
+        vertex.accesses
+        |> List.tryFind (fun access ->
+            access.factors
+            |> Seq.exists (fun factor -> factor.id = edgeId))
         |> Option.map (fun access -> vertex.id, access))
 
 let getVerticesWithName vertexName graph =

@@ -13,9 +13,9 @@ let private init _ = MainMenuStep.clearGraph, Cmd.none
 
 let private handleClickedBackground model dispatch =
     match model.step with
-        | MainMenu -> dispatch Msg.IgnoreAction
-        | ModifyVertex -> ModifyVertexStep.handleClickedBackground model dispatch
-        | ModifyAccess -> dispatch Msg.IgnoreAction
+    | MainMenu -> dispatch Msg.IgnoreAction
+    | ModifyVertex -> ModifyVertexStep.handleClickedBackground model dispatch
+    | ModifyAccess -> ModifyAccessStep.handleClickedBackground model dispatch
 
 let private handleClickedVertex (idAsString: string) model dispatch =
     let vertex =
@@ -26,9 +26,23 @@ let private handleClickedVertex (idAsString: string) model dispatch =
     match vertex with
     | Some vertex ->
         match model.step with
-            | MainMenu -> MainMenuStep.handleClickedVertex vertex model dispatch
-            | ModifyVertex -> ModifyVertexStep.handleClickedVertex vertex model dispatch
-            | ModifyAccess -> ModifyAccessStep.handleClickedVertex vertex model dispatch
+        | MainMenu -> MainMenuStep.handleClickedVertex vertex model dispatch
+        | ModifyVertex -> ModifyVertexStep.handleClickedVertex vertex model dispatch
+        | ModifyAccess -> ModifyAccessStep.handleClickedVertex vertex model dispatch
+    | None -> dispatch Msg.IgnoreAction
+
+let private handleClickedVisEdge (idAsString: string) model dispatch =
+    let vertexIdAccess =
+        match Guid.TryParse(idAsString) with
+        | (true, guid) -> AAG.findAccessByEdgeId guid model.graph
+        | (false, _) -> None
+
+    match vertexIdAccess with
+    | Some (vertexId, access) ->
+        match model.step with
+        | MainMenu -> MainMenuStep.handleClickedAccess access model dispatch
+        | ModifyVertex -> ModifyVertexStep.handleClickedAccess vertexId access model dispatch
+        | ModifyAccess -> dispatch Msg.IgnoreAction
     | None -> dispatch Msg.IgnoreAction
 
 let private update message model =
@@ -68,6 +82,7 @@ let private view (jsRuntime: IJSRuntime) model dispatch =
                     | ModifyVertex -> ModifyVertexStep.view jsRuntime model dispatch
         )
         .ClickedVertexInput("", (fun idAsString -> handleClickedVertex idAsString model dispatch))
+        .ClickedEdgeInput("", (fun idAsString -> handleClickedVisEdge idAsString model dispatch))
         .ClickedBackgroundButton(fun _ -> handleClickedBackground model dispatch)
         .Elt()
 

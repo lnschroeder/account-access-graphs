@@ -19,6 +19,9 @@ let ``open`` model =
 let handleClickedVertex (vertex: AAG.Vertex) (model: Model) dispatch =
     dispatch (Msg.OpenModifyVertexStep (Some vertex.id))
 
+let handleClickedAccess (access: AAG.Access) (model: Model) dispatch =
+    dispatch (Msg.OpenModifyAccessStep (Some access.id))
+
 let view dispatch =
     Template
         .MainMenu()

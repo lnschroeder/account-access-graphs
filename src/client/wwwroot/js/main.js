@@ -173,16 +173,27 @@ network.on("dragEnd", function () {
 network.on("click", function (params) {
   // click on node behavior
   let nodeId = this.getNodeAt(params.pointer.DOM);
-  let clickedVertexInput = document.getElementById("ClickedVertexInput");
-  let clickedBackgroundButton = document.getElementById("ClickedBackgroundButton");
+  let edgeId = this.getEdgeAt(params.pointer.DOM);
 
-  if (nodeId == null) {
-    clickedBackgroundButton.dispatchEvent(new Event("click", { bubbles: true }));
-  } else {
+  let clickedVertexInput = document.getElementById("ClickedVertexInput");
+  let clickedEdgeInput = document.getElementById("ClickedEdgeInput");
+  let clickedBackgroundButton = document.getElementById(
+    "ClickedBackgroundButton"
+  );
+
+  console.log(nodeId, edgeId);
+
+  if (nodeId == null && edgeId == null) {
+    clickedBackgroundButton.dispatchEvent(
+      new Event("click", { bubbles: true })
+    );
+  } else if (nodeId != null) {
     clickedVertexInput.value = nodeId;
     clickedVertexInput.dispatchEvent(new Event("input", { bubbles: true }));
+  } else {
+    clickedEdgeInput.value = edgeId;
+    clickedEdgeInput.dispatchEvent(new Event("input", { bubbles: true }));
   }
-
 });
 
 // Listen for changes in the system's color scheme preference
