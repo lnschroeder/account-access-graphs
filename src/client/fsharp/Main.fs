@@ -98,8 +98,6 @@ let private router = Router.infer Msg.SetPage (fun (model: Model) -> model.page)
 type App() =
     inherit ProgramComponent<Model, Msg.Message>()
 
-    override _.CssScope = CssScopes.AAG
-
     [<Inject>]
     member val HttpClient = Unchecked.defaultof<HttpClient> with get, set
 
