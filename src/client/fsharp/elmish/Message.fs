@@ -16,3 +16,4 @@ type Message =
     | ClickedExampleGraph
     | ModifiedVertexName of Guid * string
     | ModifiedAccessName of AAG.Access * string
+    | ModifiedGraphJson of string

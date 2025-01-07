@@ -1,13 +1,36 @@
+<div class="hero-body columns">
+  <div class="column is-one-third" style="height: 85vh">
+    <div class="box">${LeftColumn}</div>
+    <div class="box">
+      <div class="field">
+        <label class="label">Debug Info</label>
+        <div class="control">${DebugText}</div>
+      </div>
+    </div>
 
-<div class="box">${LeftColumn}</div>
-${DebugText}
+    <input type="hidden" bind="${ClickedVertexInput}" id="ClickedVertexInput" />
+    <input type="hidden" bind="${ClickedEdgeInput}" id="ClickedEdgeInput" />
+    <button
+      type="hidden"
+      onclick="${ClickedBackgroundButton}"
+      id="ClickedBackgroundButton"
+    ></button>
 
-<input type="hidden" bind="${ClickedVertexInput}" id="ClickedVertexInput" />
-<input type="hidden" bind="${ClickedEdgeInput}" id="ClickedEdgeInput" />
-<button
-  type="hidden"
-  onclick="${ClickedBackgroundButton}"
-  id="ClickedBackgroundButton"
-></button>
+    <script type="module" src="js/main.js"></script>
+  </div>
+  <div class="column">
+    <div id="graph-container" class="box p-0" style="height: 85vh"></div>
+  </div>
+</div>
 
-<script type="module" src="js/main.js"></script>
+<div class="box">
+  <div class="field">
+    <label class="label">JSON representation</label>
+    <textarea
+      class="textarea"
+      placeholder="Insert graph JSON here"
+      rows="30"
+      bind="${JsonOutput}"
+    ></textarea>
+  </div>
+</div>

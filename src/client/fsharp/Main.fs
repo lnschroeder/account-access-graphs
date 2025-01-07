@@ -11,6 +11,23 @@ open Bolero.Html
 
 let private init _ = MainMenuStep.clearGraph, Cmd.none
 
+let private getDebugText (model: Model) =
+    let nodeLen = Seq.length model.graph.vertices
+
+    let accessLen =
+        Seq.length (
+            model.graph.vertices
+            |> Seq.collect (fun v -> v.accesses)
+        )
+
+    let edgesLen =
+        Seq.length (
+            model.graph.vertices
+            |> Seq.collect (fun v -> v.accesses |> Seq.collect (fun a -> a.factors))
+        )
+
+    $"nodes: {nodeLen}; accesses; {accessLen} edges: {edgesLen}"
+
 let private handleClickedBackground model dispatch =
     match model.step with
     | MainMenu -> dispatch Msg.IgnoreAction
@@ -51,6 +68,7 @@ let private update message model =
         | Msg.IgnoreAction -> model
         // Main
         | Msg.SetPage page -> { model with page = page }
+        | Msg.ModifiedGraphJson graphAsString -> { Model.Init with graph = (Json.deserializeGraph graphAsString) }
         // MainMenuStep
         | Msg.OpenMainMenuStep -> MainMenuStep.``open`` model
         | Msg.ClickedClearGraph -> MainMenuStep.clearGraph
@@ -71,13 +89,10 @@ let private view (jsRuntime: IJSRuntime) model dispatch =
     jsRuntime.InvokeVoidAsync("updateNetwork", VisJSTransformer.transform model)
     |> ignore
 
-    let nodeLen = Seq.length model.graph.vertices
-    let accessLen = Seq.length (model.graph.vertices |> Seq.collect (fun v -> v.accesses))
-    let edgesLen = Seq.length (model.graph.vertices |> Seq.collect (fun v -> v.accesses |> Seq.collect (fun a -> a.factors)))
-
     Template
         .Main()
-        .DebugText($"nodes: {nodeLen}; accesses; {accessLen} edges: {edgesLen}")
+        .DebugText(getDebugText model)
+        .JsonOutput(Json.serializeGraph model.graph, (fun graphString -> dispatch (Msg.ModifiedGraphJson graphString)))
         .LeftColumn(
             cond model.page
             <| function
