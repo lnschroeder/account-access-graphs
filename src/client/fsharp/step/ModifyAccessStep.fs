@@ -70,12 +70,6 @@ let handleClickedVertex (vertex: AAG.Vertex) (model: Model) dispatch =
     | Some subjectAccessId -> dispatch (Msg.ToggleFactorOfSubjectAccess(subjectAccessId, vertex))
     | None -> dispatch Msg.IgnoreAction
 
-let handleClickedBackground (model: Model) dispatch =
-    if isValidNewAccess model then
-        dispatch (Msg.OpenModifyVertexStep model.subjectVertexId)
-    else
-        dispatch Msg.IgnoreAction
-
 let updateAccessName (access: AAG.Access) name (model: Model) =
     match model.subjectVertexId with
     | Some subjectVertexId ->

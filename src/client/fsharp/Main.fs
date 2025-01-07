@@ -15,7 +15,7 @@ let private handleClickedBackground model dispatch =
     match model.step with
     | MainMenu -> dispatch Msg.IgnoreAction
     | ModifyVertex -> ModifyVertexStep.handleClickedBackground model dispatch
-    | ModifyAccess -> ModifyAccessStep.handleClickedBackground model dispatch
+    | ModifyAccess -> dispatch Msg.IgnoreAction
 
 let private handleClickedVertex (idAsString: string) model dispatch =
     let vertex =
