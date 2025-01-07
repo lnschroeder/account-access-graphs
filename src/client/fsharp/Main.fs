@@ -62,13 +62,28 @@ let private handleClickedVisEdge (idAsString: string) model dispatch =
         | ModifyAccess -> dispatch Msg.IgnoreAction
     | None -> dispatch Msg.IgnoreAction
 
+let getJsonOutputHint (model: Model) =
+    match Json.tryDeserializeGraph model.json with
+    | Graph _ -> Hint.Info
+    | ErrorMsg msg -> msg
+
+
+let handleUpdatedJson jsonAsString (model: Model) =
+    match Json.tryDeserializeGraph jsonAsString with
+    | Graph graph ->
+        { Model.Init with
+            graph = graph
+            json = jsonAsString }
+    | ErrorMsg _ -> { model with json = jsonAsString }
+
 let private update message model =
     let model =
         match message with
         | Msg.IgnoreAction -> model
         // Main
         | Msg.SetPage page -> { model with page = page }
-        | Msg.ModifiedGraphJson graphAsString -> { Model.Init with graph = (Json.deserializeGraph graphAsString) }
+        | Msg.ModifiedGraphJson jsonAsString -> handleUpdatedJson jsonAsString model
+
         // MainMenuStep
         | Msg.OpenMainMenuStep -> MainMenuStep.``open`` model
         | Msg.ClickedClearGraph -> MainMenuStep.clearGraph
@@ -89,10 +104,17 @@ let private view (jsRuntime: IJSRuntime) model dispatch =
     jsRuntime.InvokeVoidAsync("updateNetwork", VisJSTransformer.transform model)
     |> ignore
 
+    let model =
+        if (getJsonOutputHint model).level <> Error then
+            { model with json = Json.serializeGraph model.graph }
+        else
+            model
+
     Template
         .Main()
         .DebugText(getDebugText model)
-        .JsonOutput(Json.serializeGraph model.graph, (fun graphString -> dispatch (Msg.ModifiedGraphJson graphString)))
+        .JsonOutput(model.json, (fun jsonAsString -> dispatch (Msg.ModifiedGraphJson jsonAsString)))
+        .JsonOutputHint((getJsonOutputHint model).value)
         .LeftColumn(
             cond model.page
             <| function

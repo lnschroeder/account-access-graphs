@@ -20,6 +20,10 @@ and Step =
     | ModifyAccess
     | ModifyVertex
 
+and DeserializedGraph =
+    | Graph of AAG.Graph
+    | ErrorMsg of Hint
+
 and Model =
     { page: Endpoint.Page
       step: Step
@@ -28,7 +32,8 @@ and Model =
       modifyVertexNameInput: string
       subjectVertexId: Guid option
       subjectAccessId: Guid option
-      selectedFactors: Guid Set }
+      selectedFactors: Guid Set
+      json: string }
     static member Init =
         { page = Endpoint.Main
           step = MainMenu
@@ -37,6 +42,7 @@ and Model =
           modifyVertexNameInput = ""
           subjectVertexId = None
           subjectAccessId = None
-          selectedFactors = Set.empty }
+          selectedFactors = Set.empty
+          json = """{ "vertices": [] }""" }
 
     static member Example = { Model.Init with graph = AAG.Graph.Example }

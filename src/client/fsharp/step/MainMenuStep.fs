@@ -14,7 +14,8 @@ let ``open`` model =
       modifyVertexNameInput = ""
       subjectVertexId = None
       subjectAccessId = None
-      selectedFactors = Set.empty }
+      selectedFactors = Set.empty
+      json = model.json }
 
 let handleClickedVertex (vertex: AAG.Vertex) (model: Model) dispatch =
     dispatch (Msg.OpenModifyVertexStep (Some vertex.id))

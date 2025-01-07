@@ -112,7 +112,8 @@ let private openModifyAccess vertexId (access: AAG.Access) accessNameInput model
           subjectAccessId = Some access.id
           selectedFactors =
             access.factors
-            |> Set.map (fun factor -> factor.vertexId) }
+            |> Set.map (fun factor -> factor.vertexId)
+          json = model.json }
     | None -> model // TODO throw error if the vertex is invalid
 
 let private createNewAccessForSubjectVertex (model: Model) =

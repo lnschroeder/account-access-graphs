@@ -6,4 +6,10 @@ let serializeGraph (graph: AAG.Graph) =
     use jDoc = JsonDocument.Parse(JsonSerializer.Serialize graph)
     JsonSerializer.Serialize(jDoc, JsonSerializerOptions(WriteIndented = true))
 
-let deserializeGraph (string: string) : AAG.Graph = JsonSerializer.Deserialize string
+let tryDeserializeGraph (string: string) : Model.DeserializedGraph =
+    try
+        JsonSerializer.Deserialize string |> Model.DeserializedGraph.Graph
+    with
+    | :? System.ArgumentNullException -> Model.DeserializedGraph.ErrorMsg (Model.Hint.Error "JSON is null")
+    | :? JsonException -> Model.DeserializedGraph.ErrorMsg (Model.Hint.Error "JSON is invalid")
+

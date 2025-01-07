@@ -34,7 +34,8 @@ let private openInternal (vertex: AAG.Vertex) model =
       modifyVertexNameInput = vertex.name
       subjectVertexId = Some vertex.id
       subjectAccessId = model.subjectAccessId
-      selectedFactors = Set.empty }
+      selectedFactors = Set.empty
+      json = model.json }
 
 let ``open`` vertexId model =
     match vertexId with
