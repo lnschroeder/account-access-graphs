@@ -1,24 +1,13 @@
-<style type="text/css">
-  #graph-container {
-    height: 700px;
-    /* min-height: 100%; */
-  }
-</style>
 
-<section class="section">
-  <div class="columns">
-    <div class="column is-one-third">
-      <div class="box">${LeftColumn}</div>
-      ${DebugText}
-    </div>
-    <div class="column">
-      <div id="graph-container" class="box p-0"></div>
-    </div>
-  </div>
-</section>
+<div class="box">${LeftColumn}</div>
+${DebugText}
 
-<input type="hidden" bind="${ClickedVertexInput}" id="ClickedVertexInput"/>
-<input type="hidden" bind="${ClickedEdgeInput}" id="ClickedEdgeInput"/>
-<button type="hidden" onclick="${ClickedBackgroundButton}" id="ClickedBackgroundButton"></button>
+<input type="hidden" bind="${ClickedVertexInput}" id="ClickedVertexInput" />
+<input type="hidden" bind="${ClickedEdgeInput}" id="ClickedEdgeInput" />
+<button
+  type="hidden"
+  onclick="${ClickedBackgroundButton}"
+  id="ClickedBackgroundButton"
+></button>
 
 <script type="module" src="js/main.js"></script>

@@ -9,8 +9,6 @@
       rel="stylesheet"
       href="https://cdn.jsdelivr.net/npm/bulma@1.0.2/css/bulma.min.css"
     />
-    <link rel="stylesheet" href="css/index.css" />
-    <link rel="stylesheet" href="AAG.Client.styles.css" />
     <script
       type="text/javascript"
       src="https://unpkg.com/vis-network/standalone/umd/vis-network.min.js"
@@ -31,7 +29,18 @@
       </div>
     </nav>
 
-    <div id="Main">Loading...</div>
+    <section class="section is-fullheight-with-navbar">
+      <div class="hero-body columns">
+        <div id="Main" class="column is-one-third">Loading...</div>
+        <div class="column">
+          <div
+            id="graph-container"
+            class="box p-0"
+            style="height: 85vh"
+          ></div>
+        </div>
+      </div>
+    </section>
     <script src="_framework/blazor.webassembly.js"></script>
   </body>
 </html>
