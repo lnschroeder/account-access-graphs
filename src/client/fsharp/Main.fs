@@ -32,7 +32,15 @@ let private handleClickedBackground model dispatch =
     match model.step with
     | MainMenu -> dispatch Msg.IgnoreAction
     | ModifyVertex -> ModifyVertexStep.handleClickedBackground model dispatch
-    | ModifyAccess -> dispatch Msg.IgnoreAction
+    | ModifyAccess ->
+        let validAccess = ModifyAccessStep.isValidAccess model
+        let validVertex = ModifyVertexStep.isValidVertex model
+        if validAccess && validVertex then
+            dispatch Msg.OpenMainMenuStep
+        elif validAccess && not validVertex then
+            dispatch (Msg.OpenModifyVertexStep model.subjectVertexId)
+        else
+            dispatch Msg.IgnoreAction
 
 let private handleClickedVertex (idAsString: string) model dispatch =
     let vertex =

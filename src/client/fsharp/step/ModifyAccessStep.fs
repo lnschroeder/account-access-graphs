@@ -63,7 +63,7 @@ let exitDeletingAccess subjectAccessId model =
         graph = AAG.deleteAccess subjectAccessId model.graph
         step = ModifyVertex }
 
-let private isValidNewAccess (model: Model) =
+let isValidAccess (model: Model) =
     (getFactorsHint model).level <> Error
     && (getAccessNameHint model).level <> Error
 
@@ -141,7 +141,7 @@ let ``open`` accessId model =
     | None -> createNewAccessForSubjectVertex model
 
 let view jsRuntime (model: Model) dispatch =
-    Utility.toggleButtonEnabled "ModifyAccessBackButton" (isValidNewAccess model) jsRuntime
+    Utility.toggleButtonEnabled "ModifyAccessBackButton" (isValidAccess model) jsRuntime
     |> ignore
 
     match model.subjectVertexId with
