@@ -11,5 +11,5 @@ let tryDeserializeGraph (string: string) : Model.DeserializedGraph =
         JsonSerializer.Deserialize string |> Model.DeserializedGraph.Graph
     with
     | :? System.ArgumentNullException -> Model.DeserializedGraph.ErrorMsg (Model.Hint.Error "JSON is null")
-    | :? JsonException -> Model.DeserializedGraph.ErrorMsg (Model.Hint.Error "JSON is invalid")
+    | :? JsonException -> Model.DeserializedGraph.ErrorMsg (Model.Hint.Error "JSON is not a valid AAG format")
 

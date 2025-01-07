@@ -3,6 +3,8 @@ module AAG.Client.ModifyAccessStep
 open Model
 open Bolero.Html
 
+// TODO add check if colors are correct
+
 let private getFactorsHint (model: Model) = // TODO just pass minimal
     match model.subjectVertexId with
     | Some subjectVertexId ->
