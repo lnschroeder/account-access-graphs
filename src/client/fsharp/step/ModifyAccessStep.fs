@@ -7,7 +7,7 @@ let private getFactorsHint (model: Model) = // TODO just pass minimal
     match model.subjectVertexId with
     | Some subjectVertexId ->
         if model.selectedFactors.IsEmpty then
-            Hint.Error "Select at least one factor"
+            Hint.Error "Select at least one factor or delete the access"
         elif Seq.contains subjectVertexId model.selectedFactors then
             Hint.Error "Self-references are not allowed"
         elif Seq.length (AAG.getAccessesWithFactors subjectVertexId model.selectedFactors model.graph) > 1 then
@@ -85,8 +85,6 @@ let updateAccessName (access: AAG.Access) name (model: Model) =
                 { model with
                     graph = AAG.changeAccessName access.id name model.graph
                     addAccessNameInput = name }
-
-
         | None -> model
     | None -> model
 

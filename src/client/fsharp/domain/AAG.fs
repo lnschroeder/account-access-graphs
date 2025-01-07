@@ -24,13 +24,6 @@ and Access =
       factors: Factor Set
       colorIndex: byte }
 
-    static member INTERNAL_ONLY factors colorIndex =
-        let id = Guid.NewGuid()
-        { id = id
-          name = id.ToString()
-          factors = factors |> Set.map Factor.Default
-          colorIndex = colorIndex }
-
     static member New name colorIndex =
         { id = Guid.NewGuid()
           name = name
@@ -42,23 +35,41 @@ and Graph =
     static member Empty = { vertices = [] }
 
     static member Example =
-        { vertices =
-            [ { id = Guid.Parse("1578d946-7c48-41a6-baf2-0386979c9de1")
-                name = "test"
-                accesses = [] }
-              { id = Guid.Parse("1578d946-7c48-41a6-baf2-0386979c9de2")
-                name = "test2"
-                accesses =
-                  [ (Access.INTERNAL_ONLY
-                        (Set
-                            .empty
-                            .Add(Guid.Parse("1578d946-7c48-41a6-baf2-0386979c9de1"))
-                            .Add(Guid.Parse("1578d946-7c48-41a6-baf2-0386979c9de3")))
-                        1uy)
-                    (Access.INTERNAL_ONLY (Set.empty.Add(Guid.Parse("1578d946-7c48-41a6-baf2-0386979c9de3"))) 2uy) ] }
-              { id = Guid.Parse("1578d946-7c48-41a6-baf2-0386979c9de3")
-                name = "test222"
-                accesses = [] } ] }
+        let a1 =
+            { id = Guid.Parse("1578d946-7c48-41a6-baf2-0386979c9de1")
+              name = "access 1"
+              factors =
+                Set
+                    .empty
+                    .Add(Guid.Parse("1578d946-7c48-41a6-baf2-0386979c9de1"))
+                    .Add(Guid.Parse("1578d946-7c48-41a6-baf2-0386979c9de3"))
+                |> Set.map Factor.Default
+              colorIndex = 1uy }
+
+        let a2 =
+            { id = Guid.Parse("1578d946-7c48-41a6-baf2-0386979c9de2")
+              name = "access 2"
+              factors =
+                Set.empty.Add(Guid.Parse("1578d946-7c48-41a6-baf2-0386979c9de3"))
+                |> Set.map Factor.Default
+              colorIndex = 2uy }
+
+        let v1 =
+            { id = Guid.Parse("1578d946-7c48-41a6-baf2-0386979c9de1")
+              name = "test"
+              accesses = [] }
+
+        let v2 =
+            { id = Guid.Parse("1578d946-7c48-41a6-baf2-0386979c9de2")
+              name = "test2"
+              accesses = [ a1; a2 ] }
+
+        let v3 =
+            { id = Guid.Parse("1578d946-7c48-41a6-baf2-0386979c9de3")
+              name = "test222"
+              accesses = [] }
+
+        { vertices = [ v1; v2; v3 ] }
 
 let findNextAvailableColor (vertex: Vertex) =
     let usedColors =
@@ -91,6 +102,7 @@ let rec findInVertices vertices accessId =
         match List.tryFind (fun access -> access.id = accessId) vertex.accesses with
         | Some access -> Some(access, vertex)
         | None -> findInVertices rest accessId
+
 let private addFactorToAccess vertexId (access: Access) =
     { access with factors = Set.add (Factor.Default vertexId) access.factors }
 
@@ -162,6 +174,7 @@ let addAccessToGraph vertexId access graph =
                     addAccessToVertex access vertex
                 else
                     vertex) }
+
 let deleteAccess accessId graph =
     { graph with
         vertices =

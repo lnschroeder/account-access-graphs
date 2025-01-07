@@ -47,7 +47,7 @@ let private update message model =
 let private view (jsRuntime: IJSRuntime) model dispatch =
     jsRuntime.InvokeVoidAsync("updateNetwork", VisJSTransformer.transform model)
     |> ignore
-    printfn "%A" model
+
     Template
         .Main()
         .LeftColumn(
