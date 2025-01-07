@@ -16,10 +16,8 @@ let ``open`` model =
       subjectAccessId = None
       selectedFactors = Set.empty }
 
-let handleClickedVertex (vertex: AAG.Vertex option) (model: Model) dispatch =
-    match vertex with
-    | Some vertex -> dispatch (Msg.OpenModifyVertexStep (Some vertex.id))
-    | None -> dispatch Msg.IgnoreAction
+let handleClickedVertex (vertex: AAG.Vertex) (model: Model) dispatch =
+    dispatch (Msg.OpenModifyVertexStep (Some vertex.id))
 
 let view dispatch =
     Template

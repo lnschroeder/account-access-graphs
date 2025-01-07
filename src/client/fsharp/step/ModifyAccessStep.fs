@@ -61,12 +61,9 @@ let exitDeletingAccess subjectAccessId model =
         graph = AAG.deleteAccess subjectAccessId model.graph
         step = ModifyVertex }
 
-let handleClickedVertex (vertex: AAG.Vertex option) (model: Model) dispatch =
+let handleClickedVertex (vertex: AAG.Vertex) (model: Model) dispatch =
     match model.subjectAccessId with
-    | Some subjectAccessId ->
-        match vertex with
-        | Some vertex -> dispatch (Msg.ToggleFactorOfSubjectAccess(subjectAccessId, vertex))
-        | _ -> dispatch Msg.IgnoreAction
+    | Some subjectAccessId -> dispatch (Msg.ToggleFactorOfSubjectAccess(subjectAccessId, vertex))
     | None -> dispatch Msg.IgnoreAction
 
 let private isValidNewAccess (model: Model) =

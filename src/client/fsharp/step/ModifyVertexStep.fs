@@ -52,11 +52,15 @@ let private showAccess dispatch (access: AAG.Access) =
 let isValidVertex model =
     (getVertexNameHint model).level <> Error
 
-let handleClickedVertex (vertex: AAG.Vertex option) (model: Model) dispatch =
+let handleClickedVertex (vertex: AAG.Vertex) (model: Model) dispatch =
     if isValidVertex model then
-        match vertex with
-        | Some vertex -> dispatch (Msg.OpenModifyVertexStep(Some vertex.id))
-        | None -> dispatch (Msg.OpenMainMenuStep)
+        dispatch (Msg.OpenModifyVertexStep(Some vertex.id))
+    else
+        dispatch Msg.IgnoreAction
+
+let handleClickedBackground (model: Model) dispatch =
+    if isValidVertex model then
+        dispatch (Msg.OpenMainMenuStep)
     else
         dispatch Msg.IgnoreAction
 

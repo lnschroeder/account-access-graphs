@@ -11,17 +11,25 @@ open Bolero.Html
 
 let private init _ = MainMenuStep.clearGraph, Cmd.none
 
-let private handleClickedVisNode idAsString model dispatch =
-    let vertex =
-        if idAsString = "undefined" then
-            None
-        else
-            AAG.findVertexById (Guid.Parse idAsString) model.graph
-
+let private handleClickedBackground model dispatch =
     match model.step with
-    | MainMenu -> MainMenuStep.handleClickedVertex vertex model dispatch
-    | ModifyVertex -> ModifyVertexStep.handleClickedVertex vertex model dispatch
-    | ModifyAccess -> ModifyAccessStep.handleClickedVertex vertex model dispatch
+        | MainMenu -> dispatch Msg.IgnoreAction
+        | ModifyVertex -> ModifyVertexStep.handleClickedBackground model dispatch
+        | ModifyAccess -> dispatch Msg.IgnoreAction
+
+let private handleClickedVertex (idAsString: string) model dispatch =
+    let vertex =
+        match Guid.TryParse(idAsString) with
+        | (true, guid) -> AAG.findVertexById guid model.graph
+        | (false, _) -> None
+
+    match vertex with
+    | Some vertex ->
+        match model.step with
+            | MainMenu -> MainMenuStep.handleClickedVertex vertex model dispatch
+            | ModifyVertex -> ModifyVertexStep.handleClickedVertex vertex model dispatch
+            | ModifyAccess -> ModifyAccessStep.handleClickedVertex vertex model dispatch
+    | None -> dispatch Msg.IgnoreAction
 
 let private update message model =
     let model =
@@ -59,7 +67,8 @@ let private view (jsRuntime: IJSRuntime) model dispatch =
                     | ModifyAccess -> ModifyAccessStep.view jsRuntime model dispatch
                     | ModifyVertex -> ModifyVertexStep.view jsRuntime model dispatch
         )
-        .ClickedNodeInput("", (fun idAsString -> handleClickedVisNode idAsString model dispatch))
+        .ClickedVertexInput("", (fun idAsString -> handleClickedVertex idAsString model dispatch))
+        .ClickedBackgroundButton(fun _ -> handleClickedBackground model dispatch)
         .Elt()
 
 
