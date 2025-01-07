@@ -20,6 +20,12 @@ let updateVertexName subjectVertexId name (model: Model) =
         modifyVertexNameInput = name
         graph = AAG.changeVertexName subjectVertexId name model.graph }
 
+let exitDeletingVertex subjectVertex (model: Model) =
+    { model with
+        step = MainMenu
+        modifyVertexNameInput = ""
+        graph = AAG.removeVertexFromGraph subjectVertex model.graph }
+
 let private openInternal (vertex: AAG.Vertex) model =
     { page = model.page
       step = ModifyVertex
@@ -83,7 +89,7 @@ let view jsRuntime (model: Model) dispatch =
     match model.subjectVertexId with
     | Some subjectVertexId ->
         match AAG.findVertexById subjectVertexId model.graph with
-        | Some subject ->
+        | Some subjectVertex ->
             Template
                 .ModifyVertex()
                 .SubjectNameInput(
@@ -91,9 +97,10 @@ let view jsRuntime (model: Model) dispatch =
                     (fun v -> dispatch (Msg.ModifiedVertexName(subjectVertexId, v)))
                 )
                 .SubjectNameHint((getVertexNameHint model).value)
-                .Accesses(forEach subject.accesses (showAccess dispatch))
+                .Accesses(forEach subjectVertex.accesses (showAccess dispatch))
                 .AddAccessButton(fun _ -> dispatch (Msg.OpenModifyAccessStep None))
                 .BackButton(fun _ -> dispatch Msg.OpenMainMenuStep)
+                .DeleteButton(fun _ -> dispatch (Msg.ClickedDeleteVertex subjectVertex))
                 .Elt()
         | None -> Template.ModifyVertex().Elt()
     | None -> Template.ModifyVertex().Elt()

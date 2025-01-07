@@ -63,6 +63,7 @@ let private update message model =
         // ModifyVertex
         | Msg.OpenModifyVertexStep vertexId -> ModifyVertexStep.``open`` vertexId model
         | Msg.ModifiedVertexName (subjectVertexId, name) -> ModifyVertexStep.updateVertexName subjectVertexId name model
+        | Msg.ClickedDeleteVertex subjectVertex -> ModifyVertexStep.exitDeletingVertex subjectVertex model
 
     model, Cmd.none
 
@@ -70,8 +71,13 @@ let private view (jsRuntime: IJSRuntime) model dispatch =
     jsRuntime.InvokeVoidAsync("updateNetwork", VisJSTransformer.transform model)
     |> ignore
 
+    let nodeLen = Seq.length model.graph.vertices
+    let accessLen = Seq.length (model.graph.vertices |> Seq.collect (fun v -> v.accesses))
+    let edgesLen = Seq.length (model.graph.vertices |> Seq.collect (fun v -> v.accesses |> Seq.collect (fun a -> a.factors)))
+
     Template
         .Main()
+        .DebugText($"nodes: {nodeLen}; accesses; {accessLen} edges: {edgesLen}")
         .LeftColumn(
             cond model.page
             <| function

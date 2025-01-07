@@ -75,9 +75,36 @@ and Graph =
         let v3 =
             { id = Guid.Parse("1578d946-7c48-41a6-baf2-0386979c9de3")
               name = "test222"
-              accesses = [a3] }
+              accesses = [ a3 ] }
 
         { vertices = [ v1; v2; v3 ] }
+
+let private hasVertexId id (a: Vertex) = a.id = id
+
+let private hasFactorVertexId vertexId (a: Factor) = a.vertexId = vertexId
+
+let private removeFactorWithVertexIdFromFactors vertexId factors =
+    factors |> Set.filter (not << hasFactorVertexId vertexId)
+
+let private removeVertexFactorFromAccess vertexId access =
+    { access with factors = (removeFactorWithVertexIdFromFactors vertexId access.factors) }
+
+let private removeVertexFactorFromAccesses vertexId accesses =
+    accesses
+    |> List.map (removeVertexFactorFromAccess vertexId)
+
+let private removeVertexFactorFromVertex vertexId vertex =
+    { vertex with
+        accesses =
+            removeVertexFactorFromAccesses vertexId vertex.accesses
+            |> List.filter (fun access -> not access.factors.IsEmpty) }
+
+let removeVertexFromGraph (vertex: Vertex) graph =
+    { graph with
+        vertices =
+            graph.vertices
+            |> List.filter (not << hasVertexId vertex.id)
+            |> List.map (removeVertexFactorFromVertex vertex.id) }
 
 let findNextAvailableColor (vertex: Vertex) =
     let usedColors =

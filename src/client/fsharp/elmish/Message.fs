@@ -10,6 +10,7 @@ type Message =
     | OpenModifyVertexStep of Guid option
     | OpenModifyAccessStep of Guid option
     | ToggleFactorOfSubjectAccess of Guid * AAG.Vertex
+    | ClickedDeleteVertex of AAG.Vertex
     | ClickedDeleteAccess of Guid
     | ClickedClearGraph
     | ClickedExampleGraph
