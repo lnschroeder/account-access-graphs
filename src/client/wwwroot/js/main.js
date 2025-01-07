@@ -103,7 +103,10 @@ function updateNetwork(networkDTO) {
   nodes.forEach((node) => {
     let borderWidth = 1;
     let borderColor = getCssVariable("--bulma-link");
-    let backgroundColor = getCssVariable("--bulma-text-bold-invert");
+    let backgroundColor = window.matchMedia("(prefers-color-scheme: dark)")
+      .matches
+      ? "#14161A"
+      : "#FFFFFF";
     let fontColor = getCssVariable("--bulma-text-bold");
 
     if (node.isSubject) {
