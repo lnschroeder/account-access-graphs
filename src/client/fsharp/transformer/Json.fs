@@ -8,8 +8,9 @@ let serializeGraph (graph: AAG.Graph) =
 
 let tryDeserializeGraph (string: string) : Model.DeserializedGraph =
     try
-        JsonSerializer.Deserialize string |> Model.DeserializedGraph.Graph
-    with
-    | :? System.ArgumentNullException -> Model.DeserializedGraph.ErrorMsg (Model.Hint.Error "JSON is null")
-    | :? JsonException -> Model.DeserializedGraph.ErrorMsg (Model.Hint.Error "JSON is not a valid AAG format")
+        JsonSerializer.Deserialize(string, JsonSerializerOptions(ReadCommentHandling = JsonCommentHandling.Skip))
+        |> Model.DeserializedGraph.Graph
 
+    with
+    | :? System.ArgumentNullException -> Model.DeserializedGraph.ErrorMsg(Model.Hint.Error "JSON is null")
+    | :? JsonException -> Model.DeserializedGraph.ErrorMsg(Model.Hint.Error "JSON is not a valid AAG format")
