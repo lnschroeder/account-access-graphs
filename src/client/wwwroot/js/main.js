@@ -107,6 +107,7 @@ function updateNetwork(networkDTO) {
       ? "#14161A"
       : "#FFFFFF";
     let fontColor = getCssVariable("--bulma-text-bold");
+    let borderDashes = false;
 
     if (node.isSubject) {
       backgroundColor = getCssVariable("--bulma-warning-on-scheme");
@@ -124,6 +125,12 @@ function updateNetwork(networkDTO) {
       borderWidth = 3;
     }
 
+    if (node.isTransitivelyCompromised) {
+      borderColor = getCssVariable("--bulma-danger-on-scheme");
+      borderWidth = 3;
+      borderDashes = [5, 5];
+    }
+
     data.nodes.update({
       id: node.id,
       label: node.label,
@@ -136,6 +143,9 @@ function updateNetwork(networkDTO) {
           border: borderColor,
           background: backgroundColor,
         },
+      },
+      shapeProperties: {
+        borderDashes: borderDashes,
       },
 
       font: {

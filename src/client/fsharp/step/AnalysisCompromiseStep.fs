@@ -20,29 +20,35 @@ let ``open`` model =
       selectedFactors = Set.empty
       highlightedAccess = None
       initiallyCompromisedVertexIds = Set.empty
+      transitivelyCompromisedVertexIds = Set.empty
       json = model.json }
 
-let handleClickedBackground dispatch =
-    dispatch Msg.OpenMainMenuStep
+let handleClickedBackground dispatch = dispatch Msg.OpenMainMenuStep
 
 let handleClickedVertex (vertex: AAG.Vertex) (model: Model) dispatch =
     dispatch (Msg.ToggleInitialCompromise vertex)
 
-let removeInitialCompromiseVertex vertexId (model: Model) =
-    { model with
-        // graph = AAG.removeFactorFromGraph vertexId model.graph
-        initiallyCompromisedVertexIds = Set.remove vertexId model.initiallyCompromisedVertexIds }
+let private removeInitialCompromiseVertex (vertex: AAG.Vertex) (model: Model) =
+    let initiallyCompromisedVertexIds =
+        Set.remove vertex.id model.initiallyCompromisedVertexIds
 
-let addInitialCompromiseVertex vertexId (model: Model) =
     { model with
-        // graph = AAG.addFactorToGraph accessId vertexId model.graph
-        initiallyCompromisedVertexIds = Set.add vertexId model.initiallyCompromisedVertexIds }
+        initiallyCompromisedVertexIds = initiallyCompromisedVertexIds
+        transitivelyCompromisedVertexIds = AAG.getCompromisedVerticesOfGraph initiallyCompromisedVertexIds model.graph }
+
+let private addInitialCompromiseVertex (vertex: AAG.Vertex) (model: Model) =
+    let initiallyCompromisedVertexIds =
+        Set.add vertex.id model.initiallyCompromisedVertexIds
+
+    { model with
+        initiallyCompromisedVertexIds = initiallyCompromisedVertexIds
+        transitivelyCompromisedVertexIds = AAG.getCompromisedVerticesOfGraph initiallyCompromisedVertexIds model.graph }
 
 let toggleFactor (vertex: AAG.Vertex) (model: Model) =
-    if  Set.contains vertex.id model.initiallyCompromisedVertexIds then
-        removeInitialCompromiseVertex vertex.id model
+    if Set.contains vertex.id model.initiallyCompromisedVertexIds then
+        removeInitialCompromiseVertex vertex model
     else
-        addInitialCompromiseVertex vertex.id model
+        addInitialCompromiseVertex vertex model
 
 
 let private showFactor (model: Model) id =

@@ -84,7 +84,8 @@ let private hasVertexId id (a: Vertex) = a.id = id
 let private hasFactorVertexId vertexId (a: Factor) = a.vertexId = vertexId
 
 let private removeFactorWithVertexIdFromFactors vertexId factors =
-    factors |> Set.filter (not << hasFactorVertexId vertexId)
+    factors
+    |> Set.filter (not << hasFactorVertexId vertexId)
 
 let private removeVertexFactorFromAccess vertexId access =
     { access with factors = (removeFactorWithVertexIdFromFactors vertexId access.factors) }
@@ -105,6 +106,32 @@ let removeVertexFromGraph (vertex: Vertex) graph =
             graph.vertices
             |> List.filter (not << hasVertexId vertex.id)
             |> List.map (removeVertexFactorFromVertex vertex.id) }
+
+let isAccessFulfilled (vertexIds: Guid Set) (access: Access) =
+    Set.isSubset (access.factors |> Set.map (fun f -> f.vertexId)) vertexIds
+
+let canBeCompromised (vertexIds: Guid Set) (vertex: Vertex) =
+    match vertex with
+    | vertex when Set.contains vertex.id vertexIds -> true
+    | _ ->
+        vertex.accesses
+        |> List.exists (isAccessFulfilled vertexIds)
+
+let private getNewlyCompromisedVertexId (compromisedVertexIds: Guid Set) (vertices: Vertex list) : Vertex option =
+    vertices
+    |> List.tryFind (canBeCompromised compromisedVertexIds)
+
+let rec getCompromisedVertices (compromisedVertexIds: Guid Set) (vertices: Vertex list) =
+    let vertices =
+        vertices
+        |> List.filter (fun v -> not <| Set.contains v.id compromisedVertexIds)
+
+    match getNewlyCompromisedVertexId compromisedVertexIds vertices with
+    | None -> compromisedVertexIds
+    | Some v -> getCompromisedVertices (Set.add v.id compromisedVertexIds) vertices
+
+let getCompromisedVerticesOfGraph (compromisedVertexIds: Guid Set) (graph: Graph) =
+    getCompromisedVertices compromisedVertexIds graph.vertices
 
 let findNextAvailableColor (vertex: Vertex) =
     let usedColors =

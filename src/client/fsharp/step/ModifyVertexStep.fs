@@ -37,6 +37,7 @@ let private openInternal (vertex: AAG.Vertex) model =
       selectedFactors = Set.empty
       highlightedAccess = None
       initiallyCompromisedVertexIds = Set.empty
+      transitivelyCompromisedVertexIds = Set.empty
       json = model.json }
 
 let ``open`` vertexId model =

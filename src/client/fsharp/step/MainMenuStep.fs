@@ -17,6 +17,7 @@ let ``open`` model =
       selectedFactors = Set.empty
       highlightedAccess = None
       initiallyCompromisedVertexIds = Set.empty
+      transitivelyCompromisedVertexIds = Set.empty
       json = model.json }
 
 let handleClickedVertex (vertex: AAG.Vertex) (model: Model) dispatch =

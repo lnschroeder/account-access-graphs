@@ -8,7 +8,8 @@ type Node =
       label: string
       isSubject: bool
       isFactor: bool
-      isInitiallyCompromised: bool }
+      isInitiallyCompromised: bool
+      isTransitivelyCompromised: bool }
 
 type Edge =
     { id: Guid
@@ -21,11 +22,19 @@ type Edge =
 type Network = { nodes: Node list; edges: Edge list }
 
 let private transformVertex (model: Model) (vertex: AAG.Vertex) =
+    let isInitiallyCompromised =
+        Set.contains vertex.id model.initiallyCompromisedVertexIds
+
+    let isTransitivelyCompromised =
+        Set.contains vertex.id model.transitivelyCompromisedVertexIds
+        && not isInitiallyCompromised
+
     { id = vertex.id
       label = vertex.name
       isSubject = Some vertex.id = model.subjectVertexId
       isFactor = Seq.contains vertex.id model.selectedFactors
-      isInitiallyCompromised = Set.contains vertex.id model.initiallyCompromisedVertexIds}
+      isInitiallyCompromised = isInitiallyCompromised
+      isTransitivelyCompromised = isTransitivelyCompromised }
 
 let transform (model: Model) =
     { nodes =
@@ -41,7 +50,9 @@ let transform (model: Model) =
                      { id = factor.id
                        from = factor.vertexId
                        ``to`` = vertex.id
-                       isProvisional = (model.subjectAccessId = Some access.id && (access.factors |> Set.map (fun f -> f.vertexId)) = model.selectedFactors)
+                       isProvisional =
+                         (model.subjectAccessId = Some access.id
+                          && (access.factors |> Set.map (fun f -> f.vertexId)) = model.selectedFactors)
                        colorIndex = access.colorIndex
-                       isHighlighted = Some access.id = model.highlightedAccess})
+                       isHighlighted = Some access.id = model.highlightedAccess })
                  |> Seq.toList))) }

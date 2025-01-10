@@ -36,6 +36,7 @@ and Model =
       selectedFactors: Guid Set
       highlightedAccess: Guid option
       initiallyCompromisedVertexIds: Guid Set
+      transitivelyCompromisedVertexIds: Guid Set
       json: string }
     static member Init =
         { page = Endpoint.Main
@@ -48,6 +49,7 @@ and Model =
           selectedFactors = Set.empty
           highlightedAccess = None
           initiallyCompromisedVertexIds = Set.empty
+          transitivelyCompromisedVertexIds = Set.empty
           json = """{ "vertices": [] }""" }
 
     static member Example = { Model.Init with graph = AAG.Graph.Example }
@@ -55,5 +57,4 @@ and Model =
 let highlightAccess accessId (model: Model) =
     { model with highlightedAccess = accessId }
 
-let deHighlightAccess (model: Model) =
-    { model with highlightedAccess = None }
+let deHighlightAccess (model: Model) = { model with highlightedAccess = None }
