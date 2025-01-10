@@ -146,8 +146,6 @@ function updateNetwork(networkDTO) {
 
       if (edge.isProvisional) {
         dashes = true;
-        physics = false;
-        // color = getCssVariable("--bulma-warning-on-scheme");
         width = 2;
       }
 
@@ -187,8 +185,6 @@ network.on("click", function (params) {
   let clickedBackgroundButton = document.getElementById(
     "ClickedBackgroundButton"
   );
-
-  console.log(nodeId, edgeId);
 
   if (nodeId == null && edgeId == null) {
     clickedBackgroundButton.dispatchEvent(
