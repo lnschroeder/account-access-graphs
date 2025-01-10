@@ -102,7 +102,6 @@ function updateNetwork(networkDTO) {
 
   nodes.forEach((node) => {
     let borderWidth = 1;
-    let borderColor = getCssVariable("--bulma-link");
     let backgroundColor = window.matchMedia("(prefers-color-scheme: dark)")
       .matches
       ? "#14161A"
@@ -113,6 +112,7 @@ function updateNetwork(networkDTO) {
       backgroundColor = getCssVariable("--bulma-warning-on-scheme");
       fontColor = getCssVariable("--bulma-text-bold-invert");
     }
+    let borderColor = fontColor;
 
     if (node.isFactor) {
       borderColor = getCssVariable("--bulma-warning-on-scheme");
@@ -147,7 +147,7 @@ function updateNetwork(networkDTO) {
       if (edge.isProvisional) {
         dashes = true;
         physics = false;
-        color = getCssVariable("--bulma-warning-on-scheme");
+        // color = getCssVariable("--bulma-warning-on-scheme");
         width = 2;
       }
 
