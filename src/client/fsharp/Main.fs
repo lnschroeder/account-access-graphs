@@ -33,6 +33,8 @@ let private handleClickedBackground model dispatch =
     | MainMenu -> dispatch Msg.IgnoreAction
     | ModifyVertex -> ModifyVertexStep.handleClickedBackground model dispatch
     | ModifyAccess -> ModifyAccessStep.handleClickedBackground model dispatch
+    | AnalysisCompromise -> AnalysisCompromiseStep.handleClickedBackground dispatch
+
 let private handleClickedVertex (idAsString: string) model dispatch =
     let vertex =
         match Guid.TryParse(idAsString) with
@@ -45,6 +47,7 @@ let private handleClickedVertex (idAsString: string) model dispatch =
         | MainMenu -> MainMenuStep.handleClickedVertex vertex model dispatch
         | ModifyVertex -> ModifyVertexStep.handleClickedVertex vertex model dispatch
         | ModifyAccess -> ModifyAccessStep.handleClickedVertex vertex model dispatch
+        | AnalysisCompromise -> AnalysisCompromiseStep.handleClickedVertex vertex model dispatch
     | None -> dispatch Msg.IgnoreAction
 
 let private handleClickedVisEdge (idAsString: string) model dispatch =
@@ -58,7 +61,7 @@ let private handleClickedVisEdge (idAsString: string) model dispatch =
         match model.step with
         | MainMenu -> MainMenuStep.handleClickedAccess access model dispatch
         | ModifyVertex -> ModifyVertexStep.handleClickedAccess vertexId access model dispatch
-        | ModifyAccess -> dispatch Msg.IgnoreAction
+        | _ -> dispatch Msg.IgnoreAction
     | None -> dispatch Msg.IgnoreAction
 
 let getJsonOutputHint (model: Model) =
@@ -83,11 +86,11 @@ let private update message model =
         | Msg.SetPage page -> { model with page = page }
         | Msg.ModifiedGraphJson jsonAsString -> handleUpdatedJson jsonAsString model
 
-        // MainMenuStep
+        // MainMenu
         | Msg.OpenMainMenuStep -> MainMenuStep.``open`` model
         | Msg.ClickedClearGraph -> MainMenuStep.clearGraph
         | Msg.ClickedExampleGraph -> MainMenuStep.exampleGraph
-        // ModifyAccessStep
+        // ModifyAccess
         | Msg.OpenModifyAccessStep accessId -> ModifyAccessStep.``open`` accessId model
         | Msg.ModifiedAccessName (access, name) -> ModifyAccessStep.updateAccessName access name model
         | Msg.ToggleFactorOfSubjectAccess (accessId, vertex) -> ModifyAccessStep.toggleFactor accessId vertex model
@@ -98,6 +101,9 @@ let private update message model =
         | Msg.ClickedDeleteVertex subjectVertex -> ModifyVertexStep.exitDeletingVertex subjectVertex model
         | Msg.HighlightAccess accessId -> highlightAccess accessId model
         | Msg.DeHighlightAccess -> deHighlightAccess  model
+        // AnalysisCompromise
+        | Msg.OpenAnalysisCompromise -> AnalysisCompromiseStep.``open`` model
+        | Msg.ToggleInitialCompromise vertex -> AnalysisCompromiseStep.toggleFactor vertex model
 
     model, Cmd.none
 
@@ -124,6 +130,7 @@ let private view (jsRuntime: IJSRuntime) model dispatch =
                     | MainMenu -> MainMenuStep.view dispatch
                     | ModifyAccess -> ModifyAccessStep.view jsRuntime model dispatch
                     | ModifyVertex -> ModifyVertexStep.view jsRuntime model dispatch
+                    | AnalysisCompromise -> AnalysisCompromiseStep.view jsRuntime model dispatch
         )
         .ClickedVertexInput("", (fun idAsString -> handleClickedVertex idAsString model dispatch))
         .ClickedEdgeInput("", (fun idAsString -> handleClickedVisEdge idAsString model dispatch))

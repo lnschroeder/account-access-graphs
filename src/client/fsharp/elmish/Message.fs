@@ -9,9 +9,11 @@ type Message =
     | OpenMainMenuStep
     | OpenModifyVertexStep of Guid option
     | OpenModifyAccessStep of Guid option
+    | OpenAnalysisCompromise
     | HighlightAccess of Guid option
     | DeHighlightAccess
     | ToggleFactorOfSubjectAccess of Guid * AAG.Vertex
+    | ToggleInitialCompromise of AAG.Vertex
     | ClickedDeleteVertex of AAG.Vertex
     | ClickedDeleteAccess of Guid
     | ClickedClearGraph

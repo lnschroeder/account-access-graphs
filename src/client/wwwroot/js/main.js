@@ -119,6 +119,11 @@ function updateNetwork(networkDTO) {
       borderWidth = 3;
     }
 
+    if (node.isInitiallyCompromised) {
+      borderColor = getCssVariable("--bulma-danger-on-scheme");
+      borderWidth = 3;
+    }
+
     data.nodes.update({
       id: node.id,
       label: node.label,

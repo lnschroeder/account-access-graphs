@@ -19,6 +19,7 @@ and Step =
     | MainMenu
     | ModifyAccess
     | ModifyVertex
+    | AnalysisCompromise
 
 and DeserializedGraph =
     | Graph of AAG.Graph
@@ -34,6 +35,7 @@ and Model =
       subjectAccessId: Guid option
       selectedFactors: Guid Set
       highlightedAccess: Guid option
+      initiallyCompromisedVertexIds: Guid Set
       json: string }
     static member Init =
         { page = Endpoint.Main
@@ -45,6 +47,7 @@ and Model =
           subjectAccessId = None
           selectedFactors = Set.empty
           highlightedAccess = None
+          initiallyCompromisedVertexIds = Set.empty
           json = """{ "vertices": [] }""" }
 
     static member Example = { Model.Init with graph = AAG.Graph.Example }

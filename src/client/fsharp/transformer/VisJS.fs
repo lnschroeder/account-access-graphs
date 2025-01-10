@@ -7,7 +7,8 @@ type Node =
     { id: Guid
       label: string
       isSubject: bool
-      isFactor: bool }
+      isFactor: bool
+      isInitiallyCompromised: bool }
 
 type Edge =
     { id: Guid
@@ -23,7 +24,8 @@ let private transformVertex (model: Model) (vertex: AAG.Vertex) =
     { id = vertex.id
       label = vertex.name
       isSubject = Some vertex.id = model.subjectVertexId
-      isFactor = Seq.contains vertex.id model.selectedFactors }
+      isFactor = Seq.contains vertex.id model.selectedFactors
+      isInitiallyCompromised = Set.contains vertex.id model.initiallyCompromisedVertexIds}
 
 let transform (model: Model) =
     { nodes =

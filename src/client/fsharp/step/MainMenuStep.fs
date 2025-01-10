@@ -16,6 +16,7 @@ let ``open`` model =
       subjectAccessId = None
       selectedFactors = Set.empty
       highlightedAccess = None
+      initiallyCompromisedVertexIds = Set.empty
       json = model.json }
 
 let handleClickedVertex (vertex: AAG.Vertex) (model: Model) dispatch =
@@ -28,6 +29,7 @@ let view dispatch =
     Template
         .MainMenu()
         .AddVertexButton(fun _ -> dispatch (Msg.OpenModifyVertexStep None))
+        .AnalysisCompromiseButton(fun _ -> dispatch (Msg.OpenAnalysisCompromise))
         .ClearGraphButton(fun _ -> dispatch (Msg.ClickedClearGraph))
         .ExampleGraphButton(fun _ -> dispatch (Msg.ClickedExampleGraph))
         .Elt()

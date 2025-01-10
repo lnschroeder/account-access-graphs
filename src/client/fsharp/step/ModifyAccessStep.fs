@@ -122,6 +122,7 @@ let private openModifyAccess vertexId (access: AAG.Access) accessNameInput model
           selectedFactors =
             access.factors
             |> Set.map (fun factor -> factor.vertexId)
+          initiallyCompromisedVertexIds = Set.empty
           json = model.json }
     | None -> model // TODO throw error if the vertex is invalid
 
