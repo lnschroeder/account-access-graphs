@@ -151,6 +151,10 @@ function updateNetwork(networkDTO) {
         width = 2;
       }
 
+      if (edge.isHighlighted) {
+        width = 2;
+      }
+
       data.edges.update({
         id: edge.id,
         from: edge.from,

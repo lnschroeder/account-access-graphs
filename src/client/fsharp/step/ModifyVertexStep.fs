@@ -35,6 +35,7 @@ let private openInternal (vertex: AAG.Vertex) model =
       subjectVertexId = Some vertex.id
       subjectAccessId = model.subjectAccessId
       selectedFactors = Set.empty
+      highlightedAccess = None
       json = model.json }
 
 let ``open`` vertexId model =
@@ -54,6 +55,8 @@ let private showAccess dispatch (access: AAG.Access) =
         .Access()
         .Name(access.name)
         .Button(fun _ -> dispatch (Msg.OpenModifyAccessStep(Some access.id)))
+        .Enter(fun _ -> dispatch (Msg.HighlightAccess(Some access.id)))
+        .Leave(fun _ -> dispatch (Msg.DeHighlightAccess))
         .Elt()
 
 let isValidVertex model =

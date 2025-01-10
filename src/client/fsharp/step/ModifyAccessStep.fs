@@ -112,6 +112,7 @@ let private openModifyAccess vertexId (access: AAG.Access) accessNameInput model
           modifyVertexNameInput = subjectVertex.name
           subjectVertexId = Some subjectVertex.id
           subjectAccessId = Some access.id
+          highlightedAccess = None
           selectedFactors =
             access.factors
             |> Set.map (fun factor -> factor.vertexId)

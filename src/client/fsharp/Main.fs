@@ -105,6 +105,8 @@ let private update message model =
         | Msg.OpenModifyVertexStep vertexId -> ModifyVertexStep.``open`` vertexId model
         | Msg.ModifiedVertexName (subjectVertexId, name) -> ModifyVertexStep.updateVertexName subjectVertexId name model
         | Msg.ClickedDeleteVertex subjectVertex -> ModifyVertexStep.exitDeletingVertex subjectVertex model
+        | Msg.HighlightAccess accessId -> highlightAccess accessId model
+        | Msg.DeHighlightAccess -> deHighlightAccess  model
 
     model, Cmd.none
 

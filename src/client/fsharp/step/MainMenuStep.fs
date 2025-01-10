@@ -15,6 +15,7 @@ let ``open`` model =
       subjectVertexId = None
       subjectAccessId = None
       selectedFactors = Set.empty
+      highlightedAccess = None
       json = model.json }
 
 let handleClickedVertex (vertex: AAG.Vertex) (model: Model) dispatch =

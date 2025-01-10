@@ -14,6 +14,7 @@ type Edge =
       from: Guid
       ``to``: Guid
       isProvisional: bool
+      isHighlighted: bool
       colorIndex: byte }
 
 type Network = { nodes: Node list; edges: Edge list }
@@ -39,5 +40,6 @@ let transform (model: Model) =
                        from = factor.vertexId
                        ``to`` = vertex.id
                        isProvisional = (model.subjectAccessId = Some access.id && (access.factors |> Set.map (fun f -> f.vertexId)) = model.selectedFactors)
-                       colorIndex = access.colorIndex })
+                       colorIndex = access.colorIndex
+                       isHighlighted = Some access.id = model.highlightedAccess})
                  |> Seq.toList))) }

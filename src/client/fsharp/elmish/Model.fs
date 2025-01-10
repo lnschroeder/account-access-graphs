@@ -33,6 +33,7 @@ and Model =
       subjectVertexId: Guid option
       subjectAccessId: Guid option
       selectedFactors: Guid Set
+      highlightedAccess: Guid option
       json: string }
     static member Init =
         { page = Endpoint.Main
@@ -43,6 +44,13 @@ and Model =
           subjectVertexId = None
           subjectAccessId = None
           selectedFactors = Set.empty
+          highlightedAccess = None
           json = """{ "vertices": [] }""" }
 
     static member Example = { Model.Init with graph = AAG.Graph.Example }
+
+let highlightAccess accessId (model: Model) =
+    { model with highlightedAccess = accessId }
+
+let deHighlightAccess (model: Model) =
+    { model with highlightedAccess = None }
