@@ -72,6 +72,12 @@ let handleClickedVertex (vertex: AAG.Vertex) (model: Model) dispatch =
     | Some subjectAccessId -> dispatch (Msg.ToggleFactorOfSubjectAccess(subjectAccessId, vertex))
     | None -> dispatch Msg.IgnoreAction
 
+let handleClickedBackground model dispatch =
+    if isValidAccess model then
+        dispatch (Msg.OpenModifyVertexStep model.subjectVertexId)
+    else
+        dispatch Msg.IgnoreAction
+
 let updateAccessName (access: AAG.Access) name (model: Model) =
     match model.subjectVertexId with
     | Some subjectVertexId ->
@@ -125,7 +131,6 @@ let private createNewAccessForSubjectVertex (model: Model) =
         match AAG.findVertexById subjectVertexId model.graph with
         | Some subjectVertex ->
             let name = AAG.findNextAvailableName subjectVertex
-            printfn "name  %A" name
             let access = AAG.Access.New name (AAG.findNextAvailableColor subjectVertex)
             let graph = AAG.addAccessToGraph subjectVertexId access model.graph
 
