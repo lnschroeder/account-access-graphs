@@ -1,0 +1,404 @@
+// From Fig 14 of the paper "User Account Access Graphs" https://dl.acm.org/doi/10.1145/3319535.3354193
+{
+  "vertices": [
+    {
+      "id": "8b0e81c5-ea59-4a3a-814b-b0f5c9329512",
+      "name": "oldpwdGoogle",
+      "accesses": []
+    },
+    {
+      "id": "45648450-007b-4538-b4fe-59ead07c8533",
+      "name": "pwdmail",
+      "accesses": []
+    },
+    {
+      "id": "a7607c31-dc67-4e7e-bb97-b238f2b5f29e",
+      "name": "accmail",
+      "accesses": [
+        {
+          "id": "ac16be39-8fcf-4341-bda8-a43a8d84845e",
+          "name": "0",
+          "factors": [
+            {
+              "id": "c448ea01-e5ec-412d-9cc4-5f000b9feeaf",
+              "vertexId": "45648450-007b-4538-b4fe-59ead07c8533"
+            }
+          ],
+          "colorIndex": 0
+        }
+      ]
+    },
+    {
+      "id": "14c94964-f527-46da-90ba-68fccca4cefe",
+      "name": "Googlefull",
+      "accesses": [
+        {
+          "id": "0f684d32-bccf-4489-82ed-51b688a93cff",
+          "name": "3",
+          "factors": [
+            {
+              "id": "0fe93b7a-7f98-479a-b064-6619888e5f47",
+              "vertexId": "8b0e81c5-ea59-4a3a-814b-b0f5c9329512"
+            },
+            {
+              "id": "5c61aa5b-b851-4586-a702-b18553f73900",
+              "vertexId": "a7607c31-dc67-4e7e-bb97-b238f2b5f29e"
+            }
+          ],
+          "colorIndex": 3
+        },
+        {
+          "id": "1512afff-c6aa-4dc8-898f-b4453914307b",
+          "name": "2",
+          "factors": [
+            {
+              "id": "7f80cc25-4360-4a8a-b860-842488edf00a",
+              "vertexId": "1990e839-0af9-4821-bdba-8cb3e6f561b8"
+            },
+            {
+              "id": "e6f25f48-e43e-4d70-bcb8-c38e442fff4a",
+              "vertexId": "5448f979-4e8f-49b3-9586-b49c511f749f"
+            }
+          ],
+          "colorIndex": 2
+        },
+        {
+          "id": "fc564ecf-4a82-4488-948e-741b96e4db41",
+          "name": "1",
+          "factors": [
+            {
+              "id": "2cf4ec2b-6282-4159-83d1-ea42354ca849",
+              "vertexId": "00424571-0004-4967-99ae-4693486ece4b"
+            },
+            {
+              "id": "ea108041-a483-4d4a-a390-73219e6d1c24",
+              "vertexId": "1990e839-0af9-4821-bdba-8cb3e6f561b8"
+            }
+          ],
+          "colorIndex": 1
+        },
+        {
+          "id": "69a40587-dbb4-450d-9760-6f8910793c8e",
+          "name": "0",
+          "factors": [
+            {
+              "id": "02580f1b-9d52-494e-b2d9-6651f8fba4db",
+              "vertexId": "ed001001-2841-40e7-b5f7-a792aecd633f"
+            },
+            {
+              "id": "3caeb369-ecce-4fbf-9ca2-be29cae63314",
+              "vertexId": "1990e839-0af9-4821-bdba-8cb3e6f561b8"
+            }
+          ],
+          "colorIndex": 0
+        }
+      ]
+    },
+    {
+      "id": "53f198e7-228a-4f48-b21d-f0e7df9b8088",
+      "name": "homeKey",
+      "accesses": []
+    },
+    {
+      "id": "ed001001-2841-40e7-b5f7-a792aecd633f",
+      "name": "homePC\u2217",
+      "accesses": [
+        {
+          "id": "0691c624-0e26-49fe-956d-a13d1d865a4f",
+          "name": "0",
+          "factors": [
+            {
+              "id": "a345d0cd-7814-4f76-a518-1f09803237c6",
+              "vertexId": "53f198e7-228a-4f48-b21d-f0e7df9b8088"
+            }
+          ],
+          "colorIndex": 0
+        }
+      ]
+    },
+    {
+      "id": "1990e839-0af9-4821-bdba-8cb3e6f561b8",
+      "name": "pwdGoogle",
+      "accesses": []
+    },
+    {
+      "id": "9a72c9c3-794f-43bd-9c44-13726fac8bea",
+      "name": "Googlebasic",
+      "accesses": [
+        {
+          "id": "41e64960-9050-488b-832b-3d466fe482c4",
+          "name": "3",
+          "factors": [
+            {
+              "id": "a74b7416-c481-4c75-947a-254d98d1d018",
+              "vertexId": "9baaf9e9-4849-49fc-b0ca-48c2b417903e"
+            }
+          ],
+          "colorIndex": 3
+        },
+        {
+          "id": "2987674a-e0dd-4a6e-8aa5-a032ff297e4a",
+          "name": "2",
+          "factors": [
+            {
+              "id": "62755272-1167-44a7-b254-c6e4fc094978",
+              "vertexId": "da7d547e-8b8d-456f-a64b-a1bf3ea32a2c"
+            }
+          ],
+          "colorIndex": 2
+        },
+        {
+          "id": "a8bf6142-6ec0-4930-a357-a9d78a91d107",
+          "name": "1",
+          "factors": [
+            {
+              "id": "5bc6677e-de36-4e0d-8448-290f94393ee8",
+              "vertexId": "ed001001-2841-40e7-b5f7-a792aecd633f"
+            }
+          ],
+          "colorIndex": 1
+        },
+        {
+          "id": "28e0dbd2-2c6d-438a-92e1-c8d7ede0479a",
+          "name": "0",
+          "factors": [
+            {
+              "id": "0677b37a-7a8f-47c8-b51e-32f2f83c2702",
+              "vertexId": "14c94964-f527-46da-90ba-68fccca4cefe"
+            }
+          ],
+          "colorIndex": 0
+        }
+      ]
+    },
+    {
+      "id": "da7d547e-8b8d-456f-a64b-a1bf3ea32a2c",
+      "name": "laptop\u2217",
+      "accesses": [
+        {
+          "id": "b6268de5-255d-4cd0-8d75-d4a240cb5712",
+          "name": "1",
+          "factors": [
+            {
+              "id": "16becaaf-c456-459c-b726-38fcc8afa7de",
+              "vertexId": "9ab16c50-1cd2-44e1-b1af-ea51e240496a"
+            },
+            {
+              "id": "d7e4e488-51d0-4f72-9af1-dec173f16fd4",
+              "vertexId": "4d9dc4d3-7fad-47e2-b475-46b57046e57c"
+            }
+          ],
+          "colorIndex": 1
+        }
+      ]
+    },
+    {
+      "id": "9ab16c50-1cd2-44e1-b1af-ea51e240496a",
+      "name": "laptop",
+      "accesses": [
+        {
+          "id": "3de54c40-c349-4459-a7cc-08c39d433897",
+          "name": "0",
+          "factors": [
+            {
+              "id": "d62cb649-4ca5-4e55-aa11-c8e853737ff9",
+              "vertexId": "95cb1b1b-4adc-422d-b6ec-e177fa34badb"
+            }
+          ],
+          "colorIndex": 0
+        }
+      ]
+    },
+    {
+      "id": "95cb1b1b-4adc-422d-b6ec-e177fa34badb",
+      "name": "officeKey",
+      "accesses": []
+    },
+    {
+      "id": "4d9dc4d3-7fad-47e2-b475-46b57046e57c",
+      "name": "pwdlaptop",
+      "accesses": []
+    },
+    {
+      "id": "5ad9bd3b-149e-47ac-9260-c6223160a99d",
+      "name": "phone",
+      "accesses": []
+    },
+    {
+      "id": "62741824-9c64-4d33-82e2-e09c71222813",
+      "name": "finger",
+      "accesses": []
+    },
+    {
+      "id": "a8ee6c3b-c1cf-46bc-b1cf-2586e4a2ec25",
+      "name": "PIN",
+      "accesses": []
+    },
+    {
+      "id": "9baaf9e9-4849-49fc-b0ca-48c2b417903e",
+      "name": "phone\u2217",
+      "accesses": [
+        {
+          "id": "488f0936-a94a-4776-8423-ff0f7952893b",
+          "name": "1",
+          "factors": [
+            {
+              "id": "1b6009e1-f935-4fbc-9b61-612f0f4a124c",
+              "vertexId": "5ad9bd3b-149e-47ac-9260-c6223160a99d"
+            },
+            {
+              "id": "af5377c7-65d8-4c96-8ce1-332408b6d54f",
+              "vertexId": "a8ee6c3b-c1cf-46bc-b1cf-2586e4a2ec25"
+            }
+          ],
+          "colorIndex": 1
+        },
+        {
+          "id": "6a6f7e16-4ed7-4217-920c-79b5ef09c7d3",
+          "name": "0",
+          "factors": [
+            {
+              "id": "08384517-0f14-498b-a267-cc5fcd8e23f7",
+              "vertexId": "62741824-9c64-4d33-82e2-e09c71222813"
+            },
+            {
+              "id": "9159829a-5ced-48ce-8649-4b2fb9136c71",
+              "vertexId": "5ad9bd3b-149e-47ac-9260-c6223160a99d"
+            }
+          ],
+          "colorIndex": 0
+        }
+      ]
+    },
+    {
+      "id": "5448f979-4e8f-49b3-9586-b49c511f749f",
+      "name": "codeGoogle",
+      "accesses": [
+        {
+          "id": "ba99934f-82ae-43de-addf-21938b8aeea4",
+          "name": "0",
+          "factors": [
+            {
+              "id": "bc16c068-3298-49f7-926a-504b1f08637f",
+              "vertexId": "9baaf9e9-4849-49fc-b0ca-48c2b417903e"
+            }
+          ],
+          "colorIndex": 0
+        }
+      ]
+    },
+    {
+      "id": "00424571-0004-4967-99ae-4693486ece4b",
+      "name": "SMS",
+      "accesses": [
+        {
+          "id": "7f1758d1-64be-4e7f-9b93-7d44956134b8",
+          "name": "0",
+          "factors": [
+            {
+              "id": "57644c8b-6a68-4ed6-9a44-501ae4e81c76",
+              "vertexId": "9baaf9e9-4849-49fc-b0ca-48c2b417903e"
+            }
+          ],
+          "colorIndex": 0
+        }
+      ]
+    },
+    {
+      "id": "ccf8eae0-8e71-4549-b91f-55ddb6693cd5",
+      "name": "Binancefull",
+      "accesses": [
+        {
+          "id": "33d8fe44-4c57-4e73-a5f9-cec986776995",
+          "name": "0",
+          "factors": [
+            {
+              "id": "397f0a3c-ae52-43cb-923a-d661a04cf09c",
+              "vertexId": "30339a48-f090-4aca-a318-b7367bbd0357"
+            },
+            {
+              "id": "de8baa22-69d6-4a7c-bdd7-5ec6fca01d50",
+              "vertexId": "41d9d5f5-a790-498d-9313-94f651cf5dc0"
+            }
+          ],
+          "colorIndex": 0
+        }
+      ]
+    },
+    {
+      "id": "41d9d5f5-a790-498d-9313-94f651cf5dc0",
+      "name": "Binancebasic",
+      "accesses": [
+        {
+          "id": "4c9f00f3-7d3b-4131-b2c9-85e9d2f6e37b",
+          "name": "1",
+          "factors": [
+            {
+              "id": "00f45e44-0d7f-40c6-be4e-6d07553f3d55",
+              "vertexId": "30cb7c79-d416-484a-910e-4e95246a3d3d"
+            },
+            {
+              "id": "5a602b32-61bb-48ef-b497-d5c6ea72849c",
+              "vertexId": "30339a48-f090-4aca-a318-b7367bbd0357"
+            }
+          ],
+          "colorIndex": 1
+        },
+        {
+          "id": "a24d32ff-cfa3-46c7-a101-09da2ea265f7",
+          "name": "0",
+          "factors": [
+            {
+              "id": "23cc92a3-c2cf-43ce-a633-69b92140832f",
+              "vertexId": "30cb7c79-d416-484a-910e-4e95246a3d3d"
+            },
+            {
+              "id": "37a33575-9fdd-4621-964f-f66e4a3acade",
+              "vertexId": "85071990-3bde-4893-95b2-27aead8cd8c3"
+            }
+          ],
+          "colorIndex": 0
+        }
+      ]
+    },
+    {
+      "id": "30339a48-f090-4aca-a318-b7367bbd0357",
+      "name": "Gmail",
+      "accesses": [
+        {
+          "id": "acd11a66-8275-47e4-82d5-e7d4092667eb",
+          "name": "0",
+          "factors": [
+            {
+              "id": "064b222c-a193-4089-a233-537953affe46",
+              "vertexId": "9a72c9c3-794f-43bd-9c44-13726fac8bea"
+            }
+          ],
+          "colorIndex": 0
+        }
+      ]
+    },
+    {
+      "id": "85071990-3bde-4893-95b2-27aead8cd8c3",
+      "name": "pwdBinance",
+      "accesses": []
+    },
+    {
+      "id": "30cb7c79-d416-484a-910e-4e95246a3d3d",
+      "name": "codeBinance",
+      "accesses": [
+        {
+          "id": "7f67c887-92aa-4929-984b-892e9a7bb411",
+          "name": "0",
+          "factors": [
+            {
+              "id": "884b1cb5-3458-492f-895b-54988a8180a6",
+              "vertexId": "9baaf9e9-4849-49fc-b0ca-48c2b417903e"
+            }
+          ],
+          "colorIndex": 0
+        }
+      ]
+    }
+  ]
+}
