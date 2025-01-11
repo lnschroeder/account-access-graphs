@@ -13,9 +13,9 @@ let ``open`` model =
       addAccessNameInput = ""
       modifyVertexNameInput = ""
       subjectVertexId = None
-      subjectAccessId = None
+      subjectAccessColor = None
       selectedFactors = Set.empty
-      highlightedAccess = None
+      highlightedEdgeIds = Set.empty
       initiallyCompromisedVertexIds = Set.empty
       transitivelyCompromisedVertexIds = Set.empty
       json = model.json }
@@ -23,8 +23,8 @@ let ``open`` model =
 let handleClickedVertex (vertex: AAG.Vertex) (model: Model) dispatch =
     dispatch (Msg.OpenModifyVertexStep (Some vertex.id))
 
-let handleClickedAccess (access: AAG.Access) (model: Model) dispatch =
-    dispatch (Msg.OpenModifyAccessStep (Some access.id))
+let handleClickedAccess (access: AAG.Access) dispatch =
+    dispatch (Msg.OpenModifyAccessStep (Some access))
 
 let view dispatch =
     Template

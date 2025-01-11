@@ -8,14 +8,14 @@ type Message =
     | SetPage of Endpoint.Page
     | OpenMainMenuStep
     | OpenModifyVertexStep of Guid option
-    | OpenModifyAccessStep of Guid option
+    | OpenModifyAccessStep of AAG.Access option
     | OpenAnalysisCompromise
-    | HighlightAccess of Guid option
+    | HighlightAccess of AAG.Access
     | DeHighlightAccess
-    | ToggleFactorOfSubjectAccess of Guid * AAG.Vertex
+    | ToggleFactorForSubject of AAG.Vertex
     | ToggleInitialCompromise of AAG.Vertex
     | ClickedDeleteVertex of AAG.Vertex
-    | ClickedDeleteAccess of Guid
+    | ClickedDeleteAccess of AAG.Access
     | ClickedClearGraph
     | ClickedExampleGraph
     | ModifiedVertexName of Guid * string

@@ -17,14 +17,10 @@ let private getDebugText (model: Model) =
     let accessLen =
         Seq.length (
             model.graph.vertices
-            |> Seq.collect (fun v -> v.accesses)
+            |> Seq.collect (fun v -> AAG.getAccesses v.id model.graph)
         )
 
-    let edgesLen =
-        Seq.length (
-            model.graph.vertices
-            |> Seq.collect (fun v -> v.accesses |> Seq.collect (fun a -> a.factors))
-        )
+    let edgesLen = Seq.length (model.graph.edges)
 
     $"nodes: {nodeLen}; accesses; {accessLen} edges: {edgesLen}"
 
@@ -51,16 +47,16 @@ let private handleClickedVertex (idAsString: string) model dispatch =
     | None -> dispatch Msg.IgnoreAction
 
 let private handleClickedVisEdge (idAsString: string) model dispatch =
-    let vertexIdAccess =
+    let access =
         match Guid.TryParse(idAsString) with
         | (true, guid) -> AAG.findAccessByEdgeId guid model.graph
         | (false, _) -> None
 
-    match vertexIdAccess with
-    | Some (vertexId, access) ->
+    match access with
+    | Some access ->
         match model.step with
-        | MainMenu -> MainMenuStep.handleClickedAccess access model dispatch
-        | ModifyVertex -> ModifyVertexStep.handleClickedAccess vertexId access model dispatch
+        | MainMenu -> MainMenuStep.handleClickedAccess access dispatch
+        | ModifyVertex -> ModifyVertexStep.handleClickedEdge access model dispatch
         | _ -> dispatch Msg.IgnoreAction
     | None -> dispatch Msg.IgnoreAction
 
@@ -91,16 +87,16 @@ let private update message model =
         | Msg.ClickedClearGraph -> MainMenuStep.clearGraph
         | Msg.ClickedExampleGraph -> MainMenuStep.exampleGraph
         // ModifyAccess
-        | Msg.OpenModifyAccessStep accessId -> ModifyAccessStep.``open`` accessId model
+        | Msg.OpenModifyAccessStep access -> ModifyAccessStep.``open`` access model
         | Msg.ModifiedAccessName (access, name) -> ModifyAccessStep.updateAccessName access name model
-        | Msg.ToggleFactorOfSubjectAccess (accessId, vertex) -> ModifyAccessStep.toggleFactor accessId vertex model
-        | Msg.ClickedDeleteAccess subjectAccessId -> ModifyAccessStep.exitDeletingAccess subjectAccessId model
+        | Msg.ToggleFactorForSubject vertex -> ModifyAccessStep.toggleFactorForSubject vertex model
+        | Msg.ClickedDeleteAccess access -> ModifyAccessStep.exitDeletingAccess access model
         // ModifyVertex
         | Msg.OpenModifyVertexStep vertexId -> ModifyVertexStep.``open`` vertexId model
         | Msg.ModifiedVertexName (subjectVertexId, name) -> ModifyVertexStep.updateVertexName subjectVertexId name model
         | Msg.ClickedDeleteVertex subjectVertex -> ModifyVertexStep.exitDeletingVertex subjectVertex model
-        | Msg.HighlightAccess accessId -> highlightAccess accessId model
-        | Msg.DeHighlightAccess -> deHighlightAccess  model
+        | Msg.HighlightAccess access -> highlightAccess access model
+        | Msg.DeHighlightAccess -> deHighlightAccess model
         // AnalysisCompromise
         | Msg.OpenAnalysisCompromise -> AnalysisCompromiseStep.``open`` model
         | Msg.ToggleInitialCompromise vertex -> AnalysisCompromiseStep.toggleFactor vertex model
@@ -119,7 +115,7 @@ let private view (jsRuntime: IJSRuntime) model dispatch =
 
     Template
         .Main()
-        .DebugText(getDebugText model)
+        .DebugText(getDebugText model) // TODO
         .JsonOutput(model.json, (fun jsonAsString -> dispatch (Msg.ModifiedGraphJson jsonAsString)))
         .JsonOutputHint((getJsonOutputHint model).value)
         .LeftColumn(

@@ -20,11 +20,11 @@ let updateVertexName subjectVertexId name (model: Model) =
         modifyVertexNameInput = name
         graph = AAG.changeVertexName subjectVertexId name model.graph }
 
-let exitDeletingVertex subjectVertex (model: Model) =
+let exitDeletingVertex (subjectVertex: AAG.Vertex) (model: Model) =
     { model with
         step = MainMenu
         modifyVertexNameInput = ""
-        graph = AAG.removeVertexFromGraph subjectVertex model.graph }
+        graph = AAG.removeVertexFromGraph subjectVertex.id model.graph }
 
 let private openInternal (vertex: AAG.Vertex) model =
     { page = model.page
@@ -33,9 +33,9 @@ let private openInternal (vertex: AAG.Vertex) model =
       addAccessNameInput = model.addAccessNameInput
       modifyVertexNameInput = vertex.name
       subjectVertexId = Some vertex.id
-      subjectAccessId = model.subjectAccessId
+      subjectAccessColor = model.subjectAccessColor
       selectedFactors = Set.empty
-      highlightedAccess = None
+      highlightedEdgeIds = Set.empty
       initiallyCompromisedVertexIds = Set.empty
       transitivelyCompromisedVertexIds = Set.empty
       json = model.json }
@@ -56,8 +56,8 @@ let private showAccess dispatch (access: AAG.Access) =
         .ModifyVertex
         .Access()
         .Name(access.name)
-        .Button(fun _ -> dispatch (Msg.OpenModifyAccessStep(Some access.id)))
-        .Enter(fun _ -> dispatch (Msg.HighlightAccess(Some access.id)))
+        .Button(fun _ -> dispatch (Msg.OpenModifyAccessStep(Some access)))
+        .Enter(fun _ -> dispatch (Msg.HighlightAccess(access)))
         .Leave(fun _ -> dispatch (Msg.DeHighlightAccess))
         .Elt()
 
@@ -76,9 +76,9 @@ let handleClickedBackground (model: Model) dispatch =
     else
         dispatch Msg.IgnoreAction
 
-let handleClickedAccess vertexId (access: AAG.Access) (model: Model) dispatch =
-    if Some vertexId = model.subjectVertexId then
-        dispatch (Msg.OpenModifyAccessStep(Some access.id))
+let handleClickedEdge (access: AAG.Access) (model: Model) dispatch =
+    if Some access.vertexId = model.subjectVertexId then
+        dispatch (Msg.OpenModifyAccessStep(Some access))
     else
         dispatch Msg.IgnoreAction
 
@@ -103,7 +103,7 @@ let view jsRuntime (model: Model) dispatch =
                     (fun v -> dispatch (Msg.ModifiedVertexName(subjectVertexId, v)))
                 )
                 .SubjectNameHint((getVertexNameHint model).value)
-                .Accesses(forEach subjectVertex.accesses (showAccess dispatch))
+                .Accesses(forEach (AAG.getAccesses subjectVertex.id model.graph) (showAccess dispatch))
                 .AddAccessButton(fun _ -> dispatch (Msg.OpenModifyAccessStep None))
                 .BackButton(fun _ -> dispatch Msg.OpenMainMenuStep)
                 .DeleteButton(fun _ -> dispatch (Msg.ClickedDeleteVertex subjectVertex))

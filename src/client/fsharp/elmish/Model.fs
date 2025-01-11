@@ -32,9 +32,9 @@ and Model =
       addAccessNameInput: string
       modifyVertexNameInput: string
       subjectVertexId: Guid option
-      subjectAccessId: Guid option
+      subjectAccessColor: byte option
       selectedFactors: Guid Set
-      highlightedAccess: Guid option
+      highlightedEdgeIds: Guid Set
       initiallyCompromisedVertexIds: Guid Set
       transitivelyCompromisedVertexIds: Guid Set
       json: string }
@@ -45,16 +45,17 @@ and Model =
           addAccessNameInput = ""
           modifyVertexNameInput = ""
           subjectVertexId = None
-          subjectAccessId = None
+          subjectAccessColor = None
           selectedFactors = Set.empty
-          highlightedAccess = None
+          highlightedEdgeIds = Set.empty
           initiallyCompromisedVertexIds = Set.empty
           transitivelyCompromisedVertexIds = Set.empty
           json = """{ "vertices": [] }""" }
 
     static member Example = { Model.Init with graph = AAG.Graph.Example }
 
-let highlightAccess accessId (model: Model) =
-    { model with highlightedAccess = accessId }
+let highlightAccess (access: AAG.Access) (model: Model) =
+    let edges = AAG.findFactorsOfAccess model.graph access |> Set.ofList
+    { model with highlightedEdgeIds = edges }
 
-let deHighlightAccess (model: Model) = { model with highlightedAccess = None }
+let deHighlightAccess (model: Model) = { model with highlightedEdgeIds = Set.empty }

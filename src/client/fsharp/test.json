@@ -1,0 +1,57 @@
+// vertex: Binancefull
+// V_init: pwdBinance, codeBinance
+// -> dont unpack: binancefull + V_init
+
+{Gmail, Binancebasic}
+
+{Gmail, pwdBinance, codeBinance}, {Gmail, codeBinance, Gmail} = {Gmail, codebinance}
+{Googlebasic, Binancebasic}
+= {gmail, codebinance}, {googlebasic, binancebasic}
+
+{gmail, phone*}, {googlebasic, codebinance}
+{googlebasic, pwdbinance, codebinance}, {googlebasic, gmail, codebinance}
+{laptop*, binancebasic}, {homepc*, binancebasic}, {googlefull, binancebasic}, {phone*, binancebasic}
+= {gmail, phone*}, {googlebasic, codebinance}
+{laptop*, binancebasic}, {homepc*, binancebasic}, {googlefull, binancebasic}, {phone*, binancebasic}
+
+{gmail, }
+
+// nur ignorieren, wenn das unpacking zu keinem neuen accessset führt
+
+
+{{Googlebasic, Gmail, codeBinance}, {Googlebasic, pwdBinance, codeBinance}}
+// -> dont unpack: binancefull, Gmail, Binancebasic + V_init
+
+{{laptop*, phone*}, {homePC*, phone*}, {Googlefull, phone*}, {phone*, phone*},
+    {laptop*, pwdBinance, phone*}, {homePC*, pwdBinance, phone*}, {Googlefull, pwdBinance, phone*}, {phone*, pwdBinance, phone*} }
+// binanceful, gmail, binancebasic, googlebasic, pwdbinance, codebinance, codebinance
+
+
+
+
+// vertex: laptop*
+// V_init:
+accessBase(laptop*)
+= {*accessBase(laptop), pwdlaptop}
+= {officeky, pwdlaptop}
+
+accessbase(binancebasic)
+= {pwdBinance + accessbase(codeBinance)}, {accessbase(codeBinance), gmail}, {codebinance, accessbase(gmail)}
+
+
+accessbase(binancefull) = accessbase(binancebasic) x accessbase(gmail)
+
+accessbase(binancebasic)
+= accessbase(gmail) x accessbase(codebinance) U accessbase(pwdBinance) x accessbase(codebinance)
+
+accessbase(gmail)
+= accessbase(googlebasic)
+
+accessbase(codebinance)
+= accessbase(phone*)
+
+accessbase(pwdbinance)
+= pwdbinance
+
+accessbase(googlebasic)
+= ab(laptop*) U ab(homepc*) U ab(googlefull) U 
