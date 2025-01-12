@@ -108,16 +108,17 @@ function updateNetwork(networkDTO) {
       : "#FFFFFF";
     let fontColor = getCssVariable("--bulma-text-bold");
     let borderDashes = false;
+    let borderColor = fontColor;
 
     if (node.isSubject) {
-      backgroundColor = getCssVariable("--bulma-warning-on-scheme");
-      fontColor = getCssVariable("--bulma-text-bold-invert");
+      borderColor = getCssVariable("--bulma-warning-on-scheme");
+      borderWidth = 3;
     }
-    let borderColor = fontColor;
 
     if (node.isFactor) {
       borderColor = getCssVariable("--bulma-warning-on-scheme");
       borderWidth = 3;
+      borderDashes = [5, 5];
     }
 
     if (node.isInitiallyCompromised) {
@@ -165,7 +166,7 @@ function updateNetwork(networkDTO) {
       }
 
       if (edge.isHighlighted) {
-        width = 2;
+        width = 3;
       }
 
       data.edges.update({
