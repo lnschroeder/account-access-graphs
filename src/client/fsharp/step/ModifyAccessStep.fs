@@ -33,8 +33,8 @@ let private getAccessNameHint (model: Model) =
             Hint.Info
     | None -> Hint.Error "Select a subject vertex first!"
 
-let private getAccessNameInputPlaceholder subjectVertexId (model: Model) =
-    $"Defaults to: {AAG.findNextAvailableName subjectVertexId model.graph}"
+let private getAccessNameInputPlaceholder (model: Model) =
+    $"Defaults to: {model.subjectAccessName}"
 
 let removeFactorFromSubject vertexId (access: AAG.Access) (model: Model) =
     { model with
@@ -52,7 +52,7 @@ let toggleFactorForSubject (vertex: AAG.Vertex) (model: Model) =
         match model.subjectAccessColor with
         | Some color ->
             let access: AAG.Access =
-                { name = model.addAccessNameInput
+                { name = model.subjectAccessName
                   colorIndex = color
                   vertexId = subjectVertexId }
 
@@ -91,24 +91,23 @@ let handleClickedBackground model dispatch =
 let updateAccessName (access: AAG.Access option) name (model: Model) =
     match model.subjectVertexId with
     | Some subjectVertexId ->
-        let addAccessNameInput =
-            if name = "" then
-                model.addAccessNameInput
-            else
-                name
+        let model = { model with addAccessNameInput = name }
 
-        let graph =
-            match access with
-            | Some access ->
+        if (getAccessNameHint model).level <> Error then
+            let subjectAccessName =
                 if name = "" then
-                    AAG.changeAccessName access (AAG.findNextAvailableName subjectVertexId model.graph) model.graph
+                    AAG.findNextAvailableName subjectVertexId model.graph
                 else
-                    AAG.changeAccessName access name model.graph
-            | None -> model.graph
+                    model.subjectAccessName
 
-        { model with
-            graph = graph
-            addAccessNameInput = addAccessNameInput }
+            { model with
+                graph =
+                    match access with
+                    | Some access -> AAG.changeAccessName access subjectAccessName model.graph
+                    | None -> model.graph
+                subjectAccessName = subjectAccessName }
+        else
+            model
     | None -> model
 
 let private showFactor (model: Model) dispatch id =
@@ -126,16 +125,19 @@ let private showFactor (model: Model) dispatch id =
             .Name("INVALID")
             .Elt()
 
-let private openModifyAccess (access: AAG.Access) model =
+let ``open`` (access: AAG.Access) addAccessNameInput model =
+    // match access with
+    // | Some access ->
     match AAG.findVertexById access.vertexId model.graph with
     | Some subjectVertex ->
         { page = Endpoint.Main
           step = ModifyAccess
           graph = model.graph
-          addAccessNameInput = access.name
+          addAccessNameInput = addAccessNameInput
           modifyVertexNameInput = subjectVertex.name
           subjectVertexId = Some subjectVertex.id
           subjectAccessColor = Some access.colorIndex
+          subjectAccessName = access.name
           highlightedEdgeIds = Set.empty
           selectedFactors =
             AAG.findEdgesOfAccess model.graph access
@@ -145,23 +147,16 @@ let private openModifyAccess (access: AAG.Access) model =
           transitivelyCompromisedVertexIds = Set.empty
           json = model.json }
     | None -> model
+// | None ->
+//     match model.subjectVertexId with
+//     | Some subjectVertexId ->
+//         match AAG.findVertexById subjectVertexId model.graph with
+//         | Some subjectVertex ->
 
-let ``open`` (access: AAG.Access option) model =
-    match model.subjectVertexId with
-    | Some subjectVertexId ->
-        match access with
-        | Some access -> openModifyAccess access model
-        | None ->
-            match AAG.findVertexById subjectVertexId model.graph with
-            | Some subjectVertex ->
-                let access: AAG.Access =
-                    { vertexId = subjectVertexId
-                      colorIndex = AAG.findNextAvailableColor subjectVertex model.graph
-                      name = "" }
 
-                openModifyAccess access model
-            | None -> model
-    | None -> model
+//             openModifyAccess subjectVertex access "" model
+//         | None -> model
+//     | None -> model
 
 let view jsRuntime (model: Model) dispatch =
     Utility.toggleButtonEnabled "ModifyAccessBackButton" (isValidAccess model) jsRuntime
@@ -184,17 +179,11 @@ let view jsRuntime (model: Model) dispatch =
                         model.addAccessNameInput,
                         (fun v -> dispatch (Msg.ModifiedAccessName(subjectAccess, v)))
                     )
-                    .AccessNameInputPlaceholder(getAccessNameInputPlaceholder subjectVertexId model)
+                    .AccessNameInputPlaceholder(getAccessNameInputPlaceholder model)
                     .AccessNameHint((getAccessNameHint model).value)
                     .Factors(forEach model.selectedFactors (showFactor model dispatch))
                     .FactorsHint((getFactorsHint model).value)
                     .Elt()
-            | None ->
-                printfn "2"
-                Template.ModifyAccess().Elt()
-        | None ->
-            printfn "3"
-            Template.ModifyAccess().Elt()
-    | None ->
-        printfn "4"
-        Template.ModifyAccess().Elt()
+            | None -> Template.ModifyAccess().Elt()
+        | None -> Template.ModifyAccess().Elt()
+    | None -> Template.ModifyAccess().Elt()

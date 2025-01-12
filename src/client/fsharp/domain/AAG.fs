@@ -138,16 +138,21 @@ let private mapEdgeToAccess (edge: Edge) =
       colorIndex = edge.colorIndex
       vertexId = edge.``to`` }
 
+let getAccesses vertexId (graph: Graph) =
+    graph.edges
+    |> List.filter (fun e -> e.``to`` = vertexId)
+    |> List.map mapEdgeToAccess
+    |> Set.ofList
+
 let private isEdgeInAccess (access: Access) (edge: Edge) =
     edge.accessName = access.name
     && edge.``to`` = access.vertexId
     && edge.colorIndex = access.colorIndex
 
-let findNextAvailableColor (vertex: Vertex) (graph: Graph) =
+let findNextAvailableColor vertexId graph =
     let usedColors =
-        graph.edges
-        |> List.filter (fun e -> e.``to`` = vertex.id)
-        |> Seq.map (fun access -> access.colorIndex)
+        getAccesses vertexId graph
+        |> Set.map (fun a -> a.colorIndex)
         |> Seq.sort
 
     Seq.zip usedColors (Seq.initInfinite byte)
@@ -156,11 +161,10 @@ let findNextAvailableColor (vertex: Vertex) (graph: Graph) =
         | Some (_, b) -> b
         | None -> Seq.length usedColors |> byte
 
-let findNextAvailableName vertexId (graph: Graph) =
+let findNextAvailableName vertexId graph =
     let usedNames =
-        graph.edges
-        |> List.filter (fun e -> e.``to`` = vertexId)
-        |> Seq.map (fun e -> e.accessName)
+        getAccesses vertexId graph
+        |> Set.map (fun a -> a.name)
         |> Seq.sort
 
     Seq.zip usedNames (Seq.initInfinite int)
@@ -168,12 +172,6 @@ let findNextAvailableName vertexId (graph: Graph) =
     |> function
         | Some (_, b) -> $"{b}"
         | None -> $"{Seq.length usedNames |> int}"
-
-let getAccesses vertexId (graph: Graph) =
-    graph.edges
-    |> List.filter (fun e -> e.``to`` = vertexId)
-    |> List.map mapEdgeToAccess
-    |> Set.ofList
 
 // let rec findInVertices vertices accessId =
 //     match vertices with
@@ -243,10 +241,6 @@ let findAccessByVertexIdAndColor vertexId color graph =
 
 let findEdgesOfAccess graph (access: Access) = // TODO change id to option
     graph.edges |> List.filter (isEdgeInAccess access)
-
-let findEdge graph vertexId (access: Access) =
-    findEdgesOfAccess graph access
-    |> List.find (fun e -> e.from = vertexId)
 
 // graph.vertices
 // |> List.tryPick (fun vertex ->

@@ -87,7 +87,7 @@ let private update message model =
         | Msg.ClickedClearGraph -> MainMenuStep.clearGraph
         | Msg.ClickedExampleGraph -> MainMenuStep.exampleGraph
         // ModifyAccess
-        | Msg.OpenModifyAccessStep access -> ModifyAccessStep.``open`` access model
+        | Msg.OpenModifyAccessStep (access, addAccessNameInput) -> ModifyAccessStep.``open`` access addAccessNameInput model
         | Msg.ModifiedAccessName (access, name) -> ModifyAccessStep.updateAccessName access name model
         | Msg.ToggleFactorForSubject vertex -> ModifyAccessStep.toggleFactorForSubject vertex model
         | Msg.ClickedDeleteAccess access -> ModifyAccessStep.exitDeletingAccess access model

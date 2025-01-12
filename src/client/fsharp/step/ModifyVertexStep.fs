@@ -30,10 +30,11 @@ let private openInternal (vertex: AAG.Vertex) model =
     { page = model.page
       step = ModifyVertex
       graph = model.graph
-      addAccessNameInput = model.addAccessNameInput
+      addAccessNameInput = ""
       modifyVertexNameInput = vertex.name
       subjectVertexId = Some vertex.id
       subjectAccessColor = None
+      subjectAccessName = ""
       selectedFactors = Set.empty
       highlightedEdgeIds = Set.empty
       initiallyCompromisedVertexIds = Set.empty
@@ -56,9 +57,8 @@ let private showAccess dispatch (access: AAG.Access) =
         .ModifyVertex
         .Access()
         .Name(access.name)
-        .Button(fun _ -> dispatch (Msg.OpenModifyAccessStep(Some access)))
-        .Enter(fun _ ->
-            dispatch (Msg.HighlightAccess(access)))
+        .Button(fun _ -> dispatch (Msg.OpenModifyAccessStep(access, access.name)))
+        .Enter(fun _ -> dispatch (Msg.HighlightAccess(access)))
         .Leave(fun _ -> dispatch (Msg.DeHighlightAccess))
         .Elt()
 
@@ -79,7 +79,7 @@ let handleClickedBackground (model: Model) dispatch =
 
 let handleClickedEdge (access: AAG.Access) (model: Model) dispatch =
     if Some access.vertexId = model.subjectVertexId then
-        dispatch (Msg.OpenModifyAccessStep(Some access))
+        dispatch (Msg.OpenModifyAccessStep(access, access.name))
     else
         dispatch Msg.IgnoreAction
 
@@ -105,7 +105,15 @@ let view jsRuntime (model: Model) dispatch =
                 )
                 .SubjectNameHint((getVertexNameHint model).value)
                 .Accesses(forEach (AAG.getAccesses subjectVertex.id model.graph) (showAccess dispatch))
-                .AddAccessButton(fun _ -> dispatch (Msg.OpenModifyAccessStep None))
+                .AddAccessButton(fun _ ->
+                    dispatch (
+                        Msg.OpenModifyAccessStep(
+                            { vertexId = subjectVertexId
+                              colorIndex = AAG.findNextAvailableColor subjectVertex.id model.graph
+                              name = AAG.findNextAvailableName subjectVertex.id model.graph },
+                            ""
+                        )
+                    ))
                 .BackButton(fun _ -> dispatch Msg.OpenMainMenuStep)
                 .DeleteButton(fun _ -> dispatch (Msg.ClickedDeleteVertex subjectVertex))
                 .Elt()

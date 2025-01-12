@@ -17,6 +17,7 @@ let ``open`` model =
       modifyVertexNameInput = model.modifyVertexNameInput
       subjectVertexId = model.subjectVertexId
       subjectAccessColor = model.subjectAccessColor
+      subjectAccessName = model.subjectAccessName
       selectedFactors = Set.empty
       highlightedEdgeIds = Set.empty
       initiallyCompromisedVertexIds = Set.empty

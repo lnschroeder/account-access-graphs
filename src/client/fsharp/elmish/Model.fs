@@ -33,6 +33,7 @@ and Model =
       modifyVertexNameInput: string
       subjectVertexId: Guid option
       subjectAccessColor: byte option
+      subjectAccessName: string
       selectedFactors: Guid Set
       highlightedEdgeIds: Guid Set
       initiallyCompromisedVertexIds: Guid Set
@@ -46,6 +47,7 @@ and Model =
           modifyVertexNameInput = ""
           subjectVertexId = None
           subjectAccessColor = None
+          subjectAccessName = ""
           selectedFactors = Set.empty
           highlightedEdgeIds = Set.empty
           initiallyCompromisedVertexIds = Set.empty

@@ -48,18 +48,3 @@ let transform (model: Model) =
         (model.graph.vertices
          |> List.map (transformVertex model))
       edges = model.graph.edges |> List.map (transformEdge model) }
-        // (model.graph.vertices
-        //  |> List.collect (fun vertex ->
-        //      vertex.accesses
-        //      |> List.collect (fun access ->
-        //          access.factors
-        //          |> Set.map (fun factor ->
-        //              { id = factor.id
-        //                from = factor.vertexId
-        //                ``to`` = vertex.id
-        //                isProvisional =
-        //                  (model.subjectAccessId = Some access.id
-        //                   && (access.factors |> Set.map (fun f -> f.vertexId)) = model.selectedFactors)
-        //                colorIndex = access.colorIndex
-        //                isHighlighted = Some access.id = model.highlightedAccess })
-        //          |> Seq.toList))) }

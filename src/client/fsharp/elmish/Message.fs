@@ -8,7 +8,7 @@ type Message =
     | SetPage of Endpoint.Page
     | OpenMainMenuStep
     | OpenModifyVertexStep of Guid option
-    | OpenModifyAccessStep of AAG.Access option
+    | OpenModifyAccessStep of AAG.Access * string
     | OpenAnalysisCompromise
     | HighlightAccess of AAG.Access
     | DeHighlightAccess

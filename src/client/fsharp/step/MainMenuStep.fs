@@ -14,6 +14,7 @@ let ``open`` model =
       modifyVertexNameInput = ""
       subjectVertexId = None
       subjectAccessColor = None
+      subjectAccessName = model.subjectAccessName
       selectedFactors = Set.empty
       highlightedEdgeIds = Set.empty
       initiallyCompromisedVertexIds = Set.empty
@@ -24,7 +25,7 @@ let handleClickedVertex (vertex: AAG.Vertex) (model: Model) dispatch =
     dispatch (Msg.OpenModifyVertexStep (Some vertex.id))
 
 let handleClickedAccess (access: AAG.Access) dispatch =
-    dispatch (Msg.OpenModifyAccessStep (Some access))
+    dispatch (Msg.OpenModifyAccessStep (access, access.name))
 
 let view dispatch =
     Template
