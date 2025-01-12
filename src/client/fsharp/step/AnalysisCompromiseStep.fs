@@ -32,18 +32,16 @@ let handleClickedVertex (vertex: AAG.Vertex) (model: Model) dispatch =
 let private removeInitialCompromiseVertex (vertex: AAG.Vertex) (model: Model) =
     let initiallyCompromisedVertexIds =
         Set.remove vertex.id model.initiallyCompromisedVertexIds
-    model // TODO
-    // { model with
-    //     initiallyCompromisedVertexIds = initiallyCompromisedVertexIds
-    //     transitivelyCompromisedVertexIds = AAG.getCompromisedVerticesOfGraph initiallyCompromisedVertexIds model.graph }
+    { model with
+        initiallyCompromisedVertexIds = initiallyCompromisedVertexIds
+        transitivelyCompromisedVertexIds = AAG.getCompromisedVerticesOfGraph initiallyCompromisedVertexIds model.graph }
 
 let private addInitialCompromiseVertex (vertex: AAG.Vertex) (model: Model) =
     let initiallyCompromisedVertexIds =
         Set.add vertex.id model.initiallyCompromisedVertexIds
-    model // TODO
-    // { model with
-    //     initiallyCompromisedVertexIds = initiallyCompromisedVertexIds
-    //     transitivelyCompromisedVertexIds = AAG.getCompromisedVerticesOfGraph initiallyCompromisedVertexIds model.graph }
+    { model with
+        initiallyCompromisedVertexIds = initiallyCompromisedVertexIds
+        transitivelyCompromisedVertexIds = AAG.getCompromisedVerticesOfGraph initiallyCompromisedVertexIds model.graph }
 
 let toggleFactor (vertex: AAG.Vertex) (model: Model) =
     if Set.contains vertex.id model.initiallyCompromisedVertexIds then

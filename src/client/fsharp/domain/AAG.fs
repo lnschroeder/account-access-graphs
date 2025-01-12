@@ -97,41 +97,11 @@ and Graph =
 //         accesses =
 //             removeVertexFactorFromAccesses vertexId vertex.accesses
 //             |> List.filter (fun access -> not access.factors.IsEmpty) }
+let private isEdgeInAccess (access: Access) (edge: Edge) =
+    edge.accessName = access.name
+    && edge.``to`` = access.vertexId
+    && edge.colorIndex = access.colorIndex
 
-let removeVertexFromGraph vertexId graph =
-    { graph with
-        vertices =
-            graph.vertices
-            |> List.filter (fun v -> v.id <> vertexId)
-        edges =
-            graph.edges
-            |> List.filter (fun e -> e.from <> vertexId && e.``to`` <> vertexId) }
-
-// let isAccessFulfilled (vertexIds: Guid Set) (access: Access) =
-//     Set.isSubset (access.factors |> Set.map (fun f -> f.vertexId)) vertexIds
-
-// let canBeCompromised (vertexIds: Guid Set) (vertex: Vertex) =
-//     match vertex with
-//     | vertex when Set.contains vertex.id vertexIds -> true
-//     | _ ->
-//         vertex.accesses
-//         |> List.exists (isAccessFulfilled vertexIds)
-
-// let private getNewlyCompromisedVertexId (compromisedVertexIds: Guid Set) (vertices: Vertex list) : Vertex option =
-//     vertices
-//     |> List.tryFind (canBeCompromised compromisedVertexIds)
-
-// let rec getCompromisedVertices (compromisedVertexIds: Guid Set) (vertices: Vertex list) =
-//     let vertices =
-//         vertices
-//         |> List.filter (fun v -> not <| Set.contains v.id compromisedVertexIds)
-
-//     match getNewlyCompromisedVertexId compromisedVertexIds vertices with
-//     | None -> compromisedVertexIds
-//     | Some v -> getCompromisedVertices (Set.add v.id compromisedVertexIds) vertices
-
-// let getCompromisedVerticesOfGraph (compromisedVertexIds: Guid Set) (graph: Graph) =
-//     getCompromisedVertices compromisedVertexIds graph.vertices
 
 let private mapEdgeToAccess (edge: Edge) =
     { name = edge.accessName
@@ -144,10 +114,45 @@ let getAccesses vertexId (graph: Graph) =
     |> List.map mapEdgeToAccess
     |> Set.ofList
 
-let private isEdgeInAccess (access: Access) (edge: Edge) =
-    edge.accessName = access.name
-    && edge.``to`` = access.vertexId
-    && edge.colorIndex = access.colorIndex
+let findEdgesOfAccess graph (access: Access) = // TODO change id to option
+    graph.edges |> List.filter (isEdgeInAccess access)
+
+let removeVertexFromGraph vertexId graph =
+    { graph with
+        vertices =
+            graph.vertices
+            |> List.filter (fun v -> v.id <> vertexId)
+        edges =
+            graph.edges
+            |> List.filter (fun e -> e.from <> vertexId && e.``to`` <> vertexId) }
+
+let isAccessFulfilled (vertexIds: Guid Set) (edges: Edge list) =
+    Set.isSubset (edges |> List.map (fun e -> e.from) |> Set.ofList) vertexIds
+
+let canBeCompromised (graph: Graph) (vertexIds: Guid Set) (vertex: Vertex) =
+    match vertex with
+    | vertex when
+        Set.contains vertex.id vertexIds -> true
+    | _ ->
+        getAccesses vertex.id graph
+        |> Set.map (findEdgesOfAccess graph)
+        |> Set.exists (isAccessFulfilled vertexIds)
+
+let private getNewlyCompromisedVertexId (compromisedVertexIds: Guid Set) (graph: Graph) (vertices: Vertex list) : Vertex option =
+    vertices
+    |> List.tryFind (canBeCompromised graph compromisedVertexIds)
+
+let rec getCompromisedVertices (compromisedVertexIds: Guid Set) (graph: Graph) (vertices: Vertex list) =
+    let vertices =
+        vertices
+        |> List.filter (fun v -> not <| Set.contains v.id compromisedVertexIds)
+
+    match getNewlyCompromisedVertexId compromisedVertexIds graph vertices with
+    | None -> compromisedVertexIds
+    | Some v -> getCompromisedVertices (Set.add v.id compromisedVertexIds) graph vertices
+
+let getCompromisedVerticesOfGraph (compromisedVertexIds: Guid Set) (graph: Graph) =
+    getCompromisedVertices compromisedVertexIds graph graph.vertices
 
 let findNextAvailableColor vertexId graph =
     let usedColors =
@@ -238,9 +243,6 @@ let findAccessByVertexIdAndColor vertexId color graph =
 //         vertex.accesses
 //         |> List.tryFind (fun access -> access.id = accessId)
 //         |> Option.map (fun access -> vertex.id, access))
-
-let findEdgesOfAccess graph (access: Access) = // TODO change id to option
-    graph.edges |> List.filter (isEdgeInAccess access)
 
 // graph.vertices
 // |> List.tryPick (fun vertex ->
