@@ -8,16 +8,16 @@ type Message =
     | SetPage of Endpoint.Page
     | OpenMainMenuStep
     | OpenModifyVertexStep of Guid option
-    | OpenModifyAccessStep of Guid option
+    | OpenModifyAccessStep of AAG.Access * string
     | OpenAnalysisCompromise
-    | HighlightAccess of Guid option
+    | HighlightAccess of AAG.Access
     | DeHighlightAccess
-    | ToggleFactorOfSubjectAccess of Guid * AAG.Vertex
+    | ToggleFactorForSubject of AAG.Vertex
     | ToggleInitialCompromise of AAG.Vertex
     | ClickedDeleteVertex of AAG.Vertex
-    | ClickedDeleteAccess of Guid
+    | ClickedDeleteAccess of AAG.Access option
     | ClickedClearGraph
     | ClickedExampleGraph
     | ModifiedVertexName of Guid * string
-    | ModifiedAccessName of AAG.Access * string
+    | ModifiedAccessName of AAG.Access option * string
     | ModifiedGraphJson of string

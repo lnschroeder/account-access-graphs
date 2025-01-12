@@ -36,23 +36,15 @@ let private transformVertex (model: Model) (vertex: AAG.Vertex) =
       isInitiallyCompromised = isInitiallyCompromised
       isTransitivelyCompromised = isTransitivelyCompromised }
 
+let private transformEdge (model: Model) (edge: AAG.Edge) =
+    { id = edge.id
+      from = edge.from
+      ``to`` = edge.``to``
+      isProvisional = model.subjectVertexId = Some edge.``to`` && model.subjectAccessColor = Some edge.colorIndex
+      colorIndex = edge.colorIndex
+      isHighlighted = Set.contains edge.id model.highlightedEdgeIds }
 let transform (model: Model) =
     { nodes =
         (model.graph.vertices
          |> List.map (transformVertex model))
-      edges =
-        (model.graph.vertices
-         |> List.collect (fun vertex ->
-             vertex.accesses
-             |> List.collect (fun access ->
-                 access.factors
-                 |> Set.map (fun factor ->
-                     { id = factor.id
-                       from = factor.vertexId
-                       ``to`` = vertex.id
-                       isProvisional =
-                         (model.subjectAccessId = Some access.id
-                          && (access.factors |> Set.map (fun f -> f.vertexId)) = model.selectedFactors)
-                       colorIndex = access.colorIndex
-                       isHighlighted = Some access.id = model.highlightedAccess })
-                 |> Seq.toList))) }
+      edges = model.graph.edges |> List.map (transformEdge model) }
