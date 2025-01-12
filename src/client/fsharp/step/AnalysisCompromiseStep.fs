@@ -3,12 +3,21 @@ module AAG.Client.AnalysisCompromiseStep
 open Model
 open Bolero.Html
 
+// Placeholder
+// Hints
 let private getFactorsHint (model: Model) =
     if model.initiallyCompromisedVertexIds.IsEmpty then
         Hint.Error "Select at least one vertex to be compromised"
     else
         Hint.Info
 
+// Handle actions
+let handleClickedBackground dispatch = dispatch Msg.OpenMainMenuStep
+
+let handleClickedVertex (vertex: AAG.Vertex) (model: Model) dispatch =
+    dispatch (Msg.ToggleInitialCompromise vertex)
+
+// Open
 let ``open`` model =
     { page = model.page
       step = AnalysisCompromise
@@ -24,11 +33,7 @@ let ``open`` model =
       transitivelyCompromisedVertexIds = Set.empty
       json = model.json }
 
-let handleClickedBackground dispatch = dispatch Msg.OpenMainMenuStep
-
-let handleClickedVertex (vertex: AAG.Vertex) (model: Model) dispatch =
-    dispatch (Msg.ToggleInitialCompromise vertex)
-
+// Functionality
 let private removeInitialCompromiseVertex (vertex: AAG.Vertex) (model: Model) =
     let initiallyCompromisedVertexIds =
         Set.remove vertex.id model.initiallyCompromisedVertexIds
@@ -51,6 +56,7 @@ let toggleFactor (vertex: AAG.Vertex) (model: Model) =
     else
         addInitialCompromiseVertex vertex model
 
+// View
 let private showFactor (model: Model) id =
     match AAG.tryFindVertexById id model.graph with
     | Some vertex ->

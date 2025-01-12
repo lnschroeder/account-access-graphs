@@ -3,6 +3,8 @@ module AAG.Client.ModifyVertexStep
 open Model
 open Bolero.Html
 
+// Placeholder
+// Hints
 let private getVertexNameHint (model: Model) =
     let name = model.modifyVertexNameInput
 
@@ -15,17 +17,29 @@ let private getVertexNameHint (model: Model) =
     else
         Hint.Info
 
-let updateVertexName subjectVertexId name (model: Model) =
-    { model with
-        modifyVertexNameInput = name
-        graph = AAG.updateVertexName subjectVertexId name model.graph }
+let isValidVertex model =
+    (getVertexNameHint model).level <> Error
 
-let exitDeletingVertex (subjectVertex: AAG.Vertex) (model: Model) =
-    { model with
-        step = MainMenu
-        modifyVertexNameInput = ""
-        graph = AAG.removeVertexFromGraph subjectVertex.id model.graph }
+// Handle actions
+let handleClickedVertex (vertex: AAG.Vertex) (model: Model) dispatch =
+    if isValidVertex model then
+        dispatch (Msg.OpenModifyVertexStep(Some vertex.id))
+    else
+        dispatch Msg.IgnoreAction
 
+let handleClickedBackground (model: Model) dispatch =
+    if isValidVertex model then
+        dispatch (Msg.OpenMainMenuStep)
+    else
+        dispatch Msg.IgnoreAction
+
+let handleClickedEdge (access: AAG.Access) (model: Model) dispatch =
+    if isValidVertex model then
+        dispatch (Msg.OpenModifyAccessStep(access, access.name))
+    else
+        dispatch Msg.IgnoreAction
+
+// Open
 let private openInternal (vertex: AAG.Vertex) model =
     { page = model.page
       step = ModifyVertex
@@ -52,6 +66,19 @@ let ``open`` vertexId model =
         let graph = AAG.addVertex vertex model.graph
         openInternal vertex { model with graph = graph }
 
+// Functionality
+let updateVertexName subjectVertexId name (model: Model) =
+    { model with
+        modifyVertexNameInput = name
+        graph = AAG.updateVertexName subjectVertexId name model.graph }
+
+let exitDeletingVertex (subjectVertex: AAG.Vertex) (model: Model) =
+    { model with
+        step = MainMenu
+        modifyVertexNameInput = ""
+        graph = AAG.removeVertexFromGraph subjectVertex.id model.graph }
+
+// View
 let private showAccess dispatch (access: AAG.Access) =
     Template
         .ModifyVertex
@@ -61,27 +88,6 @@ let private showAccess dispatch (access: AAG.Access) =
         .Enter(fun _ -> dispatch (Msg.HighlightAccess(access)))
         .Leave(fun _ -> dispatch (Msg.DeHighlightAccess))
         .Elt()
-
-let isValidVertex model =
-    (getVertexNameHint model).level <> Error
-
-let handleClickedVertex (vertex: AAG.Vertex) (model: Model) dispatch =
-    if isValidVertex model then
-        dispatch (Msg.OpenModifyVertexStep(Some vertex.id))
-    else
-        dispatch Msg.IgnoreAction
-
-let handleClickedBackground (model: Model) dispatch =
-    if isValidVertex model then
-        dispatch (Msg.OpenMainMenuStep)
-    else
-        dispatch Msg.IgnoreAction
-
-let handleClickedEdge (access: AAG.Access) (model: Model) dispatch =
-    if isValidVertex model then
-        dispatch (Msg.OpenModifyAccessStep(access, access.name))
-    else
-        dispatch Msg.IgnoreAction
 
 let view jsRuntime (model: Model) dispatch =
     Utility.toggleButtonEnabled "ModifyVertexBackButton" (isValidVertex model) jsRuntime

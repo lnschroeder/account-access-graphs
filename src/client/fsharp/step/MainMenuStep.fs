@@ -5,7 +5,16 @@ open Model
 let clearGraph = Model.Init
 
 let exampleGraph = Model.Example
+/// Placeholder
+// Hints
+// Handle actions
+let handleClickedVertex (vertex: AAG.Vertex) (model: Model) dispatch =
+    dispatch (Msg.OpenModifyVertexStep(Some vertex.id))
 
+let handleClickedAccess (access: AAG.Access) dispatch =
+    dispatch (Msg.OpenModifyAccessStep(access, access.name))
+
+// Open
 let ``open`` model =
     { page = Endpoint.Main
       step = MainMenu
@@ -21,11 +30,8 @@ let ``open`` model =
       transitivelyCompromisedVertexIds = Set.empty
       json = model.json }
 
-let handleClickedVertex (vertex: AAG.Vertex) (model: Model) dispatch =
-    dispatch (Msg.OpenModifyVertexStep(Some vertex.id))
-
-let handleClickedAccess (access: AAG.Access) dispatch =
-    dispatch (Msg.OpenModifyAccessStep(access, access.name))
+// Functionality
+// View
 
 let view dispatch =
     Template

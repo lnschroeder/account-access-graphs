@@ -3,6 +3,11 @@ module AAG.Client.ModifyAccessStep
 open Model
 open Bolero.Html
 
+// Placeholder
+let private getAccessNameInputPlaceholder (model: Model) =
+    $"Defaults to: {model.subjectAccessName}"
+
+// Hints
 // TODO add check if colors are correct
 
 let private getFactorsHint (model: Model) = // TODO just pass minimal
@@ -33,15 +38,60 @@ let private getAccessNameHint (model: Model) =
             Hint.Info
     | None -> Hint.Error "Select a subject vertex first!"
 
-let private getAccessNameInputPlaceholder (model: Model) =
-    $"Defaults to: {model.subjectAccessName}"
+let private isValidAccess (model: Model) =
+    (getFactorsHint model).level <> Error
+    && (getAccessNameHint model).level <> Error
 
-let removeFactorFromSubject vertexId (access: AAG.Access) (model: Model) =
+// Handle actions
+let handleClickedVertex (vertex: AAG.Vertex) (model: Model) dispatch =
+    dispatch (Msg.ToggleFactorForSubject(vertex))
+
+let handleClickedBackground model dispatch =
+    if isValidAccess model then
+        dispatch (Msg.OpenModifyVertexStep model.subjectVertexId)
+    else
+        dispatch Msg.IgnoreAction
+
+// Open
+let ``open`` (access: AAG.Access) addAccessNameInput model =
+    match AAG.tryFindVertexById access.vertexId model.graph with
+    | Some subjectVertex ->
+        { page = Endpoint.Main
+          step = ModifyAccess
+          graph = model.graph
+          addAccessNameInput = addAccessNameInput
+          modifyVertexNameInput = subjectVertex.name
+          subjectVertexId = Some subjectVertex.id
+          subjectAccessColor = Some access.colorIndex
+          subjectAccessName = access.name
+          highlightedEdgeIds = Set.empty
+          selectedFactors =
+            AAG.getEdgesForAccess model.graph access
+            |> List.map (fun e -> e.from)
+            |> Set.ofList
+          initiallyCompromisedVertexIds = Set.empty
+          transitivelyCompromisedVertexIds = Set.empty
+          json = model.json }
+    | None -> model
+
+let exitDeletingAccess access model =
+    { model with
+        selectedFactors = Set.empty
+        addAccessNameInput = ""
+        graph =
+            match access with
+            | Some access -> AAG.removeAccessFromGraph access model.graph
+            | None -> model.graph
+        step = ModifyVertex }
+
+// Functionality
+
+let private removeFactorFromSubject vertexId (access: AAG.Access) (model: Model) =
     { model with
         graph = AAG.removeVertexFromAccess vertexId access model.graph
         selectedFactors = Set.remove vertexId model.selectedFactors }
 
-let addFactorToSubjectAccess vertexId (access: AAG.Access) (model: Model) =
+let private addFactorToSubjectAccess vertexId (access: AAG.Access) (model: Model) =
     { model with
         graph = AAG.addEdge (AAG.Edge.New vertexId access) model.graph
         selectedFactors = Set.add vertexId model.selectedFactors }
@@ -65,29 +115,6 @@ let toggleFactorForSubject (vertex: AAG.Vertex) (model: Model) =
         | None -> model
     | None -> model
 
-let exitDeletingAccess access model =
-    { model with
-        selectedFactors = Set.empty
-        addAccessNameInput = ""
-        graph =
-            match access with
-            | Some access -> AAG.removeAccessFromGraph access model.graph
-            | None -> model.graph
-        step = ModifyVertex }
-
-let private isValidAccess (model: Model) =
-    (getFactorsHint model).level <> Error
-    && (getAccessNameHint model).level <> Error
-
-let handleClickedVertex (vertex: AAG.Vertex) (model: Model) dispatch =
-    dispatch (Msg.ToggleFactorForSubject(vertex))
-
-let handleClickedBackground model dispatch =
-    if isValidAccess model then
-        dispatch (Msg.OpenModifyVertexStep model.subjectVertexId)
-    else
-        dispatch Msg.IgnoreAction
-
 let updateAccessName (access: AAG.Access option) name (model: Model) =
     match model.subjectVertexId with
     | Some subjectVertexId ->
@@ -110,6 +137,7 @@ let updateAccessName (access: AAG.Access option) name (model: Model) =
             model
     | None -> model
 
+// View
 let private showFactor (model: Model) dispatch id =
     match AAG.tryFindVertexById id model.graph with
     | Some vertex ->
@@ -124,29 +152,6 @@ let private showFactor (model: Model) dispatch id =
             .Factor()
             .Name("INVALID")
             .Elt()
-
-let ``open`` (access: AAG.Access) addAccessNameInput model =
-    // match access with
-    // | Some access ->
-    match AAG.tryFindVertexById access.vertexId model.graph with
-    | Some subjectVertex ->
-        { page = Endpoint.Main
-          step = ModifyAccess
-          graph = model.graph
-          addAccessNameInput = addAccessNameInput
-          modifyVertexNameInput = subjectVertex.name
-          subjectVertexId = Some subjectVertex.id
-          subjectAccessColor = Some access.colorIndex
-          subjectAccessName = access.name
-          highlightedEdgeIds = Set.empty
-          selectedFactors =
-            AAG.getEdgesForAccess model.graph access
-            |> List.map (fun e -> e.from)
-            |> Set.ofList
-          initiallyCompromisedVertexIds = Set.empty
-          transitivelyCompromisedVertexIds = Set.empty
-          json = model.json }
-    | None -> model
 
 let view jsRuntime (model: Model) dispatch =
     Utility.toggleButtonEnabled "ModifyAccessBackButton" (isValidAccess model) jsRuntime
