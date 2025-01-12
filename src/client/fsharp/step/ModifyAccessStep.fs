@@ -125,7 +125,7 @@ let updateAccessName (access: AAG.Access option) name (model: Model) =
                 if name = "" then
                     AAG.getNextAvailableName subjectVertexId model.graph
                 else
-                    model.subjectAccessName
+                    name
 
             { model with
                 graph =
