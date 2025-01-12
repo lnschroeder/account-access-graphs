@@ -8,7 +8,7 @@ let exampleGraph = Model.Example
 /// Placeholder
 // Hints
 // Handle actions
-let handleClickedVertex (vertex: AAG.Vertex) (model: Model) dispatch =
+let handleClickedVertex (vertex: AAG.Vertex) dispatch =
     dispatch (Msg.OpenModifyVertexStep(Some vertex.id))
 
 let handleClickedAccess (access: AAG.Access) dispatch =

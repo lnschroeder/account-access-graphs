@@ -14,7 +14,7 @@ let private getFactorsHint (model: Model) =
 // Handle actions
 let handleClickedBackground dispatch = dispatch Msg.OpenMainMenuStep
 
-let handleClickedVertex (vertex: AAG.Vertex) (model: Model) dispatch =
+let handleClickedVertex (vertex: AAG.Vertex) dispatch =
     dispatch (Msg.ToggleInitialCompromise vertex)
 
 // Open
@@ -72,7 +72,7 @@ let private showFactor (model: Model) id =
             .Name("INVALID")
             .Elt()
 
-let view jsRuntime (model: Model) dispatch =
+let view (model: Model) dispatch =
     Template
         .AnalysisCompromise()
         .Factors(forEach model.initiallyCompromisedVertexIds (showFactor model))

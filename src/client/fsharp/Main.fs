@@ -40,10 +40,10 @@ let private handleClickedVertex (idAsString: string) model dispatch =
     match vertex with
     | Some vertex ->
         match model.step with
-        | MainMenu -> MainMenuStep.handleClickedVertex vertex model dispatch
+        | MainMenu -> MainMenuStep.handleClickedVertex vertex dispatch
         | ModifyVertex -> ModifyVertexStep.handleClickedVertex vertex model dispatch
-        | ModifyAccess -> ModifyAccessStep.handleClickedVertex vertex model dispatch
-        | AnalysisCompromise -> AnalysisCompromiseStep.handleClickedVertex vertex model dispatch
+        | ModifyAccess -> ModifyAccessStep.handleClickedVertex vertex dispatch
+        | AnalysisCompromise -> AnalysisCompromiseStep.handleClickedVertex vertex dispatch
     | None -> dispatch Msg.IgnoreAction
 
 let private handleClickedVisEdge (idAsString: string) model dispatch =
@@ -127,7 +127,7 @@ let private view (jsRuntime: IJSRuntime) model dispatch =
                     | MainMenu -> MainMenuStep.view dispatch
                     | ModifyAccess -> ModifyAccessStep.view jsRuntime model dispatch
                     | ModifyVertex -> ModifyVertexStep.view jsRuntime model dispatch
-                    | AnalysisCompromise -> AnalysisCompromiseStep.view jsRuntime model dispatch
+                    | AnalysisCompromise -> AnalysisCompromiseStep.view model dispatch
         )
         .ClickedVertexInput("", (fun idAsString -> handleClickedVertex idAsString model dispatch))
         .ClickedEdgeInput("", (fun idAsString -> handleClickedVisEdge idAsString model dispatch))

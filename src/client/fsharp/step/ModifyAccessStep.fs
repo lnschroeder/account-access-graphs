@@ -43,7 +43,7 @@ let private isValidAccess (model: Model) =
     && (getAccessNameHint model).level <> Error
 
 // Handle actions
-let handleClickedVertex (vertex: AAG.Vertex) (model: Model) dispatch =
+let handleClickedVertex (vertex: AAG.Vertex) dispatch =
     dispatch (Msg.ToggleFactorForSubject(vertex))
 
 let handleClickedBackground model dispatch =
@@ -138,7 +138,7 @@ let updateAccessName (access: AAG.Access option) name (model: Model) =
     | None -> model
 
 // View
-let private showFactor (model: Model) dispatch id =
+let private showFactor (model: Model) id =
     match AAG.tryFindVertexById id model.graph with
     | Some vertex ->
         Template
@@ -176,7 +176,7 @@ let view jsRuntime (model: Model) dispatch =
                     )
                     .AccessNameInputPlaceholder(getAccessNameInputPlaceholder model)
                     .AccessNameHint((getAccessNameHint model).value)
-                    .Factors(forEach model.selectedFactors (showFactor model dispatch))
+                    .Factors(forEach model.selectedFactors (showFactor model))
                     .FactorsHint((getFactorsHint model).value)
                     .Elt()
             | None -> Template.ModifyAccess().Elt()

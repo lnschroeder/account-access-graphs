@@ -220,7 +220,6 @@ let getAccessesWithName vertexId name graph =
     getAccesses vertexId graph
     |> Set.filter (fun a -> a.name = name)
 
-
 //
 let private getNewlyCompromisedVertexId
     (compromisedVertexIds: Guid Set)
