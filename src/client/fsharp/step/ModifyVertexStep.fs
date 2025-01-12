@@ -120,6 +120,14 @@ let view jsRuntime (model: Model) dispatch =
                             ""
                         )
                     ))
+                .VinitInput(
+                    subjectVertex.isVinit,
+                    (fun b ->
+                        if b then
+                            dispatch (Msg.SetVinit subjectVertex)
+                        else
+                            dispatch (Msg.UnsetVinit subjectVertex))
+                )
                 .BackButton(fun _ -> dispatch Msg.OpenMainMenuStep)
                 .DeleteButton(fun _ -> dispatch (Msg.ClickedDeleteVertex subjectVertexId))
                 .Elt()
