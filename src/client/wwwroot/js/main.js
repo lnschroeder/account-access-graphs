@@ -50,6 +50,7 @@ const options = () => ({
     borderWidthSelected: 1,
     font: {
       face: getCssVariable("--bulma-body-family"),
+      multi: "md",
     },
   },
   edges: {
@@ -109,6 +110,7 @@ function updateNetwork(networkDTO) {
     let fontColor = getCssVariable("--bulma-text-bold");
     let borderDashes = false;
     let borderColor = fontColor;
+    let label = node.label + "\n" + node.score;
 
     if (node.isSubject) {
       borderColor = getCssVariable("--bulma-warning-on-scheme");
@@ -139,7 +141,7 @@ function updateNetwork(networkDTO) {
 
     data.nodes.update({
       id: node.id,
-      label: node.label,
+      label: label,
       borderWidth: borderWidth,
       color: {
         border: borderColor,

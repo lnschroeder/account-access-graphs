@@ -108,6 +108,7 @@ let private update (http: HttpClient) message model =
     | Msg.ClickedDeleteVertex subjectVertex -> ModifyVertexStep.exitDeletingVertex subjectVertex model, Cmd.none
     | Msg.HighlightAccess access -> highlightAccess access model, Cmd.none
     | Msg.DeHighlightAccess -> deHighlightAccess model, Cmd.none
+    | Msg.SetScore (vertex, score) -> ModifyVertexStep.setScore vertex score model, Cmd.none
     // AnalysisCompromise
     | Msg.OpenAnalysisCompromise -> AnalysisCompromiseStep.``open`` model, Cmd.none
     | Msg.ToggleInitialCompromise vertex -> AnalysisCompromiseStep.toggleFactor vertex model, Cmd.none

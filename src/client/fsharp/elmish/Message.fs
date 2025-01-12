@@ -15,6 +15,7 @@ type Message =
     | OpenVinit
     | UnsetVinit of AAG.Vertex
     | SetVinit of AAG.Vertex
+    | SetScore of AAG.Vertex * int
     | HighlightAccess of AAG.Access
     | DeHighlightAccess
     | ToggleFactorForSubject of AAG.Vertex

@@ -84,6 +84,9 @@ let exitDeletingVertex vertexId (model: Model) =
         modifyVertexNameInput = ""
         graph = AAG.removeVertexFromGraph vertexId model.graph }
 
+let setScore (vertex: AAG.Vertex) score (model: Model) =
+    { model with graph = AAG.setScore model.graph score vertex.id }
+
 // View
 let private showAccess dispatch (access: AAG.Access) =
     Template
@@ -128,6 +131,7 @@ let view jsRuntime (model: Model) dispatch =
                         else
                             dispatch (Msg.UnsetVinit subjectVertex))
                 )
+                .ScoreInput(subjectVertex.score, fun i -> dispatch (Msg.SetScore (subjectVertex, i)))
                 .BackButton(fun _ -> dispatch Msg.OpenMainMenuStep)
                 .DeleteButton(fun _ -> dispatch (Msg.ClickedDeleteVertex subjectVertexId))
                 .Elt()

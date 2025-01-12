@@ -5,11 +5,13 @@ open System
 type Vertex =
     { id: Guid
       name: string
-      isVinit: bool }
+      isVinit: bool
+      score: int }
     static member Default =
         { id = Guid.NewGuid()
           name = ""
-          isVinit = false }
+          isVinit = false
+          score = 1 }
 
 and Edge =
     { id: Guid
@@ -40,17 +42,20 @@ and Graph =
         let v1 =
             { id = Guid.Parse("1578d946-7c48-41a6-baf2-0386979c9de1")
               name = "test"
-              isVinit = false }
+              isVinit = false
+              score = 1 }
 
         let v2 =
             { id = Guid.Parse("1578d946-7c48-41a6-baf2-0386979c9de2")
               name = "test2"
-              isVinit = false }
+              isVinit = false
+              score = 2}
 
         let v3 =
             { id = Guid.Parse("1578d946-7c48-41a6-baf2-0386979c9de3")
               name = "test222"
-              isVinit = true }
+              isVinit = true
+              score = 3}
 
         let a1e1 =
             { id = Guid.Parse("2578d946-7c48-41a6-baf2-0386979c9de1")
@@ -150,6 +155,15 @@ let setVinit graph isVinit vertexId =
             |> List.map (fun v ->
                 if v.id = vertexId then
                     { v with isVinit = isVinit }
+                else
+                    v) }
+let setScore graph score vertexId =
+    { graph with
+        vertices =
+            graph.vertices
+            |> List.map (fun v ->
+                if v.id = vertexId then
+                    { v with score = score }
                 else
                     v) }
 //
