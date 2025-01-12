@@ -92,7 +92,7 @@ let private update (http: HttpClient) message model =
             http.GetFromJsonAsync<AAG.Graph>("/resources/hammann-fig14.json")
 
         let cmd = Cmd.OfTask.either getGraph () Msg.GotGraph Msg.Error
-        Model.Init, cmd
+        model, cmd
     // ModifyAccess
     | Msg.OpenModifyAccessStep (access, addAccessNameInput) ->
         ModifyAccessStep.``open`` access addAccessNameInput model, Cmd.none
