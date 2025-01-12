@@ -78,6 +78,8 @@ const colors = [
 
 // removes, updates, and adds nodes and edges to the network
 function updateNetwork(networkDTO) {
+  let step = networkDTO.step;
+  let subjectVertexId = networkDTO.subjectVertexId;
   let nodes = networkDTO.nodes;
   let edges = networkDTO.edges;
   let oldNodeIds = data.nodes.map((item) => item.id);
@@ -110,12 +112,16 @@ function updateNetwork(networkDTO) {
     let fontColor = getCssVariable("--bulma-text-bold");
     let borderDashes = false;
     let borderColor = fontColor;
-    let label = node.label + "\n" + node.score;
+    let label = node.label;
 
-    if (node.isVinit) {
+    if (node.isVinit && (step == "Vinit" || (step == "ModifyVertex" && subjectVertexId == node.id)) ) {
       backgroundColor = getCssVariable("--bulma-success");
       fontColor = getCssVariable("--bulma-text-bold-invert");
       borderColor = fontColor;
+    }
+
+    if (step == "ModifyVertex" && subjectVertexId == node.id) {
+      label = node.label + "\n" + node.score;
     }
 
     if (node.isSubject) {

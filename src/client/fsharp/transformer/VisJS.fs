@@ -21,7 +21,12 @@ type Edge =
       isHighlighted: bool
       colorIndex: byte }
 
-type Network = { nodes: Node list; edges: Edge list }
+type Network =
+    { nodes: Node list
+      edges: Edge list
+      step: string
+      subjectVertexId: Guid option
+     }
 
 let private transformVertex (model: Model) (vertex: AAG.Vertex) =
     let isInitiallyCompromised =
@@ -56,4 +61,7 @@ let transform (model: Model) =
          |> List.map (transformVertex model))
       edges =
         model.graph.edges
-        |> List.map (transformEdge model) }
+        |> List.map (transformEdge model)
+      step = model.step.ToString()
+      subjectVertexId = model.subjectVertexId
+    }
