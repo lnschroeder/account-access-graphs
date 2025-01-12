@@ -245,6 +245,9 @@ let findEdgesOfAccess graph (access: Access) = // TODO change id to option
     graph.edges
     |> List.filter (isEdgeInAccess access)
 
+let findEdge graph vertexId (access: Access) =
+    findEdgesOfAccess graph access |> List.find (fun e -> e.from = vertexId)
+
 // graph.vertices
 // |> List.tryPick (fun vertex ->
 //     vertex.accesses
