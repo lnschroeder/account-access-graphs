@@ -95,10 +95,6 @@ let private isEdgeInAccess (access: Access) (edge: Edge) =
 let private isAccessFulfilled (vertexIds: Guid Set) (edges: Edge list) =
     Set.isSubset (edges |> List.map (fun e -> e.from) |> Set.ofList) vertexIds
 
-let isInvalidVertexName value = String.IsNullOrWhiteSpace(value)
-
-let isInvalidAccessName value = String.IsNullOrWhiteSpace(value)
-
 let getVerticesWithName vertexName graph =
     graph.vertices
     |> Seq.filter (fun v -> v.name = vertexName)

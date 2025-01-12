@@ -59,6 +59,8 @@ and Model =
 let accessNameInputPlaceholder (model: Model) =
     $"Defaults to: {model.subjectAccessName}"
 
+let isValidTextValue (value: string) = value <> "" && value = value.Trim()
+
 let selectedFactors (model: Model) =
     match model.subjectVertexId with
     | Some subjectVertexId ->
@@ -80,8 +82,8 @@ let addAccessNameInput (model: Model) =
 
         if value = "" then
             Hint.Info
-        elif AAG.isInvalidAccessName value then
-            Hint.Error "Invalid name"
+        elif not (isValidTextValue value) then
+            Hint.Error "No leading and trailing whitespaces allowed"
         elif Seq.length (AAG.getAccessesWithName subjectVertexId value model.graph) > 1 then
             Hint.Error "Access name already taken for that vertex"
         else
@@ -93,8 +95,8 @@ let modifyVertexNameInput (model: Model) =
 
     if value = "" then
         Hint.Required
-    elif AAG.isInvalidVertexName value then
-        Hint.Error "Invalid name"
+    elif not (isValidTextValue value) then
+        Hint.Error "No leading and trailing whitespaces allowed"
     elif Seq.length (AAG.getVerticesWithName value model.graph) > 1 then
         Hint.Error "Vertex already exists"
     else
