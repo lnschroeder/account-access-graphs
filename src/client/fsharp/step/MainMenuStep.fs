@@ -5,8 +5,7 @@ open Model
 let clearGraph = Model.Init
 
 let exampleGraph = Model.Example
-/// Placeholder
-// Hints
+// Validity
 // Handle actions
 let handleClickedVertex (vertex: AAG.Vertex) dispatch =
     dispatch (Msg.OpenModifyVertexStep(Some vertex.id))

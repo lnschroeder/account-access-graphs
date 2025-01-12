@@ -3,22 +3,8 @@ module AAG.Client.ModifyVertexStep
 open Model
 open Bolero.Html
 
-// Placeholder
-// Hints
-let private getVertexNameHint (model: Model) =
-    let name = model.modifyVertexNameInput
-
-    if name = "" then
-        Hint.Required
-    elif AAG.isInvalidVertexName name then
-        Hint.Error "Invalid name"
-    elif Seq.length (AAG.getVerticesWithName name model.graph) > 1 then
-        Hint.Error "Vertex already exists"
-    else
-        Hint.Info
-
-let isValidVertex model =
-    (getVertexNameHint model).level <> Error
+// Validity
+let isValidVertex model = isValid model modifyVertexNameInput
 
 // Handle actions
 let handleClickedVertex (vertex: AAG.Vertex) (model: Model) dispatch =
@@ -103,7 +89,7 @@ let view jsRuntime (model: Model) dispatch =
                     model.modifyVertexNameInput,
                     (fun v -> dispatch (Msg.ModifiedVertexName(subjectVertexId, v)))
                 )
-                .SubjectNameHint((getVertexNameHint model).value)
+                .SubjectNameHint((modifyVertexNameInput model).value)
                 .Accesses(forEach (AAG.getAccesses subjectVertex.id model.graph) (showAccess dispatch))
                 .AddAccessButton(fun _ ->
                     dispatch (

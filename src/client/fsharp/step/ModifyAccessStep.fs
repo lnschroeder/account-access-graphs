@@ -3,44 +3,10 @@ module AAG.Client.ModifyAccessStep
 open Model
 open Bolero.Html
 
-// Placeholder
-let private getAccessNameInputPlaceholder (model: Model) =
-    $"Defaults to: {model.subjectAccessName}"
-
-// Hints
-// TODO add check if colors are correct
-
-let private getFactorsHint (model: Model) = // TODO just pass minimal
-    match model.subjectVertexId with
-    | Some subjectVertexId ->
-        if model.selectedFactors.IsEmpty then
-            Hint.Error "Select at least one factor or delete the access"
-        elif Seq.contains subjectVertexId model.selectedFactors then
-            Hint.Error "Self-references are not allowed"
-        elif Seq.length (AAG.getAccessesWithFactors subjectVertexId model.selectedFactors model.graph) > 1 then
-            Hint.Error "There is already an access with the same factors"
-        else
-            Hint.Info
-    | None -> Hint.Error "No subject vertex selected yet"
-
-let private getAccessNameHint (model: Model) =
-    match model.subjectVertexId with
-    | Some subjectVertexId ->
-        let name = model.addAccessNameInput
-
-        if name = "" then
-            Hint.Info
-        elif AAG.isInvalidAccessName name then
-            Hint.Error "Invalid name"
-        elif Seq.length (AAG.getAccessesWithName subjectVertexId name model.graph) > 1 then
-            Hint.Error "Access name already taken for that vertex"
-        else
-            Hint.Info
-    | None -> Hint.Error "Select a subject vertex first!"
-
+// Validity
 let private isValidAccess (model: Model) =
-    (getFactorsHint model).level <> Error
-    && (getAccessNameHint model).level <> Error
+    isValid model selectedFactors
+    && isValid model addAccessNameInput
 
 // Handle actions
 let handleClickedVertex (vertex: AAG.Vertex) dispatch =
@@ -120,7 +86,7 @@ let updateAccessName (access: AAG.Access option) name (model: Model) =
     | Some subjectVertexId ->
         let model = { model with addAccessNameInput = name }
 
-        if (getAccessNameHint model).level <> Error then
+        if (addAccessNameInput model).level <> Error then
             let subjectAccessName =
                 if name = "" then
                     AAG.getNextAvailableName subjectVertexId model.graph
@@ -174,10 +140,10 @@ let view jsRuntime (model: Model) dispatch =
                         model.addAccessNameInput,
                         (fun v -> dispatch (Msg.ModifiedAccessName(subjectAccess, v)))
                     )
-                    .AccessNameInputPlaceholder(getAccessNameInputPlaceholder model)
-                    .AccessNameHint((getAccessNameHint model).value)
+                    .AccessNameInputPlaceholder(accessNameInputPlaceholder model)
+                    .AccessNameHint((addAccessNameInput model).value)
                     .Factors(forEach model.selectedFactors (showFactor model))
-                    .FactorsHint((getFactorsHint model).value)
+                    .FactorsHint((selectedFactors model).value)
                     .Elt()
             | None -> Template.ModifyAccess().Elt()
         | None -> Template.ModifyAccess().Elt()

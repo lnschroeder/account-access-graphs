@@ -3,14 +3,7 @@ module AAG.Client.AnalysisCompromiseStep
 open Model
 open Bolero.Html
 
-// Placeholder
-// Hints
-let private getFactorsHint (model: Model) =
-    if model.initiallyCompromisedVertexIds.IsEmpty then
-        Hint.Error "Select at least one vertex to be compromised"
-    else
-        Hint.Info
-
+// Validity
 // Handle actions
 let handleClickedBackground dispatch = dispatch Msg.OpenMainMenuStep
 
@@ -76,6 +69,6 @@ let view (model: Model) dispatch =
     Template
         .AnalysisCompromise()
         .Factors(forEach model.initiallyCompromisedVertexIds (showFactor model))
-        .FactorsHint((getFactorsHint model).value)
+        .FactorsHint((initiallyCompromisedVertexIds model).value)
         .BackButton(fun _ -> dispatch Msg.OpenMainMenuStep)
         .Elt()
