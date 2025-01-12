@@ -85,7 +85,7 @@ let exitDeletingVertex vertexId (model: Model) =
         graph = AAG.removeVertexFromGraph vertexId model.graph }
 
 let setScore (vertex: AAG.Vertex) score (model: Model) =
-    { model with graph = AAG.setScore model.graph score vertex.id }
+    { model with graph = AAG.setScore model.graph (max 0 score) vertex.id }
 
 // View
 let private showAccess dispatch (access: AAG.Access) =
