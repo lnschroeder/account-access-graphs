@@ -31,6 +31,7 @@ let private handleClickedBackground model dispatch =
     | ModifyVertex -> ModifyVertexStep.handleClickedBackground model dispatch
     | ModifyAccess -> ModifyAccessStep.handleClickedBackground model dispatch
     | AnalysisCompromise -> AnalysisCompromiseStep.handleClickedBackground model dispatch
+    | AnalysisScore -> dispatch Msg.IgnoreAction
     | Vinit -> VinitStep.handleClickedBackground dispatch
 
 let private handleClickedVertex (idAsString: string) model dispatch =
@@ -46,6 +47,7 @@ let private handleClickedVertex (idAsString: string) model dispatch =
         | ModifyVertex -> ModifyVertexStep.handleClickedVertex vertex model dispatch
         | ModifyAccess -> ModifyAccessStep.handleClickedVertex vertex dispatch
         | AnalysisCompromise -> AnalysisCompromiseStep.handleClickedVertex vertex dispatch
+        | AnalysisScore -> dispatch Msg.IgnoreAction
         | Vinit -> VinitStep.handleClickedVertex vertex dispatch
     | None -> dispatch Msg.IgnoreAction
 
@@ -112,11 +114,13 @@ let private update (http: HttpClient) message model =
     // AnalysisCompromise
     | Msg.OpenAnalysisCompromise -> AnalysisCompromiseStep.``open`` model, Cmd.none
     | Msg.ToggleInitialCompromise vertex -> AnalysisCompromiseStep.toggleFactor vertex model, Cmd.none
+    // AnalysisScore
+    | Msg.OpenAnalysisScore -> AnalysisScoreStep.``open`` model, Cmd.none
+    | Msg.ClickedComputeScoreButton -> AnalysisScoreStep.compute model, Cmd.none
     // Vinit
     | Msg.OpenVinit -> VinitStep.``open`` model, Cmd.none
     | Msg.SetVinit vertex -> VinitStep.setVinit vertex true model, Cmd.none
     | Msg.UnsetVinit vertex -> VinitStep.setVinit vertex false model, Cmd.none
-
 let private view (jsRuntime: IJSRuntime) model dispatch =
     jsRuntime.InvokeVoidAsync("updateNetwork", VisJSTransformer.transform model)
     |> ignore
@@ -141,6 +145,7 @@ let private view (jsRuntime: IJSRuntime) model dispatch =
                     | ModifyAccess -> ModifyAccessStep.view jsRuntime model dispatch
                     | ModifyVertex -> ModifyVertexStep.view jsRuntime model dispatch
                     | AnalysisCompromise -> AnalysisCompromiseStep.view model dispatch
+                    | AnalysisScore -> AnalysisScoreStep.view model dispatch
                     | Vinit -> VinitStep.view model dispatch
         )
         .ClickedVertexInput("", (fun idAsString -> handleClickedVertex idAsString model dispatch))

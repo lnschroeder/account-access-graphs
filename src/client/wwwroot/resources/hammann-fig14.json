@@ -4,139 +4,162 @@
       "id": "c163653e-1d6b-4382-bfd1-32aea95ad8ba",
       "name": "Binancefull",
       "isVinit": false,
-      "score": 1
+      "score": 1024,
+      "_score": 1024
     },
     {
       "id": "aa6a4926-de2d-478e-985b-50f895be7186",
       "name": "pwdBinance",
-      "isVinit": false,
-      "score": 1
+      "isVinit": true,
+      "score": 1,
+      "_score": 1
     },
     {
       "id": "9e54484d-c3c2-4217-8ad6-925ac752d684",
       "name": "Binancebasic",
       "isVinit": false,
-      "score": 1
+      "score": 1024,
+      "_score": 1024
     },
     {
       "id": "0888724c-ac85-4875-9bbb-3d8fa07c3305",
       "name": "codeBinance",
       "isVinit": false,
-      "score": 1
+      "score": 1024,
+      "_score": 1024
     },
     {
       "id": "d3336ef7-e3f5-4d30-b454-9e2d52685b30",
       "name": "Gmail",
       "isVinit": false,
-      "score": 1
+      "score": 1024,
+      "_score": 1024
     },
     {
       "id": "0144c079-2c26-4180-ad2c-92d2dc4f25e6",
       "name": "phone",
-      "isVinit": false,
-      "score": 1
+      "isVinit": true,
+      "score": 1,
+      "_score": 1
     },
     {
       "id": "34821a3e-91e8-48f8-9078-e19f9b176dab",
       "name": "finger",
-      "isVinit": false,
-      "score": 1
+      "isVinit": true,
+      "score": 1,
+      "_score": 1
     },
     {
       "id": "08ba1ed4-2ef6-4f64-b8c8-895dfa6b3340",
       "name": "PIN",
-      "isVinit": false,
-      "score": 1
+      "isVinit": true,
+      "score": 1,
+      "_score": 1
     },
     {
       "id": "e7419d95-0f5f-48b2-a8e4-2c898b39167e",
       "name": "phone\u2217",
       "isVinit": false,
-      "score": 1
+      "score": 1024,
+      "_score": 1024
     },
     {
       "id": "6c284e0c-92f5-4f4b-97dd-9dff2410198e",
       "name": "pwdlaptop",
-      "isVinit": false,
-      "score": 1
+      "isVinit": true,
+      "score": 1,
+      "_score": 1
     },
     {
       "id": "38013cd0-4e8f-4d80-863c-1c6da5557271",
       "name": "laptop\u2217",
       "isVinit": false,
-      "score": 1
+      "score": 1024,
+      "_score": 1024
     },
     {
       "id": "5efbe769-44bd-428f-8247-1650a2836b7e",
       "name": "laptop",
       "isVinit": false,
-      "score": 1
+      "score": 1024,
+      "_score": 1024
     },
     {
       "id": "5ee93c82-00a8-40d6-a331-428aa5da0090",
       "name": "officeKey",
-      "isVinit": false,
-      "score": 1
+      "isVinit": true,
+      "score": 1,
+      "_score": 1
     },
     {
       "id": "10b2626e-5b6b-4863-8a0d-548488346162",
       "name": "homeKey",
-      "isVinit": false,
-      "score": 1
+      "isVinit": true,
+      "score": 1,
+      "_score": 1
     },
     {
       "id": "47795eff-a860-46ea-a406-477cac71968c",
       "name": "homePC\u2217",
       "isVinit": false,
-      "score": 1
+      "score": 1024,
+      "_score": 1024
     },
     {
       "id": "7a26b0e9-ae28-480d-bbbf-9ff14a21b69d",
       "name": "SMS",
       "isVinit": false,
-      "score": 1
+      "score": 1024,
+      "_score": 1024
     },
     {
       "id": "e67724a0-a9e9-497f-bfa9-fe643d80d8c6",
       "name": "codeGoogle",
       "isVinit": false,
-      "score": 1
+      "score": 1024,
+      "_score": 1024
     },
     {
       "id": "c7fbd9e0-f218-406c-9f38-42203215355f",
       "name": "Googlebasic",
       "isVinit": false,
-      "score": 1
+      "score": 1024,
+      "_score": 1024
     },
     {
       "id": "80bafe19-6445-4afa-abb5-d777f959ecde",
       "name": "pwdGoogle",
-      "isVinit": false,
-      "score": 1
+      "isVinit": true,
+      "score": 1,
+      "_score": 1
     },
     {
       "id": "d037d8b9-b179-43a9-a9c8-eb8ccc436ceb",
       "name": "Googlefull",
       "isVinit": false,
-      "score": 1
+      "score": 1024,
+      "_score": 1024
     },
     {
       "id": "fd757ca1-4730-42db-80b0-672d4589d626",
       "name": "accmail",
       "isVinit": false,
-      "score": 1
+      "score": 1024,
+      "_score": 1024
     },
     {
       "id": "b3131624-5f7b-4351-a7f1-24e7d1b34d5f",
       "name": "pwdmail",
-      "isVinit": false,
-      "score": 1
+      "isVinit": true,
+      "score": 1,
+      "_score": 1
     },
     {
       "id": "154e0380-20ea-488b-a5a7-14bfeefad42a",
       "name": "oldpwdGoogle",
-      "isVinit": false,
-      "score": 1
+      "isVinit": true,
+      "score": 1,
+      "_score": 1
     }
   ],
   "edges": [

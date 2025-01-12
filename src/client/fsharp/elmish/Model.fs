@@ -20,6 +20,7 @@ and Step =
     | ModifyAccess
     | ModifyVertex
     | AnalysisCompromise
+    | AnalysisScore
     | Vinit
 
 and DeserializedGraph =

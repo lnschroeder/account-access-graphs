@@ -12,6 +12,7 @@ type Message =
     | OpenModifyVertexStep of Guid option
     | OpenModifyAccessStep of AAG.Access * string
     | OpenAnalysisCompromise
+    | OpenAnalysisScore
     | OpenVinit
     | UnsetVinit of AAG.Vertex
     | SetVinit of AAG.Vertex
@@ -25,6 +26,7 @@ type Message =
     | ClickedClearGraph
     | ClickedExampleGraph
     | ClickedExample2Graph
+    | ClickedComputeScoreButton
     | ModifiedVertexName of Guid * string
     | ModifiedAccessName of AAG.Access option * string
     | ModifiedGraphJson of string

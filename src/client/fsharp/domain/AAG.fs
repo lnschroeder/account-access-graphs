@@ -6,12 +6,14 @@ type Vertex =
     { id: Guid
       name: string
       isVinit: bool
-      score: int }
+      score: int
+      _score: int }
     static member Default =
         { id = Guid.NewGuid()
           name = ""
           isVinit = false
-          score = 1 }
+          score = 1
+          _score = 1 }
 
 and Edge =
     { id: Guid
@@ -43,19 +45,22 @@ and Graph =
             { id = Guid.Parse("1578d946-7c48-41a6-baf2-0386979c9de1")
               name = "test"
               isVinit = false
-              score = 1 }
+              score = 1
+              _score = 1 }
 
         let v2 =
             { id = Guid.Parse("1578d946-7c48-41a6-baf2-0386979c9de2")
               name = "test2"
               isVinit = false
-              score = 2}
+              score = 2
+              _score = 2 }
 
         let v3 =
             { id = Guid.Parse("1578d946-7c48-41a6-baf2-0386979c9de3")
               name = "test222"
               isVinit = true
-              score = 3}
+              score = 3
+              _score = 3 }
 
         let a1e1 =
             { id = Guid.Parse("2578d946-7c48-41a6-baf2-0386979c9de1")
@@ -157,13 +162,14 @@ let setVinit graph isVinit vertexId =
                     { v with isVinit = isVinit }
                 else
                     v) }
+
 let setScore graph score vertexId =
     { graph with
         vertices =
             graph.vertices
             |> List.map (fun v ->
                 if v.id = vertexId then
-                    { v with score = score }
+                    { v with score = score; _score = score }
                 else
                     v) }
 //
@@ -274,3 +280,31 @@ let getCompromisedVerticesOfGraph (compromisedVertexIds: Guid Set) (graph: Graph
     getCompromisedVertices compromisedVertexIds graph graph.vertices
 
 ////
+let resetScores graph =
+    { graph with
+        vertices =
+            graph.vertices
+            |> List.map (fun v -> { v with _score = v.score }) }
+
+let private recomputeScore graph vertexId =
+    let _scores =
+        getAccesses vertexId graph
+        |> Set.map (getEdgesForAccess graph)
+        |> Set.map (fun es ->
+            List.sum (
+                es
+                |> List.map (fun e ->
+                    (tryFindVertexById e.from graph
+                    |> Option.map (fun v -> v._score)
+                    |> Option.defaultValue Int32.MinValue))
+            ))
+    if _scores.IsEmpty then
+        Int32.MaxValue
+    else
+        Set.minElement _scores
+
+let stepRecomputeScore graph =
+    { graph with
+        vertices =
+            graph.vertices
+            |> List.map (fun v -> { v with _score = min v._score (recomputeScore graph v.id) }) }

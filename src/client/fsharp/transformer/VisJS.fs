@@ -11,7 +11,8 @@ type Node =
       isInitiallyCompromised: bool
       isTransitivelyCompromised: bool
       isVinit: bool
-      score: int }
+      score: int
+      _score: int }
 
 type Edge =
     { id: Guid
@@ -25,8 +26,7 @@ type Network =
     { nodes: Node list
       edges: Edge list
       step: string
-      subjectVertexId: Guid option
-     }
+      subjectVertexId: Guid option }
 
 let private transformVertex (model: Model) (vertex: AAG.Vertex) =
     let isInitiallyCompromised =
@@ -43,7 +43,8 @@ let private transformVertex (model: Model) (vertex: AAG.Vertex) =
       isInitiallyCompromised = isInitiallyCompromised
       isTransitivelyCompromised = isTransitivelyCompromised
       isVinit = vertex.isVinit
-      score = vertex.score }
+      score = vertex.score
+      _score = vertex._score }
 
 let private transformEdge (model: Model) (edge: AAG.Edge) =
     { id = edge.id
@@ -63,5 +64,4 @@ let transform (model: Model) =
         model.graph.edges
         |> List.map (transformEdge model)
       step = model.step.ToString()
-      subjectVertexId = model.subjectVertexId
-    }
+      subjectVertexId = model.subjectVertexId }

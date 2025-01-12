@@ -114,14 +114,14 @@ function updateNetwork(networkDTO) {
     let borderColor = fontColor;
     let label = node.label;
 
-    if (node.isVinit && (step == "Vinit" || (step == "ModifyVertex" && subjectVertexId == node.id)) ) {
+    if (node.isVinit && (step == "Vinit" || subjectVertexId == node.id) ) {
       backgroundColor = getCssVariable("--bulma-success");
       fontColor = getCssVariable("--bulma-text-bold-invert");
       borderColor = fontColor;
     }
 
-    if (step == "ModifyVertex" && subjectVertexId == node.id) {
-      label = node.label + "\n" + node.score;
+    if ((step == "ModifyVertex" && subjectVertexId == node.id) || step == "AnalysisScore") {
+      label = node.label + "\n" + node.score + " (" + node._score + ")";
     }
 
     if (node.isSubject) {
