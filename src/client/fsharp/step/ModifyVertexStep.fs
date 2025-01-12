@@ -78,7 +78,7 @@ let handleClickedBackground (model: Model) dispatch =
         dispatch Msg.IgnoreAction
 
 let handleClickedEdge (access: AAG.Access) (model: Model) dispatch =
-    if Some access.vertexId = model.subjectVertexId then
+    if isValidVertex model then
         dispatch (Msg.OpenModifyAccessStep(access, access.name))
     else
         dispatch Msg.IgnoreAction
