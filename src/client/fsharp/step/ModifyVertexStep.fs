@@ -57,7 +57,8 @@ let private showAccess dispatch (access: AAG.Access) =
         .Access()
         .Name(access.name)
         .Button(fun _ -> dispatch (Msg.OpenModifyAccessStep(Some access)))
-        .Enter(fun _ -> dispatch (Msg.HighlightAccess(access)))
+        .Enter(fun _ ->
+            dispatch (Msg.HighlightAccess(access)))
         .Leave(fun _ -> dispatch (Msg.DeHighlightAccess))
         .Elt()
 

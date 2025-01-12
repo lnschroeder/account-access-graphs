@@ -55,7 +55,7 @@ and Model =
     static member Example = { Model.Init with graph = AAG.Graph.Example }
 
 let highlightAccess (access: AAG.Access) (model: Model) =
-    let edges = AAG.findFactorsOfAccess model.graph access |> Set.ofList
+    let edges = AAG.findEdgesOfAccess model.graph access |> List.map (fun e -> e.id) |> Set.ofList
     { model with highlightedEdgeIds = edges }
 
 let deHighlightAccess (model: Model) = { model with highlightedEdgeIds = Set.empty }

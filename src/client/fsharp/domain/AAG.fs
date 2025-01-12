@@ -138,7 +138,7 @@ let private mapEdgeToAccess (edge: Edge) =
       colorIndex = edge.colorIndex
       vertexId = edge.``to`` }
 
-let private isEdgeInAccess (edge: Edge) (access: Access) =
+let private isEdgeInAccess (access: Access) (edge: Edge) =
     edge.accessName = access.name
     && edge.``to`` = access.vertexId
     && edge.colorIndex = access.colorIndex
@@ -241,12 +241,9 @@ let findAccessByVertexIdAndColor vertexId color graph =
 //         |> List.tryFind (fun access -> access.id = accessId)
 //         |> Option.map (fun access -> vertex.id, access))
 
-let findFactorsOfAccess graph (access: Access) = // TODO change id to option
+let findEdgesOfAccess graph (access: Access) = // TODO change id to option
     graph.edges
-    |> List.filter (fun e ->
-        e.``to`` = access.vertexId
-        && e.colorIndex = access.colorIndex)
-    |> List.map (fun e -> e.from)
+    |> List.filter (isEdgeInAccess access)
 
 // graph.vertices
 // |> List.tryPick (fun vertex ->
@@ -301,7 +298,8 @@ let deleteAccess access graph =
 
 let getAccessesWithFactors vertexId factors graph = // TODO rename factors to vertices?!
     getAccesses vertexId graph
-    |> Set.map (Set.ofList << findFactorsOfAccess graph)
+    |> Set.map (fun a -> (findEdgesOfAccess graph a) |> List.map (fun e -> e.from))
+    |> Set.map(Set.ofList)
     |> Set.filter (fun fs -> fs = factors)
 
 // | Some vertex ->
@@ -338,7 +336,7 @@ let changeAccessName (access: Access) name graph =
             |> List.map (fun e ->
                 { e with
                     accessName =
-                        if isEdgeInAccess e access then
+                        if isEdgeInAccess access e then
                             name
                         else
                             e.accessName }) }

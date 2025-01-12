@@ -127,7 +127,8 @@ let private openModifyAccess (access: AAG.Access) model =
           subjectAccessColor = Some access.colorIndex
           highlightedEdgeIds = Set.empty
           selectedFactors =
-            AAG.findFactorsOfAccess model.graph access
+            AAG.findEdgesOfAccess model.graph access
+            |> List.map(fun e -> e.from)
             |> Set.ofList
           initiallyCompromisedVertexIds = Set.empty
           transitivelyCompromisedVertexIds = Set.empty
