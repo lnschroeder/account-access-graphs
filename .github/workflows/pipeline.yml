@@ -10,8 +10,6 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - name: Set base path
-        run: sed -i 's/let private baseUrl = ""/let private baseUrl = "account-access-graphs\/"/g' src/client/fsharp/Main.fs
       - name: Setup dotnet
         uses: actions/setup-dotnet@v4
         with:
