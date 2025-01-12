@@ -112,6 +112,12 @@ function updateNetwork(networkDTO) {
     let borderColor = fontColor;
     let label = node.label + "\n" + node.score;
 
+    if (node.isVinit) {
+      backgroundColor = getCssVariable("--bulma-success");
+      fontColor = getCssVariable("--bulma-text-bold-invert");
+      borderColor = fontColor;
+    }
+
     if (node.isSubject) {
       borderColor = getCssVariable("--bulma-warning-on-scheme");
       borderWidth = 3;
@@ -132,11 +138,6 @@ function updateNetwork(networkDTO) {
       borderColor = getCssVariable("--bulma-danger-on-scheme");
       borderWidth = 3;
       borderDashes = [5, 5];
-    }
-
-    if (node.isVinit) {
-      backgroundColor = getCssVariable("--bulma-success");
-      fontColor = getCssVariable("--bulma-text-bold-invert");
     }
 
     data.nodes.update({
