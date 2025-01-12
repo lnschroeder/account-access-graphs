@@ -317,7 +317,7 @@ let getAccessesWithFactors vertexId factors graph = // TODO rename factors to ve
 
 let getAccessesWithName vertexId name graph =
     getAccesses vertexId graph
-    |> Set.map (fun a -> a.name = name)
+    |> Set.filter (fun a -> a.name = name)
 
 // match findVertexById vertexId graph with
 // | Some vertex ->
