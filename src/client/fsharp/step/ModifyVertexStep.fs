@@ -6,6 +6,20 @@ open Bolero.Html
 // Validity
 let isValidVertex model = isValid model modifyVertexNameInput
 
+let isSubjectVertexEmpty (model: Model) =
+    model.subjectVertexId
+    |> Option.map (fun id ->
+        let vertex = AAG.tryFindVertexById id model.graph
+
+        match vertex with
+        | Some v ->
+            v.name = ""
+            && (model.graph.edges
+                |> List.filter (fun e -> e.from = id || e.``to`` = id))
+                .IsEmpty
+        | None -> true)
+    |> Option.defaultValue true
+
 // Handle actions
 let handleClickedVertex (vertex: AAG.Vertex) (model: Model) dispatch =
     if isValidVertex model then
@@ -16,6 +30,12 @@ let handleClickedVertex (vertex: AAG.Vertex) (model: Model) dispatch =
 let handleClickedBackground (model: Model) dispatch =
     if isValidVertex model then
         dispatch (Msg.OpenMainMenuStep)
+    elif isSubjectVertexEmpty model then
+        dispatch (
+            match model.subjectVertexId with
+            | Some subjectVertexId -> Msg.ClickedDeleteVertex subjectVertexId
+            | None -> Msg.IgnoreAction
+        )
     else
         dispatch Msg.IgnoreAction
 
@@ -58,11 +78,11 @@ let updateVertexName subjectVertexId name (model: Model) =
         modifyVertexNameInput = name
         graph = AAG.updateVertexName subjectVertexId name model.graph }
 
-let exitDeletingVertex (subjectVertex: AAG.Vertex) (model: Model) =
+let exitDeletingVertex vertexId (model: Model) =
     { model with
         step = MainMenu
         modifyVertexNameInput = ""
-        graph = AAG.removeVertexFromGraph subjectVertex.id model.graph }
+        graph = AAG.removeVertexFromGraph vertexId model.graph }
 
 // View
 let private showAccess dispatch (access: AAG.Access) =
@@ -101,7 +121,7 @@ let view jsRuntime (model: Model) dispatch =
                         )
                     ))
                 .BackButton(fun _ -> dispatch Msg.OpenMainMenuStep)
-                .DeleteButton(fun _ -> dispatch (Msg.ClickedDeleteVertex subjectVertex))
+                .DeleteButton(fun _ -> dispatch (Msg.ClickedDeleteVertex subjectVertexId))
                 .Elt()
         | None -> Template.ModifyVertex().Elt()
     | None -> Template.ModifyVertex().Elt()

@@ -14,7 +14,7 @@ type Message =
     | DeHighlightAccess
     | ToggleFactorForSubject of AAG.Vertex
     | ToggleInitialCompromise of AAG.Vertex
-    | ClickedDeleteVertex of AAG.Vertex
+    | ClickedDeleteVertex of Guid
     | ClickedDeleteAccess of AAG.Access option
     | ClickedClearGraph
     | ClickedExampleGraph

@@ -26,10 +26,10 @@ let private getDebugText (model: Model) =
 
 let private handleClickedBackground model dispatch =
     match model.step with
-    | MainMenu -> dispatch Msg.IgnoreAction
+    | MainMenu -> MainMenuStep.handleClickedBackground dispatch
     | ModifyVertex -> ModifyVertexStep.handleClickedBackground model dispatch
     | ModifyAccess -> ModifyAccessStep.handleClickedBackground model dispatch
-    | AnalysisCompromise -> AnalysisCompromiseStep.handleClickedBackground dispatch
+    | AnalysisCompromise -> AnalysisCompromiseStep.handleClickedBackground model dispatch
 
 let private handleClickedVertex (idAsString: string) model dispatch =
     let vertex =

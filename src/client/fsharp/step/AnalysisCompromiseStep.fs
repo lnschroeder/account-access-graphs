@@ -5,7 +5,12 @@ open Bolero.Html
 
 // Validity
 // Handle actions
-let handleClickedBackground dispatch = dispatch Msg.OpenMainMenuStep
+let handleClickedBackground model dispatch =
+    if model.initiallyCompromisedVertexIds.IsEmpty then
+        dispatch Msg.OpenMainMenuStep
+    else
+        dispatch Msg.OpenAnalysisCompromise
+
 
 let handleClickedVertex (vertex: AAG.Vertex) dispatch =
     dispatch (Msg.ToggleInitialCompromise vertex)

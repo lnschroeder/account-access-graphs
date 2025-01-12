@@ -13,6 +13,8 @@ let handleClickedVertex (vertex: AAG.Vertex) dispatch =
 let handleClickedAccess (access: AAG.Access) dispatch =
     dispatch (Msg.OpenModifyAccessStep(access, access.name))
 
+let handleClickedBackground dispatch =
+    dispatch (Msg.OpenModifyVertexStep None)
 // Open
 let ``open`` model =
     { page = Endpoint.Main
