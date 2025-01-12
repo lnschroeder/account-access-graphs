@@ -12,6 +12,9 @@ type Message =
     | OpenModifyVertexStep of Guid option
     | OpenModifyAccessStep of AAG.Access * string
     | OpenAnalysisCompromise
+    | OpenVinit
+    | UnsetVinit of AAG.Vertex
+    | SetVinit of AAG.Vertex
     | HighlightAccess of AAG.Access
     | DeHighlightAccess
     | ToggleFactorForSubject of AAG.Vertex

@@ -9,7 +9,8 @@ type Node =
       isSubject: bool
       isFactor: bool
       isInitiallyCompromised: bool
-      isTransitivelyCompromised: bool }
+      isTransitivelyCompromised: bool
+      isVinit: bool}
 
 type Edge =
     { id: Guid
@@ -34,7 +35,8 @@ let private transformVertex (model: Model) (vertex: AAG.Vertex) =
       isSubject = Some vertex.id = model.subjectVertexId
       isFactor = Seq.contains vertex.id model.selectedFactors
       isInitiallyCompromised = isInitiallyCompromised
-      isTransitivelyCompromised = isTransitivelyCompromised }
+      isTransitivelyCompromised = isTransitivelyCompromised
+      isVinit = vertex.isVinit }
 
 let private transformEdge (model: Model) (edge: AAG.Edge) =
     { id = edge.id

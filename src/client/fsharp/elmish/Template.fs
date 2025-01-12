@@ -7,3 +7,4 @@ type MainMenu = Template<"wwwroot/main-menu.html">
 type ModifyAccess = Template<"wwwroot/modify-access.html">
 type ModifyVertex = Template<"wwwroot/modify-vertex.html">
 type AnalysisCompromise = Template<"wwwroot/analysis-compromise.html">
+type Vinit = Template<"wwwroot/vinit.html">

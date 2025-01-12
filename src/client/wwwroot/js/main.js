@@ -132,6 +132,11 @@ function updateNetwork(networkDTO) {
       borderDashes = [5, 5];
     }
 
+    if (node.isVinit) {
+      backgroundColor = getCssVariable("--bulma-success");
+      fontColor = getCssVariable("--bulma-text-bold-invert");
+    }
+
     data.nodes.update({
       id: node.id,
       label: node.label,

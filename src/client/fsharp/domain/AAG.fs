@@ -4,8 +4,12 @@ open System
 
 type Vertex =
     { id: Guid
-      name: string }
-    static member Default = { id = Guid.NewGuid(); name = "" }
+      name: string
+      isVinit: bool }
+    static member Default =
+        { id = Guid.NewGuid()
+          name = ""
+          isVinit = false }
 
 and Edge =
     { id: Guid
@@ -35,15 +39,18 @@ and Graph =
 
         let v1 =
             { id = Guid.Parse("1578d946-7c48-41a6-baf2-0386979c9de1")
-              name = "test" }
+              name = "test"
+              isVinit = false }
 
         let v2 =
             { id = Guid.Parse("1578d946-7c48-41a6-baf2-0386979c9de2")
-              name = "test2" }
+              name = "test2"
+              isVinit = false }
 
         let v3 =
             { id = Guid.Parse("1578d946-7c48-41a6-baf2-0386979c9de3")
-              name = "test222" }
+              name = "test222"
+              isVinit = true }
 
         let a1e1 =
             { id = Guid.Parse("2578d946-7c48-41a6-baf2-0386979c9de1")
@@ -132,6 +139,19 @@ let removeVertexFromAccess vertexId (access: Access) graph =
                     && e.from = vertexId
                     && e.``to`` = access.vertexId
                 )) }
+
+let getVinit graph =
+    graph.vertices |> List.filter (fun v -> v.isVinit)
+
+let setVinit graph isVinit vertexId =
+    { graph with
+        vertices =
+            graph.vertices
+            |> List.map (fun v ->
+                if v.id = vertexId then
+                    { v with isVinit = isVinit }
+                else
+                    v) }
 //
 let getAccesses vertexId (graph: Graph) =
     graph.edges

@@ -39,6 +39,7 @@ let view dispatch =
         .MainMenu()
         .AddVertexButton(fun _ -> dispatch (Msg.OpenModifyVertexStep None))
         .AnalysisCompromiseButton(fun _ -> dispatch (Msg.OpenAnalysisCompromise))
+        .VinitButton(fun _ -> dispatch (Msg.OpenVinit))
         .ClearGraphButton(fun _ -> dispatch (Msg.ClickedClearGraph))
         .ExampleGraphButton(fun _ -> dispatch (Msg.ClickedExampleGraph))
         .ExampleGraph2Button(fun _ -> dispatch (Msg.ClickedExample2Graph))

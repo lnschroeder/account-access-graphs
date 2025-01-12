@@ -20,6 +20,7 @@ and Step =
     | ModifyAccess
     | ModifyVertex
     | AnalysisCompromise
+    | Vinit
 
 and DeserializedGraph =
     | Graph of AAG.Graph
