@@ -12,6 +12,8 @@ open Bolero.Html
 
 let private init _ = MainMenuStep.clearGraph, Cmd.none
 
+let private baseUrl = ""
+
 let private getDebugText (model: Model) =
     let nodeLen = Seq.length model.graph.vertices
 
@@ -89,7 +91,7 @@ let private update (http: HttpClient) message model =
     | Msg.ClickedExampleGraph -> MainMenuStep.exampleGraph, Cmd.none
     | Msg.ClickedExample2Graph ->
         let getGraph () =
-            http.GetFromJsonAsync<AAG.Graph>("/resources/hammann-fig14.json")
+            http.GetFromJsonAsync<AAG.Graph>($"{baseUrl}/resources/hammann-fig14.json")
 
         let cmd = Cmd.OfTask.either getGraph () Msg.GotGraph Msg.Error
         model, cmd
