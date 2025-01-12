@@ -94,7 +94,7 @@ let removeVertexFromGraph vertexId graph =
             graph.edges
             |> List.filter (fun e -> e.from <> vertexId && e.``to`` <> vertexId) }
 
-let isAccessFulfilled (vertexIds: Guid Set) (edges: Edge list) =
+let private isAccessFulfilled (vertexIds: Guid Set) (edges: Edge list) =
     Set.isSubset (edges |> List.map (fun e -> e.from) |> Set.ofList) vertexIds
 
 let findVertexById id graph = // TODO change id to option
@@ -177,7 +177,7 @@ let changeAccessName (access: Access) name graph =
 
 //
 
-let canBeCompromised (graph: Graph) (vertexIds: Guid Set) (vertex: Vertex) =
+let private canBeCompromised (graph: Graph) (vertexIds: Guid Set) (vertex: Vertex) =
     match vertex with
     | vertex when Set.contains vertex.id vertexIds -> true
     | _ ->
@@ -233,7 +233,7 @@ let private getNewlyCompromisedVertexId
     |> List.tryFind (canBeCompromised graph compromisedVertexIds)
 
 //
-let rec getCompromisedVertices (compromisedVertexIds: Guid Set) (graph: Graph) (vertices: Vertex list) =
+let rec private getCompromisedVertices (compromisedVertexIds: Guid Set) (graph: Graph) (vertices: Vertex list) =
     let vertices =
         vertices
         |> List.filter (fun v -> not <| Set.contains v.id compromisedVertexIds)
@@ -242,6 +242,7 @@ let rec getCompromisedVertices (compromisedVertexIds: Guid Set) (graph: Graph) (
     | None -> compromisedVertexIds
     | Some v -> getCompromisedVertices (Set.add v.id compromisedVertexIds) graph vertices
 
+//
 let getCompromisedVerticesOfGraph (compromisedVertexIds: Guid Set) (graph: Graph) =
     getCompromisedVertices compromisedVertexIds graph graph.vertices
 
