@@ -156,10 +156,10 @@ let findNextAvailableColor (vertex: Vertex) (graph: Graph) =
         | Some (_, b) -> b
         | None -> Seq.length usedColors |> byte
 
-let findNextAvailableName (vertex: Vertex) (graph: Graph) =
+let findNextAvailableName vertexId (graph: Graph) =
     let usedNames =
         graph.edges
-        |> List.filter (fun e -> e.``to`` = vertex.id)
+        |> List.filter (fun e -> e.``to`` = vertexId)
         |> Seq.map (fun e -> e.accessName)
         |> Seq.sort
 
@@ -302,11 +302,13 @@ let deleteAccess access graph =
 
 let getAccessesWithFactors vertexId factors graph = // TODO rename factors to vertices?!
     getAccesses vertexId graph
-    |> Set.map (fun a ->
+    |> List.ofSeq
+    |> List.map (fun a ->
         (findEdgesOfAccess graph a)
-        |> List.map (fun e -> e.from))
-    |> Set.map (Set.ofList)
-    |> Set.filter (fun fs -> fs = factors)
+        |> List.map (fun e -> e.from)
+        |> Set.ofList)
+    // |> Set.map (Set.ofList)
+    |> List.filter (fun fs -> fs = factors)
 
 // | Some vertex ->
 //     vertex.accesses

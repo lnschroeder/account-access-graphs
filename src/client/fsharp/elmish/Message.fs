@@ -15,9 +15,9 @@ type Message =
     | ToggleFactorForSubject of AAG.Vertex
     | ToggleInitialCompromise of AAG.Vertex
     | ClickedDeleteVertex of AAG.Vertex
-    | ClickedDeleteAccess of AAG.Access
+    | ClickedDeleteAccess of AAG.Access option
     | ClickedClearGraph
     | ClickedExampleGraph
     | ModifiedVertexName of Guid * string
-    | ModifiedAccessName of AAG.Access * string
+    | ModifiedAccessName of AAG.Access option * string
     | ModifiedGraphJson of string
