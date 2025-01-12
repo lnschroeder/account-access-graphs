@@ -32,6 +32,7 @@ let handleClickedVertex (vertex: AAG.Vertex) (model: Model) dispatch =
 let private removeInitialCompromiseVertex (vertex: AAG.Vertex) (model: Model) =
     let initiallyCompromisedVertexIds =
         Set.remove vertex.id model.initiallyCompromisedVertexIds
+
     { model with
         initiallyCompromisedVertexIds = initiallyCompromisedVertexIds
         transitivelyCompromisedVertexIds = AAG.getCompromisedVerticesOfGraph initiallyCompromisedVertexIds model.graph }
@@ -39,6 +40,7 @@ let private removeInitialCompromiseVertex (vertex: AAG.Vertex) (model: Model) =
 let private addInitialCompromiseVertex (vertex: AAG.Vertex) (model: Model) =
     let initiallyCompromisedVertexIds =
         Set.add vertex.id model.initiallyCompromisedVertexIds
+
     { model with
         initiallyCompromisedVertexIds = initiallyCompromisedVertexIds
         transitivelyCompromisedVertexIds = AAG.getCompromisedVerticesOfGraph initiallyCompromisedVertexIds model.graph }
@@ -48,7 +50,6 @@ let toggleFactor (vertex: AAG.Vertex) (model: Model) =
         removeInitialCompromiseVertex vertex model
     else
         addInitialCompromiseVertex vertex model
-
 
 let private showFactor (model: Model) id =
     match AAG.findVertexById id model.graph with

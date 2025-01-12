@@ -40,11 +40,16 @@ let private transformEdge (model: Model) (edge: AAG.Edge) =
     { id = edge.id
       from = edge.from
       ``to`` = edge.``to``
-      isProvisional = model.subjectVertexId = Some edge.``to`` && model.subjectAccessColor = Some edge.colorIndex
+      isProvisional =
+        model.subjectVertexId = Some edge.``to``
+        && model.subjectAccessColor = Some edge.colorIndex
       colorIndex = edge.colorIndex
       isHighlighted = Set.contains edge.id model.highlightedEdgeIds }
+
 let transform (model: Model) =
     { nodes =
         (model.graph.vertices
          |> List.map (transformVertex model))
-      edges = model.graph.edges |> List.map (transformEdge model) }
+      edges =
+        model.graph.edges
+        |> List.map (transformEdge model) }

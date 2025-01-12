@@ -83,12 +83,6 @@ let handleClickedEdge (access: AAG.Access) (model: Model) dispatch =
     else
         dispatch Msg.IgnoreAction
 
-let saveAndExit (model: Model) =
-    { model with
-        modifyVertexNameInput = ""
-        subjectVertexId = None
-        step = MainMenu }
-
 let view jsRuntime (model: Model) dispatch =
     Utility.toggleButtonEnabled "ModifyVertexBackButton" (isValidVertex model) jsRuntime
     |> ignore

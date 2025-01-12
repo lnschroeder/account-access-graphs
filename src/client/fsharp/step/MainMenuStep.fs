@@ -22,10 +22,10 @@ let ``open`` model =
       json = model.json }
 
 let handleClickedVertex (vertex: AAG.Vertex) (model: Model) dispatch =
-    dispatch (Msg.OpenModifyVertexStep (Some vertex.id))
+    dispatch (Msg.OpenModifyVertexStep(Some vertex.id))
 
 let handleClickedAccess (access: AAG.Access) dispatch =
-    dispatch (Msg.OpenModifyAccessStep (access, access.name))
+    dispatch (Msg.OpenModifyAccessStep(access, access.name))
 
 let view dispatch =
     Template

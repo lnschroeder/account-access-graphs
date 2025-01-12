@@ -147,16 +147,6 @@ let ``open`` (access: AAG.Access) addAccessNameInput model =
           transitivelyCompromisedVertexIds = Set.empty
           json = model.json }
     | None -> model
-// | None ->
-//     match model.subjectVertexId with
-//     | Some subjectVertexId ->
-//         match AAG.findVertexById subjectVertexId model.graph with
-//         | Some subjectVertex ->
-
-
-//             openModifyAccess subjectVertex access "" model
-//         | None -> model
-//     | None -> model
 
 let view jsRuntime (model: Model) dispatch =
     Utility.toggleButtonEnabled "ModifyAccessBackButton" (isValidAccess model) jsRuntime

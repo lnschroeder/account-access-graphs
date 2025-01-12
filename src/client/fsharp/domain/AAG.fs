@@ -77,26 +77,6 @@ and Graph =
         { vertices = [ v1; v2; v3 ]
           edges = [ a1e1; a1e2; a2e1; a3e1 ] }
 
-// let private hasVertexId id (a: Vertex) = a.id = id
-
-// let private hasFactorVertexId vertexId (a: Factor) = a.vertexId = vertexId
-
-// let private removeFactorWithVertexIdFromFactors vertexId factors =
-//     factors
-//     |> Set.filter (not << hasFactorVertexId vertexId)
-
-// let private removeVertexFactorFromAccess vertexId access =
-//     { access with factors = (removeFactorWithVertexIdFromFactors vertexId access.factors) }
-
-// let private removeVertexFactorFromAccesses vertexId accesses =
-//     accesses
-//     |> List.map (removeVertexFactorFromAccess vertexId)
-
-// let private removeVertexFactorFromVertex vertexId vertex =
-//     { vertex with
-//         accesses =
-//             removeVertexFactorFromAccesses vertexId vertex.accesses
-//             |> List.filter (fun access -> not access.factors.IsEmpty) }
 let private isEdgeInAccess (access: Access) (edge: Edge) =
     edge.accessName = access.name
     && edge.``to`` = access.vertexId
@@ -131,14 +111,17 @@ let isAccessFulfilled (vertexIds: Guid Set) (edges: Edge list) =
 
 let canBeCompromised (graph: Graph) (vertexIds: Guid Set) (vertex: Vertex) =
     match vertex with
-    | vertex when
-        Set.contains vertex.id vertexIds -> true
+    | vertex when Set.contains vertex.id vertexIds -> true
     | _ ->
         getAccesses vertex.id graph
         |> Set.map (findEdgesOfAccess graph)
         |> Set.exists (isAccessFulfilled vertexIds)
 
-let private getNewlyCompromisedVertexId (compromisedVertexIds: Guid Set) (graph: Graph) (vertices: Vertex list) : Vertex option =
+let private getNewlyCompromisedVertexId
+    (compromisedVertexIds: Guid Set)
+    (graph: Graph)
+    (vertices: Vertex list)
+    : Vertex option =
     vertices
     |> List.tryFind (canBeCompromised graph compromisedVertexIds)
 
@@ -178,51 +161,6 @@ let findNextAvailableName vertexId graph =
         | Some (_, b) -> $"{b}"
         | None -> $"{Seq.length usedNames |> int}"
 
-// let rec findInVertices vertices accessId =
-//     match vertices with
-//     | [] -> None
-//     | vertex :: rest ->
-//         match List.tryFind (fun access -> access.id = accessId) vertex.accesses with
-//         | Some access -> Some(access, vertex)
-//         | None -> findInVertices rest accessId
-
-// let private addFactorToAccess vertexId (access: Access) =
-//     { access with factors = Set.add (Factor.Default vertexId) access.factors }
-
-// let private removeFactorFromAccess vertexId (access: Access) =
-//     { access with
-//         factors =
-//             access.factors
-//             |> Set.filter (fun factor -> factor.vertexId <> vertexId) }
-
-// let addFactorToGraph accessId vertexId graph =
-//     { graph with
-//         vertices =
-//             graph.vertices
-//             |> List.map (fun vertex ->
-//                 { vertex with
-//                     accesses =
-//                         (vertex.accesses
-//                          |> List.map (fun access ->
-//                              if access.id = accessId then
-//                                  addFactorToAccess vertexId access
-//                              else
-//                                  access)) }) }
-
-// let removeFactorFromGraph accessId vertexId graph =
-//     { graph with
-//         vertices =
-//             graph.vertices
-//             |> List.map (fun vertex ->
-//                 { vertex with
-//                     accesses =
-//                         (vertex.accesses
-//                          |> List.map (fun access ->
-//                              if access.id = accessId then
-//                                  removeFactorFromAccess vertexId access
-//                              else
-//                                  access)) }) }
-
 let findVertexById id graph = // TODO change id to option
     graph.vertices
     |> List.tryFind (fun vertex -> vertex.id = id)
@@ -236,21 +174,6 @@ let findAccessByVertexIdAndColor vertexId color graph =
     graph.edges
     |> List.tryFind (fun e -> e.``to`` = vertexId && e.colorIndex = color)
     |> Option.map mapEdgeToAccess
-
-// let findAccessById accessId graph = // TODO change id to option
-//     graph.vertices
-//     |> List.tryPick (fun vertex ->
-//         vertex.accesses
-//         |> List.tryFind (fun access -> access.id = accessId)
-//         |> Option.map (fun access -> vertex.id, access))
-
-// graph.vertices
-// |> List.tryPick (fun vertex ->
-//     vertex.accesses
-//     |> List.tryFind (fun access ->
-//         access.factors
-//         |> Seq.exists (fun factor -> factor.id = edgeId))
-//     |> Option.map (fun access -> vertex.id, access))
 
 let getVerticesWithName vertexName graph =
     graph.vertices
@@ -277,19 +200,6 @@ let removeVertexFromAccess vertexId (access: Access) graph =
                     && e.``to`` = access.vertexId
                 )) }
 
-// let addAccessToVertex access vertex =
-//     { vertex with accesses = access :: vertex.accesses }
-
-// let addAccessToGraph vertexId access graph =
-//     { graph with
-//         vertices =
-//             graph.vertices
-//             |> List.map (fun vertex ->
-//                 if vertex.id = vertexId then
-//                     addAccessToVertex access vertex
-//                 else
-//                     vertex) }
-
 let deleteAccess access graph =
     { graph with
         edges =
@@ -303,25 +213,12 @@ let getAccessesWithFactors vertexId factors graph = // TODO rename factors to ve
         (findEdgesOfAccess graph a)
         |> List.map (fun e -> e.from)
         |> Set.ofList)
-    // |> Set.map (Set.ofList)
     |> List.filter (fun fs -> fs = factors)
 
-// | Some vertex ->
-//     vertex.accesses
-//     |> Seq.filter (fun access ->
-//         (access.factors
-//          |> Set.map (fun factor -> factor.vertexId)) = factors)
-// | None -> Set.empty
 
 let getAccessesWithName vertexId name graph =
     getAccesses vertexId graph
     |> Set.filter (fun a -> a.name = name)
-
-// match findVertexById vertexId graph with
-// | Some vertex ->
-//     vertex.accesses
-//     |> Seq.filter (fun access -> access.name = name)
-// | None -> Seq.empty
 
 let changeVertexName vertexId name graph =
     { graph with
