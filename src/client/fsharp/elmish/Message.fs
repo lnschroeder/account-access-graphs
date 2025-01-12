@@ -4,7 +4,9 @@ open System
 
 /// The Elmish application's update messages.
 type Message =
+    | Error of exn
     | IgnoreAction
+    | GotGraph of AAG.Graph
     | SetPage of Endpoint.Page
     | OpenMainMenuStep
     | OpenModifyVertexStep of Guid option
@@ -18,6 +20,7 @@ type Message =
     | ClickedDeleteAccess of AAG.Access option
     | ClickedClearGraph
     | ClickedExampleGraph
+    | ClickedExample2Graph
     | ModifiedVertexName of Guid * string
     | ModifiedAccessName of AAG.Access option * string
     | ModifiedGraphJson of string

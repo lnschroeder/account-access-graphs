@@ -41,4 +41,5 @@ let view dispatch =
         .AnalysisCompromiseButton(fun _ -> dispatch (Msg.OpenAnalysisCompromise))
         .ClearGraphButton(fun _ -> dispatch (Msg.ClickedClearGraph))
         .ExampleGraphButton(fun _ -> dispatch (Msg.ClickedExampleGraph))
+        .ExampleGraph2Button(fun _ -> dispatch (Msg.ClickedExample2Graph))
         .Elt()

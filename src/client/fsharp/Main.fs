@@ -1,6 +1,7 @@
 module AAG.Client.Main
 
 open System.Net.Http
+open System.Net.Http.Json
 open Microsoft.AspNetCore.Components
 open Elmish
 open Bolero
@@ -74,35 +75,40 @@ let handleUpdatedJson jsonAsString (model: Model) =
             json = jsonAsString }
     | ErrorMsg _ -> { model with json = jsonAsString }
 
-let private update message model =
-    let model =
-        match message with
-        | Msg.IgnoreAction -> model
-        // Main
-        | Msg.SetPage page -> { model with page = page }
-        | Msg.ModifiedGraphJson jsonAsString -> handleUpdatedJson jsonAsString model
+let private update (http: HttpClient) message model =
+    match message with
+    | Msg.IgnoreAction -> model, Cmd.none
+    | Msg.Error _ -> model, Cmd.none // TODO
+    // Main
+    | Msg.SetPage page -> { model with page = page }, Cmd.none
+    | Msg.ModifiedGraphJson jsonAsString -> handleUpdatedJson jsonAsString model, Cmd.none
+    | Msg.GotGraph graph -> { Model.Init with graph = graph }, Cmd.none
+    // MainMenu
+    | Msg.OpenMainMenuStep -> MainMenuStep.``open`` model, Cmd.none
+    | Msg.ClickedClearGraph -> MainMenuStep.clearGraph, Cmd.none
+    | Msg.ClickedExampleGraph -> MainMenuStep.exampleGraph, Cmd.none
+    | Msg.ClickedExample2Graph ->
+        let getGraph () =
+            http.GetFromJsonAsync<AAG.Graph>("/resources/hammann-fig14.json")
 
-        // MainMenu
-        | Msg.OpenMainMenuStep -> MainMenuStep.``open`` model
-        | Msg.ClickedClearGraph -> MainMenuStep.clearGraph
-        | Msg.ClickedExampleGraph -> MainMenuStep.exampleGraph
-        // ModifyAccess
-        | Msg.OpenModifyAccessStep (access, addAccessNameInput) ->
-            ModifyAccessStep.``open`` access addAccessNameInput model
-        | Msg.ModifiedAccessName (access, name) -> ModifyAccessStep.updateAccessName access name model
-        | Msg.ToggleFactorForSubject vertex -> ModifyAccessStep.toggleFactorForSubject vertex model
-        | Msg.ClickedDeleteAccess access -> ModifyAccessStep.exitDeletingAccess access model
-        // ModifyVertex
-        | Msg.OpenModifyVertexStep vertexId -> ModifyVertexStep.``open`` vertexId model
-        | Msg.ModifiedVertexName (subjectVertexId, name) -> ModifyVertexStep.updateVertexName subjectVertexId name model
-        | Msg.ClickedDeleteVertex subjectVertex -> ModifyVertexStep.exitDeletingVertex subjectVertex model
-        | Msg.HighlightAccess access -> highlightAccess access model
-        | Msg.DeHighlightAccess -> deHighlightAccess model
-        // AnalysisCompromise
-        | Msg.OpenAnalysisCompromise -> AnalysisCompromiseStep.``open`` model
-        | Msg.ToggleInitialCompromise vertex -> AnalysisCompromiseStep.toggleFactor vertex model
-
-    model, Cmd.none
+        let cmd = Cmd.OfTask.either getGraph () Msg.GotGraph Msg.Error
+        Model.Init, cmd
+    // ModifyAccess
+    | Msg.OpenModifyAccessStep (access, addAccessNameInput) ->
+        ModifyAccessStep.``open`` access addAccessNameInput model, Cmd.none
+    | Msg.ModifiedAccessName (access, name) -> ModifyAccessStep.updateAccessName access name model, Cmd.none
+    | Msg.ToggleFactorForSubject vertex -> ModifyAccessStep.toggleFactorForSubject vertex model, Cmd.none
+    | Msg.ClickedDeleteAccess access -> ModifyAccessStep.exitDeletingAccess access model, Cmd.none
+    // ModifyVertex
+    | Msg.OpenModifyVertexStep vertexId -> ModifyVertexStep.``open`` vertexId model, Cmd.none
+    | Msg.ModifiedVertexName (subjectVertexId, name) ->
+        ModifyVertexStep.updateVertexName subjectVertexId name model, Cmd.none
+    | Msg.ClickedDeleteVertex subjectVertex -> ModifyVertexStep.exitDeletingVertex subjectVertex model, Cmd.none
+    | Msg.HighlightAccess access -> highlightAccess access model, Cmd.none
+    | Msg.DeHighlightAccess -> deHighlightAccess model, Cmd.none
+    // AnalysisCompromise
+    | Msg.OpenAnalysisCompromise -> AnalysisCompromiseStep.``open`` model, Cmd.none
+    | Msg.ToggleInitialCompromise vertex -> AnalysisCompromiseStep.toggleFactor vertex model, Cmd.none
 
 let private view (jsRuntime: IJSRuntime) model dispatch =
     jsRuntime.InvokeVoidAsync("updateNetwork", VisJSTransformer.transform model)
@@ -144,5 +150,5 @@ type App() =
     member val HttpClient = Unchecked.defaultof<HttpClient> with get, set
 
     override this.Program =
-        Program.mkProgram init update (view this.JSRuntime)
+        Program.mkProgram init (update this.HttpClient) (view this.JSRuntime)
         |> Program.withRouter router
