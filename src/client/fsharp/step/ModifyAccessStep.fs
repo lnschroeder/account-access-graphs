@@ -38,7 +38,7 @@ let private getAccessNameInputPlaceholder (access: AAG.Access) (model: Model) =
 
 let removeFactorFromSubject vertexId (access: AAG.Access) (model: Model) =
     { model with
-        graph = AAG.removeEdge vertexId access model.graph
+        graph = AAG.removeVertexFromAccess vertexId access model.graph
         selectedFactors = Set.remove vertexId model.selectedFactors }
 
 let addFactorToSubjectAccess vertexId (access: AAG.Access) (model: Model) =
@@ -55,7 +55,8 @@ let toggleFactorForSubject (vertex: AAG.Vertex) (model: Model) =
                 { name = model.addAccessNameInput
                   colorIndex = color
                   vertexId = subjectVertexId }
-
+            printfn "%A" access
+            printfn "%A" vertex.id
             if Some vertex.id = model.subjectVertexId then
                 model
             elif Set.contains vertex.id model.selectedFactors then
