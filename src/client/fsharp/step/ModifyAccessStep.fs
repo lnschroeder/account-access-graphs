@@ -71,7 +71,7 @@ let exitDeletingAccess access model =
         addAccessNameInput = ""
         graph =
             match access with
-            | Some access -> AAG.deleteAccess access model.graph
+            | Some access -> AAG.removeAccessFromGraph access model.graph
             | None -> model.graph
         step = ModifyVertex }
 
@@ -96,14 +96,14 @@ let updateAccessName (access: AAG.Access option) name (model: Model) =
         if (getAccessNameHint model).level <> Error then
             let subjectAccessName =
                 if name = "" then
-                    AAG.findNextAvailableName subjectVertexId model.graph
+                    AAG.getNextAvailableName subjectVertexId model.graph
                 else
                     model.subjectAccessName
 
             { model with
                 graph =
                     match access with
-                    | Some access -> AAG.changeAccessName access subjectAccessName model.graph
+                    | Some access -> AAG.updateAccessName access subjectAccessName model.graph
                     | None -> model.graph
                 subjectAccessName = subjectAccessName }
         else
@@ -111,7 +111,7 @@ let updateAccessName (access: AAG.Access option) name (model: Model) =
     | None -> model
 
 let private showFactor (model: Model) dispatch id =
-    match AAG.findVertexById id model.graph with
+    match AAG.tryFindVertexById id model.graph with
     | Some vertex ->
         Template
             .ModifyAccess
@@ -128,7 +128,7 @@ let private showFactor (model: Model) dispatch id =
 let ``open`` (access: AAG.Access) addAccessNameInput model =
     // match access with
     // | Some access ->
-    match AAG.findVertexById access.vertexId model.graph with
+    match AAG.tryFindVertexById access.vertexId model.graph with
     | Some subjectVertex ->
         { page = Endpoint.Main
           step = ModifyAccess
@@ -140,7 +140,7 @@ let ``open`` (access: AAG.Access) addAccessNameInput model =
           subjectAccessName = access.name
           highlightedEdgeIds = Set.empty
           selectedFactors =
-            AAG.findEdgesOfAccess model.graph access
+            AAG.getEdgesForAccess model.graph access
             |> List.map (fun e -> e.from)
             |> Set.ofList
           initiallyCompromisedVertexIds = Set.empty
@@ -154,12 +154,12 @@ let view jsRuntime (model: Model) dispatch =
 
     match model.subjectVertexId with
     | Some subjectVertexId ->
-        match AAG.findVertexById subjectVertexId model.graph with
+        match AAG.tryFindVertexById subjectVertexId model.graph with
         | Some subjectVertex ->
             match model.subjectAccessColor with
             | Some subjectAccessColor ->
                 let subjectAccess =
-                    AAG.findAccessByVertexIdAndColor subjectVertex.id subjectAccessColor model.graph
+                    AAG.tryFindAccessByVertexIdAndColor subjectVertex.id subjectAccessColor model.graph
 
                 Template
                     .ModifyAccess()

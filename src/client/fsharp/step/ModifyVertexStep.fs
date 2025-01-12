@@ -18,7 +18,7 @@ let private getVertexNameHint (model: Model) =
 let updateVertexName subjectVertexId name (model: Model) =
     { model with
         modifyVertexNameInput = name
-        graph = AAG.changeVertexName subjectVertexId name model.graph }
+        graph = AAG.updateVertexName subjectVertexId name model.graph }
 
 let exitDeletingVertex (subjectVertex: AAG.Vertex) (model: Model) =
     { model with
@@ -44,7 +44,7 @@ let private openInternal (vertex: AAG.Vertex) model =
 let ``open`` vertexId model =
     match vertexId with
     | Some vertexId ->
-        match AAG.findVertexById vertexId model.graph with
+        match AAG.tryFindVertexById vertexId model.graph with
         | Some vertex -> openInternal vertex model
         | None -> model // TODO throw error if vertexId is not found
     | None ->
@@ -89,7 +89,7 @@ let view jsRuntime (model: Model) dispatch =
 
     match model.subjectVertexId with
     | Some subjectVertexId ->
-        match AAG.findVertexById subjectVertexId model.graph with
+        match AAG.tryFindVertexById subjectVertexId model.graph with
         | Some subjectVertex ->
             Template
                 .ModifyVertex()
@@ -103,8 +103,8 @@ let view jsRuntime (model: Model) dispatch =
                     dispatch (
                         Msg.OpenModifyAccessStep(
                             { vertexId = subjectVertexId
-                              colorIndex = AAG.findNextAvailableColor subjectVertex.id model.graph
-                              name = AAG.findNextAvailableName subjectVertex.id model.graph },
+                              colorIndex = AAG.getNextAvailableColor subjectVertex.id model.graph
+                              name = AAG.getNextAvailableName subjectVertex.id model.graph },
                             ""
                         )
                     ))

@@ -34,7 +34,7 @@ let private handleClickedBackground model dispatch =
 let private handleClickedVertex (idAsString: string) model dispatch =
     let vertex =
         match Guid.TryParse(idAsString) with
-        | (true, guid) -> AAG.findVertexById guid model.graph
+        | (true, guid) -> AAG.tryFindVertexById guid model.graph
         | (false, _) -> None
 
     match vertex with
@@ -49,7 +49,7 @@ let private handleClickedVertex (idAsString: string) model dispatch =
 let private handleClickedVisEdge (idAsString: string) model dispatch =
     let access =
         match Guid.TryParse(idAsString) with
-        | (true, guid) -> AAG.findAccessByEdgeId guid model.graph
+        | (true, guid) -> AAG.tryFindAccessByEdgeId guid model.graph
         | (false, _) -> None
 
     match access with

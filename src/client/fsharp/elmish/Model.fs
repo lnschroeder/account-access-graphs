@@ -58,7 +58,7 @@ and Model =
 
 let highlightAccess (access: AAG.Access) (model: Model) =
     let edges =
-        AAG.findEdgesOfAccess model.graph access
+        AAG.getEdgesForAccess model.graph access
         |> List.map (fun e -> e.id)
         |> Set.ofList
 

@@ -52,7 +52,7 @@ let toggleFactor (vertex: AAG.Vertex) (model: Model) =
         addInitialCompromiseVertex vertex model
 
 let private showFactor (model: Model) id =
-    match AAG.findVertexById id model.graph with
+    match AAG.tryFindVertexById id model.graph with
     | Some vertex ->
         Template
             .AnalysisCompromise
