@@ -280,24 +280,31 @@ let getCompromisedVerticesOfGraph (compromisedVertexIds: Guid Set) (graph: Graph
     getCompromisedVertices compromisedVertexIds graph graph.vertices
 
 ////
+let private reset_Score vertex = { vertex with _score = vertex.score }
+
 let resetScores graph =
-    { graph with
-        vertices =
-            graph.vertices
-            |> List.map (fun v -> { v with _score = v.score }) }
+    { graph with vertices = graph.vertices |> List.map reset_Score }
+
+let private tryFindFactorForEdge graph (edge: Edge) = tryFindVertexById edge.from graph
+
+let private tryFindFactorsForAccess (graph: Graph) (access: Access) =
+    (getEdgesForAccess graph access)
+    |> List.map (tryFindFactorForEdge graph)
+
+let get_Score (vertex: Vertex option) =
+    vertex
+    |> Option.map (fun v -> v._score)
+    |> Option.defaultValue Int32.MinValue
+
+let sum_Scores (vertices: Vertex option list) =
+    List.sum (vertices |> List.map get_Score)
 
 let private recomputeSumThenMinScore graph vertexId =
     let _scores =
         getAccesses vertexId graph
-        |> Set.map (getEdgesForAccess graph)
-        |> Set.map (fun es ->
-            List.sum (
-                es
-                |> List.map (fun e ->
-                    (tryFindVertexById e.from graph
-                    |> Option.map (fun v -> v._score)
-                    |> Option.defaultValue Int32.MinValue))
-            ))
+        |> Set.map (tryFindFactorsForAccess graph)
+        |> Set.map sum_Scores
+
     if _scores.IsEmpty then
         Int32.MaxValue
     else
@@ -311,6 +318,7 @@ let private stepRecomputeSumThenMinScore graph =
 
 let rec recomputeSumThenMinScores graph =
     let newGraph = stepRecomputeSumThenMinScore graph
+
     if newGraph = graph then
         newGraph
     else
