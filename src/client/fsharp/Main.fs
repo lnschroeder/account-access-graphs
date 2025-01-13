@@ -116,7 +116,7 @@ let private update (http: HttpClient) message model =
     | Msg.ToggleInitialCompromise vertex -> AnalysisCompromiseStep.toggleFactor vertex model, Cmd.none
     // AnalysisScore
     | Msg.OpenAnalysisScore -> AnalysisScoreStep.``open`` model, Cmd.none
-    | Msg.ClickedComputeScoreButton -> AnalysisScoreStep.compute model, Cmd.none
+    | Msg.ClickedSumThenMinButton -> AnalysisScoreStep.computeSumThenMin model, Cmd.none
     // Vinit
     | Msg.OpenVinit -> VinitStep.``open`` model, Cmd.none
     | Msg.SetVinit vertex -> VinitStep.setVinit vertex true model, Cmd.none

@@ -26,7 +26,7 @@ type Message =
     | ClickedClearGraph
     | ClickedExampleGraph
     | ClickedExample2Graph
-    | ClickedComputeScoreButton
+    | ClickedSumThenMinButton
     | ModifiedVertexName of Guid * string
     | ModifiedAccessName of AAG.Access option * string
     | ModifiedGraphJson of string

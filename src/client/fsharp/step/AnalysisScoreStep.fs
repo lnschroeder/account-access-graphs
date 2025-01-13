@@ -21,13 +21,13 @@ let ``open`` model =
       json = model.json }
 
 // Functionality
-let compute (model: Model) =
-    { model with graph = AAG.stepRecomputeScore model.graph }
+let computeSumThenMin (model: Model) =
+    { model with graph = AAG.recomputeSumThenMinScores model.graph }
 
 // View
 let view (model: Model) dispatch =
     Template
         .AnalysisScore()
-        .ComputeButton(fun _ -> dispatch Msg.ClickedComputeScoreButton)
+        .SumThenMinButton(fun _ -> dispatch Msg.ClickedSumThenMinButton)
         .BackButton(fun _ -> dispatch Msg.OpenMainMenuStep)
         .Elt()

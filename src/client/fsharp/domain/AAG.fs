@@ -286,7 +286,7 @@ let resetScores graph =
             graph.vertices
             |> List.map (fun v -> { v with _score = v.score }) }
 
-let private recomputeScore graph vertexId =
+let private recomputeSumThenMinScore graph vertexId =
     let _scores =
         getAccesses vertexId graph
         |> Set.map (getEdgesForAccess graph)
@@ -303,8 +303,15 @@ let private recomputeScore graph vertexId =
     else
         Set.minElement _scores
 
-let stepRecomputeScore graph =
+let private stepRecomputeSumThenMinScore graph =
     { graph with
         vertices =
             graph.vertices
-            |> List.map (fun v -> { v with _score = min v._score (recomputeScore graph v.id) }) }
+            |> List.map (fun v -> { v with _score = min v._score (recomputeSumThenMinScore graph v.id) }) }
+
+let rec recomputeSumThenMinScores graph =
+    let newGraph = stepRecomputeSumThenMinScore graph
+    if newGraph = graph then
+        newGraph
+    else
+        recomputeSumThenMinScores newGraph
