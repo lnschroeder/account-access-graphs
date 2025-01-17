@@ -121,6 +121,7 @@ let private update (http: HttpClient) message model =
     | Msg.OpenVinit -> VinitStep.``open`` model, Cmd.none
     | Msg.SetVinit vertex -> VinitStep.setVinit vertex true model, Cmd.none
     | Msg.UnsetVinit vertex -> VinitStep.setVinit vertex false model, Cmd.none
+    
 let private view (jsRuntime: IJSRuntime) model dispatch =
     jsRuntime.InvokeVoidAsync("updateNetwork", VisJSTransformer.transform model)
     |> ignore
