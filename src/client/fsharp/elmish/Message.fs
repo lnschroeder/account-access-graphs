@@ -8,8 +8,8 @@ type Message =
     | IgnoreAction
     | GotGraph of AAG.Graph
     | SetPage of Endpoint.Page
-    | EnablePhysics
-    | DisablePhysics
+    | SetPhysics of bool
+    | SetEdgeLabels of bool
     | OpenMainMenuStep
     | OpenModifyVertexStep of Guid option
     | OpenModifyAccessStep of AAG.Access * string

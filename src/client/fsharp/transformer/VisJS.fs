@@ -20,6 +20,7 @@ type Edge =
       ``to``: Guid
       isProvisional: bool
       isHighlighted: bool
+      label: string
       colorIndex: byte }
 
 type Network =
@@ -27,7 +28,8 @@ type Network =
       edges: Edge list
       step: string
       subjectVertexId: Guid option
-      physics: bool }
+      physics: bool
+      edgeLabels: bool }
 
 let private transformVertex (model: Model) (vertex: AAG.Vertex) =
     let isInitiallyCompromised =
@@ -51,6 +53,7 @@ let private transformEdge (model: Model) (edge: AAG.Edge) =
     { id = edge.id
       from = edge.from
       ``to`` = edge.``to``
+      label = edge.accessName
       isProvisional =
         model.subjectVertexId = Some edge.``to``
         && model.subjectAccessColor = Some edge.colorIndex
@@ -66,4 +69,5 @@ let transform (model: Model) =
         |> List.map (transformEdge model)
       step = model.step.ToString()
       subjectVertexId = model.subjectVertexId
-      physics = model.physics }
+      physics = model.physics
+      edgeLabels = model.edgeLabels }

@@ -32,6 +32,7 @@ and Model =
       step: Step
       graph: AAG.Graph
       physics: bool
+      edgeLabels: bool
       addAccessNameInput: string
       modifyVertexNameInput: string
       subjectVertexId: Guid option
@@ -46,6 +47,7 @@ and Model =
         { page = Endpoint.Main
           step = MainMenu
           physics = true
+          edgeLabels = false
           graph = AAG.Graph.Empty
           addAccessNameInput = ""
           modifyVertexNameInput = ""

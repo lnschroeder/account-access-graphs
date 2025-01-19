@@ -181,6 +181,11 @@ function updateNetwork(networkDTO) {
       let physics = true;
       let color = colors[edge.colorIndex % colors.length]; // TODO use random color instead
       let width = 1;
+      let label = " ";
+
+      if (networkDTO.edgeLabels) {
+        label = edge.label;
+      }
 
       if (edge.isProvisional) {
         dashes = true;
@@ -195,6 +200,7 @@ function updateNetwork(networkDTO) {
         id: edge.id,
         from: edge.from,
         to: edge.to,
+        label: label,
         dashes: dashes,
         physics: physics,
         color: {

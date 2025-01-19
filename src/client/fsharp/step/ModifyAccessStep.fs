@@ -25,6 +25,7 @@ let ``open`` (access: AAG.Access) addAccessNameInput model =
         { page = Endpoint.Main
           step = ModifyAccess
           physics = model.physics
+          edgeLabels = model.edgeLabels
           graph = model.graph
           addAccessNameInput = addAccessNameInput
           modifyVertexNameInput = subjectVertex.name

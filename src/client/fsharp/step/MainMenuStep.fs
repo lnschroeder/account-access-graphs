@@ -20,6 +20,7 @@ let ``open`` model =
     { page = Endpoint.Main
       step = MainMenu
       physics = model.physics
+      edgeLabels = model.edgeLabels
       graph = model.graph
       addAccessNameInput = ""
       modifyVertexNameInput = ""

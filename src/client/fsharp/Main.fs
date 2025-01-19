@@ -87,8 +87,8 @@ let private update (http: HttpClient) message model =
     | Msg.SetPage page -> { model with page = page }, Cmd.none
     | Msg.ModifiedGraphJson jsonAsString -> handleUpdatedJson jsonAsString model, Cmd.none
     | Msg.GotGraph graph -> { Model.Init with graph = graph }, Cmd.none
-    | Msg.EnablePhysics -> { model with physics = true }, Cmd.none
-    | Msg.DisablePhysics -> { model with physics = false }, Cmd.none
+    | Msg.SetPhysics b -> { model with physics = b }, Cmd.none
+    | Msg.SetEdgeLabels b -> { model with edgeLabels = b }, Cmd.none
     // MainMenu
     | Msg.OpenMainMenuStep -> MainMenuStep.``open`` model, Cmd.none
     | Msg.ClickedClearGraph -> MainMenuStep.clearGraph, Cmd.none
@@ -137,12 +137,8 @@ let private view (jsRuntime: IJSRuntime) model dispatch =
     Template
         .Main()
         .DebugText(getDebugText model) // TODO
-        .PhysicsCheckbox(model.physics,
-                    (fun b ->
-                        if b then
-                            dispatch (Msg.EnablePhysics)
-                        else
-                            dispatch (Msg.DisablePhysics)))
+        .PhysicsCheckbox(model.physics, (fun b -> dispatch (Msg.SetPhysics b)))
+        .EdgeLabelsCheckbox(model.edgeLabels, (fun b -> dispatch (Msg.SetEdgeLabels b)))
         .JsonOutput(model.json, (fun jsonAsString -> dispatch (Msg.ModifiedGraphJson jsonAsString)))
         .JsonOutputHint((getJsonOutputHint model).value)
         .LeftColumn(

@@ -18,6 +18,7 @@ let ``open`` model =
     { page = model.page
       step = Vinit
       physics = model.physics
+      edgeLabels = model.edgeLabels
       graph = model.graph
       addAccessNameInput = model.addAccessNameInput
       modifyVertexNameInput = model.modifyVertexNameInput

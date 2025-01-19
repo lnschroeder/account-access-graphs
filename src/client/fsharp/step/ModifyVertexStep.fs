@@ -50,6 +50,7 @@ let private openInternal (vertex: AAG.Vertex) model =
     { page = model.page
       step = ModifyVertex
       physics = model.physics
+      edgeLabels = model.edgeLabels
       graph = model.graph
       addAccessNameInput = ""
       modifyVertexNameInput = vertex.name
