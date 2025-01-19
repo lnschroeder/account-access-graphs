@@ -114,18 +114,21 @@ function updateNetwork(networkDTO) {
     let borderColor = fontColor;
     let label = node.label;
 
-    if (node.isVinit && (step == "Vinit" || subjectVertexId == node.id) ) {
+    if (node.isVinit && (step == "Vinit" || subjectVertexId == node.id)) {
       backgroundColor = getCssVariable("--bulma-success");
       fontColor = getCssVariable("--bulma-text-bold-invert");
       borderColor = fontColor;
     }
 
-    if ((step == "ModifyVertex" && subjectVertexId == node.id) || step == "AnalysisScore") {
+    if (
+      (step == "ModifyVertex" && subjectVertexId == node.id) ||
+      step == "AnalysisScore"
+    ) {
       label += "\n" + node.score;
     }
 
     if (step == "AnalysisScore") {
-      label += " (" + node._score + ")"
+      label += " (" + node._score + ")";
     }
 
     if (node.isSubject) {
@@ -153,6 +156,7 @@ function updateNetwork(networkDTO) {
     data.nodes.update({
       id: node.id,
       label: label,
+      physics: networkDTO.physics,
       borderWidth: borderWidth,
       color: {
         border: borderColor,

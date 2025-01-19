@@ -26,7 +26,8 @@ type Network =
     { nodes: Node list
       edges: Edge list
       step: string
-      subjectVertexId: Guid option }
+      subjectVertexId: Guid option
+      physics: bool }
 
 let private transformVertex (model: Model) (vertex: AAG.Vertex) =
     let isInitiallyCompromised =
@@ -64,4 +65,5 @@ let transform (model: Model) =
         model.graph.edges
         |> List.map (transformEdge model)
       step = model.step.ToString()
-      subjectVertexId = model.subjectVertexId }
+      subjectVertexId = model.subjectVertexId
+      physics = model.physics }

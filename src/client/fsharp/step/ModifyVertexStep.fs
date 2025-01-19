@@ -49,6 +49,7 @@ let handleClickedEdge (access: AAG.Access) (model: Model) dispatch =
 let private openInternal (vertex: AAG.Vertex) model =
     { page = model.page
       step = ModifyVertex
+      physics = model.physics
       graph = model.graph
       addAccessNameInput = ""
       modifyVertexNameInput = vertex.name

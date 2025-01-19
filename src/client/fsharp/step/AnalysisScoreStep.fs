@@ -8,6 +8,7 @@ open Model
 let ``open`` model =
     { page = model.page
       step = AnalysisScore
+      physics = model.physics
       graph = AAG.resetScores model.graph
       addAccessNameInput = model.addAccessNameInput
       modifyVertexNameInput = model.modifyVertexNameInput

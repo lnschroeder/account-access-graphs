@@ -17,6 +17,7 @@ let handleClickedVertex (vertex: AAG.Vertex) dispatch =
 let ``open`` model =
     { page = model.page
       step = Vinit
+      physics = model.physics
       graph = model.graph
       addAccessNameInput = model.addAccessNameInput
       modifyVertexNameInput = model.modifyVertexNameInput

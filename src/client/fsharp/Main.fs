@@ -87,6 +87,8 @@ let private update (http: HttpClient) message model =
     | Msg.SetPage page -> { model with page = page }, Cmd.none
     | Msg.ModifiedGraphJson jsonAsString -> handleUpdatedJson jsonAsString model, Cmd.none
     | Msg.GotGraph graph -> { Model.Init with graph = graph }, Cmd.none
+    | Msg.EnablePhysics -> { model with physics = true }, Cmd.none
+    | Msg.DisablePhysics -> { model with physics = false }, Cmd.none
     // MainMenu
     | Msg.OpenMainMenuStep -> MainMenuStep.``open`` model, Cmd.none
     | Msg.ClickedClearGraph -> MainMenuStep.clearGraph, Cmd.none
@@ -121,7 +123,7 @@ let private update (http: HttpClient) message model =
     | Msg.OpenVinit -> VinitStep.``open`` model, Cmd.none
     | Msg.SetVinit vertex -> VinitStep.setVinit vertex true model, Cmd.none
     | Msg.UnsetVinit vertex -> VinitStep.setVinit vertex false model, Cmd.none
-    
+
 let private view (jsRuntime: IJSRuntime) model dispatch =
     jsRuntime.InvokeVoidAsync("updateNetwork", VisJSTransformer.transform model)
     |> ignore
@@ -135,6 +137,12 @@ let private view (jsRuntime: IJSRuntime) model dispatch =
     Template
         .Main()
         .DebugText(getDebugText model) // TODO
+        .PhysicsCheckbox(model.physics,
+                    (fun b ->
+                        if b then
+                            dispatch (Msg.EnablePhysics)
+                        else
+                            dispatch (Msg.DisablePhysics)))
         .JsonOutput(model.json, (fun jsonAsString -> dispatch (Msg.ModifiedGraphJson jsonAsString)))
         .JsonOutputHint((getJsonOutputHint model).value)
         .LeftColumn(
