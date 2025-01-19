@@ -187,6 +187,10 @@ function updateNetwork(networkDTO) {
         label = edge.label;
       }
 
+      if (edge.colorIndex == 255) {
+        color = getCssVariable("--bulma-text-bold");
+      }
+
       if (edge.isProvisional) {
         dashes = true;
         width = 2;
