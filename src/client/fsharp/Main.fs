@@ -76,6 +76,8 @@ let handleUpdatedJson jsonAsString (model: Model) =
     | Graph graph ->
         { Model.Init with
             graph = graph
+            physics = model.physics
+            edgeLabels = model.edgeLabels
             json = jsonAsString }
     | ErrorMsg _ -> { model with json = jsonAsString }
 
