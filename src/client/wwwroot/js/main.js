@@ -207,6 +207,7 @@ function updateNetwork(networkDTO) {
         label: label,
         dashes: dashes,
         physics: physics,
+        // smooth: networkDTO.physics, // enable/disable straight edges
         color: {
           color: color,
         },
