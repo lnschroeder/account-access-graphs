@@ -9,8 +9,31 @@ open Model
 open Microsoft.JSInterop
 open System
 open Bolero.Html
+open Newtonsoft.Json.Linq
+open JsonLogic.Net
 
 let private init _ = MainMenuStep.clearGraph, Cmd.none
+
+// TODO this function is just for testing purposes
+let private testAuthenticationPolicyEvaluation =
+    let evaluator = JsonLogicEvaluator(EvaluateOperators.Default)
+    let ruleObj = JObject.Parse(
+        """
+        {
+            "if": [
+                { "var": "passkey" },
+                { "var": "isPremium" },
+                true
+            ]
+        }
+        """
+    )
+    let data = {|
+        passkey = false
+        isPremium = true
+    |}
+    let result = evaluator.Apply(ruleObj, data)
+    printfn "%A" result
 
 let private getDebugText (model: Model) =
     let nodeLen = Seq.length model.graph.vertices
@@ -82,6 +105,7 @@ let handleUpdatedJson jsonAsString (model: Model) =
     | ErrorMsg _ -> { model with json = jsonAsString }
 
 let private update (http: HttpClient) message model =
+    testAuthenticationPolicyEvaluation
     match message with
     | Msg.IgnoreAction -> model, Cmd.none
     | Msg.Error _ -> model, Cmd.none // TODO
