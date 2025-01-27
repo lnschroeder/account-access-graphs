@@ -40,7 +40,7 @@ let view dispatch =
     Template
         .MainMenu()
         .AddVertexButton(fun _ -> dispatch (Msg.OpenModifyVertexStep None))
-        .AnalysisCompromiseButton(fun _ -> dispatch (Msg.OpenAnalysisCompromise))
+        .AnalysisCompromiseButton(fun _ -> dispatch (Msg.OpenAnalysisManual))
         .AnalysisScore(fun _ -> dispatch Msg.OpenAnalysis)
         .VinitButton(fun _ -> dispatch (Msg.OpenVinit))
         .ClearGraphButton(fun _ -> dispatch (Msg.ClickedClearGraph))

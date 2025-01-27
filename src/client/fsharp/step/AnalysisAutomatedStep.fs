@@ -1,4 +1,4 @@
-module AAG.Client.AnalysisScoreStep
+module AAG.Client.AnalysisAutomatedStep
 
 open Model
 open Bolero.Html
@@ -18,7 +18,7 @@ let private recalculateGraph graph = AAG.computeAccessBase graph
 // Open
 let private openPrivate model graph vertexId =
     { page = model.page
-      step = AnalysisScore
+      step = AnalysisAutomated
       physics = model.physics
       edgeLabels = model.edgeLabels
       graph = graph
@@ -41,7 +41,7 @@ let showAnalysisForSubject model vertexId = openPrivate model model.graph vertex
 // View
 let private showAccessSetFactor (graph: AAG.Graph) factorId =
     Template
-        .AnalysisScore
+        .AnalysisAutomated
         .AccessSetFactor()
         .AccessSetFactorName(
             AAG.tryFindVertexById factorId graph
@@ -52,7 +52,7 @@ let private showAccessSetFactor (graph: AAG.Graph) factorId =
 
 let private showAccessSet (graph: AAG.Graph) (accessSet: AAG.AccessSet) =
     Template
-        .AnalysisScore
+        .AnalysisAutomated
         .AccessSet()
         .Score((AAG.getScore graph accessSet).ToString())
         .AccessSetFactors(forEach accessSet.factors (showAccessSetFactor graph))
@@ -65,10 +65,10 @@ let view (model: Model) dispatch =
             match AAG.tryFindVertexById subjectVertexId model.graph with
             | Some subjectVertex ->
                 Template
-                    .AnalysisScore()
+                    .AnalysisAutomated()
                     .AccessBase(forEach subjectVertex.accessBase.accessSets (showAccessSet model.graph))
-            | None -> Template.AnalysisScore()
-        | None -> Template.AnalysisScore()
+            | None -> Template.AnalysisAutomated()
+        | None -> Template.AnalysisAutomated()
 
     template
         .BackButton(fun _ -> dispatch Msg.OpenMainMenuStep)

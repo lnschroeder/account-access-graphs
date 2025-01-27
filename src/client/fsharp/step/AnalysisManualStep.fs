@@ -1,4 +1,4 @@
-module AAG.Client.AnalysisCompromiseStep
+module AAG.Client.AnalysisManualStep
 
 open Model
 open Bolero.Html
@@ -9,7 +9,7 @@ let handleClickedBackground model dispatch =
     if model.initiallyCompromisedVertexIds.IsEmpty then
         dispatch Msg.OpenMainMenuStep
     else
-        dispatch Msg.OpenAnalysisCompromise
+        dispatch Msg.OpenAnalysisManual
 
 
 let handleClickedVertex (vertex: AAG.Vertex) dispatch =
@@ -18,7 +18,7 @@ let handleClickedVertex (vertex: AAG.Vertex) dispatch =
 // Open
 let ``open`` model =
     { page = model.page
-      step = AnalysisCompromise
+      step = AnalysisManual
       physics = model.physics
       edgeLabels = model.edgeLabels
       graph = model.graph
@@ -61,20 +61,20 @@ let private showFactor (model: Model) id =
     match AAG.tryFindVertexById id model.graph with
     | Some vertex ->
         Template
-            .AnalysisCompromise
+            .AnalysisManual
             .Factor()
             .Name(vertex.name)
             .Elt()
     | None ->
         Template
-            .AnalysisCompromise
+            .AnalysisManual
             .Factor()
             .Name("INVALID")
             .Elt()
 
 let view (model: Model) dispatch =
     Template
-        .AnalysisCompromise()
+        .AnalysisManual()
         .Factors(forEach model.initiallyCompromisedVertexIds (showFactor model))
         .FactorsHint((initiallyCompromisedVertexIds model).value)
         .BackButton(fun _ -> dispatch Msg.OpenMainMenuStep)

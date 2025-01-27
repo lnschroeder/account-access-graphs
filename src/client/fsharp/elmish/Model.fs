@@ -19,8 +19,8 @@ and Step =
     | MainMenu
     | ModifyAccess
     | ModifyVertex
-    | AnalysisCompromise
-    | AnalysisScore
+    | AnalysisManual
+    | AnalysisAutomated
     | Vinit
 
 and DeserializedGraph =

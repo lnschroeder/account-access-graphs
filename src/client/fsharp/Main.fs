@@ -53,8 +53,8 @@ let private handleClickedBackground model dispatch =
     | MainMenu -> MainMenuStep.handleClickedBackground dispatch
     | ModifyVertex -> ModifyVertexStep.handleClickedBackground model dispatch
     | ModifyAccess -> ModifyAccessStep.handleClickedBackground model dispatch
-    | AnalysisCompromise -> AnalysisCompromiseStep.handleClickedBackground model dispatch
-    | AnalysisScore -> AnalysisScoreStep.handleClickedBackground dispatch
+    | AnalysisManual -> AnalysisManualStep.handleClickedBackground model dispatch
+    | AnalysisAutomated -> AnalysisAutomatedStep.handleClickedBackground dispatch
     | Vinit -> VinitStep.handleClickedBackground dispatch
 
 let private handleClickedVertex (idAsString: string) model dispatch =
@@ -69,8 +69,8 @@ let private handleClickedVertex (idAsString: string) model dispatch =
         | MainMenu -> MainMenuStep.handleClickedVertex vertex dispatch
         | ModifyVertex -> ModifyVertexStep.handleClickedVertex vertex model dispatch
         | ModifyAccess -> ModifyAccessStep.handleClickedVertex vertex dispatch
-        | AnalysisCompromise -> AnalysisCompromiseStep.handleClickedVertex vertex dispatch
-        | AnalysisScore -> AnalysisScoreStep.handleClickedVertex vertex dispatch
+        | AnalysisManual -> AnalysisManualStep.handleClickedVertex vertex dispatch
+        | AnalysisAutomated -> AnalysisAutomatedStep.handleClickedVertex vertex dispatch
         | Vinit -> VinitStep.handleClickedVertex vertex dispatch
     | None -> dispatch Msg.IgnoreAction
 
@@ -139,12 +139,12 @@ let private update (http: HttpClient) message model =
     | Msg.HighlightAccess access -> highlightAccess access model, Cmd.none
     | Msg.DeHighlightAccess -> deHighlightAccess model, Cmd.none
     | Msg.SetScore (vertex, score) -> ModifyVertexStep.setScore vertex score model, Cmd.none
-    // AnalysisCompromise
-    | Msg.OpenAnalysisCompromise -> AnalysisCompromiseStep.``open`` model, Cmd.none
-    | Msg.ToggleInitialCompromise vertex -> AnalysisCompromiseStep.toggleFactor vertex model, Cmd.none
-    // AnalysisScore
-    | Msg.OpenAnalysis -> AnalysisScoreStep.``open`` model, Cmd.none
-    | Msg.OpenAnalysisForVertex vertexId -> AnalysisScoreStep.showAnalysisForSubject model vertexId, Cmd.none
+    // AnalysisManual
+    | Msg.OpenAnalysisManual -> AnalysisManualStep.``open`` model, Cmd.none
+    | Msg.ToggleInitialCompromise vertex -> AnalysisManualStep.toggleFactor vertex model, Cmd.none
+    // AnalysisAutomated
+    | Msg.OpenAnalysis -> AnalysisAutomatedStep.``open`` model, Cmd.none
+    | Msg.OpenAnalysisForVertex vertexId -> AnalysisAutomatedStep.showAnalysisForSubject model vertexId, Cmd.none
     // Vinit
     | Msg.OpenVinit -> VinitStep.``open`` model, Cmd.none
     | Msg.SetVinit vertex -> VinitStep.setVinit vertex true model, Cmd.none
@@ -175,8 +175,8 @@ let private view (jsRuntime: IJSRuntime) model dispatch =
                     | MainMenu -> MainMenuStep.view dispatch
                     | ModifyAccess -> ModifyAccessStep.view jsRuntime model dispatch
                     | ModifyVertex -> ModifyVertexStep.view jsRuntime model dispatch
-                    | AnalysisCompromise -> AnalysisCompromiseStep.view model dispatch
-                    | AnalysisScore -> AnalysisScoreStep.view model dispatch
+                    | AnalysisManual -> AnalysisManualStep.view model dispatch
+                    | AnalysisAutomated -> AnalysisAutomatedStep.view model dispatch
                     | Vinit -> VinitStep.view model dispatch
         )
         .ClickedVertexInput("", (fun idAsString -> handleClickedVertex idAsString model dispatch))

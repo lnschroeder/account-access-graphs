@@ -13,7 +13,7 @@ type Message =
     | OpenMainMenuStep
     | OpenModifyVertexStep of Guid option
     | OpenModifyAccessStep of AAG.Access * string
-    | OpenAnalysisCompromise
+    | OpenAnalysisManual
     | OpenAnalysis
     | OpenAnalysisForVertex of Guid option
     | OpenVinit
