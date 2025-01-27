@@ -1,0 +1,67 @@
+{
+    "vertices": [
+      {
+        "id": "6c284e0c-92f5-4f4b-97dd-9dff2410198e",
+        "name": "pwdlaptop",
+        "isVinit": true,
+        "score": 3,
+        "_score": 3,
+        "accessBase": {
+          "accessSets": []
+        }
+      },
+      {
+        "id": "38013cd0-4e8f-4d80-863c-1c6da5557271",
+        "name": "laptop\u2217",
+        "isVinit": false,
+        "score": 1024,
+        "_score": 1024,
+        "accessBase": {
+          "accessSets": []
+        }
+      },
+      {
+        "id": "5efbe769-44bd-428f-8247-1650a2836b7e",
+        "name": "laptop",
+        "isVinit": false,
+        "score": 1024,
+        "_score": 1024,
+        "accessBase": {
+          "accessSets": []
+        }
+      },
+      {
+        "id": "5ee93c82-00a8-40d6-a331-428aa5da0090",
+        "name": "officeKey",
+        "isVinit": true,
+        "score": 3,
+        "_score": 3,
+        "accessBase": {
+          "accessSets": []
+        }
+      }
+    ],
+    "edges": [
+      {
+        "id": "faae0c0a-6877-4824-9b76-cc7b92e90c98",
+        "accessName": "0",
+        "colorIndex": 0,
+        "from": "6c284e0c-92f5-4f4b-97dd-9dff2410198e",
+        "to": "38013cd0-4e8f-4d80-863c-1c6da5557271"
+      },
+      {
+        "id": "a99b9e48-d072-4e92-ba0b-5c2b43ba48a6",
+        "accessName": "0",
+        "colorIndex": 0,
+        "from": "5efbe769-44bd-428f-8247-1650a2836b7e",
+        "to": "38013cd0-4e8f-4d80-863c-1c6da5557271"
+      },
+      {
+        "id": "6dfe41bc-ca3a-4f5c-9de0-eb3eb434b81c",
+        "accessName": "0",
+        "colorIndex": 0,
+        "from": "5ee93c82-00a8-40d6-a331-428aa5da0090",
+        "to": "5efbe769-44bd-428f-8247-1650a2836b7e"
+      }
+    ]
+  }

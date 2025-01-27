@@ -2,18 +2,35 @@ module AAG.Client.AAG
 
 open System
 
-type Vertex =
+open System.Collections.Generic
+
+type IdAccess = { target: Guid; factors: Guid Set }
+
+and AccessSet =
+    { factors: Guid Set }
+    static member Singleton id = { factors = Set.singleton id }
+
+and AccessBase =
+    { accessSets: AccessSet Set }
+    static member Singleton accessSet =
+        { accessSets = Set.singleton accessSet }
+
+    static member Empty = { accessSets = Set.empty }
+
+and Vertex =
     { id: Guid
       name: string
       isVinit: bool
       score: int
-      _score: int }
+      _score: int
+      accessBase: AccessBase }
     static member Default =
         { id = Guid.NewGuid()
           name = ""
           isVinit = false
           score = 1
-          _score = 1 }
+          _score = 1
+          accessBase = AccessBase.Empty }
 
 and Edge =
     { id: Guid
@@ -46,21 +63,24 @@ and Graph =
               name = "test"
               isVinit = false
               score = 1
-              _score = 1 }
+              _score = 1
+              accessBase = AccessBase.Empty }
 
         let v2 =
             { id = Guid.Parse("1578d946-7c48-41a6-baf2-0386979c9de2")
               name = "test2"
               isVinit = false
               score = 2
-              _score = 2 }
+              _score = 2
+              accessBase = AccessBase.Empty }
 
         let v3 =
             { id = Guid.Parse("1578d946-7c48-41a6-baf2-0386979c9de3")
               name = "test222"
               isVinit = true
               score = 3
-              _score = 3 }
+              _score = 3
+              accessBase = AccessBase.Empty }
 
         let a1e1 =
             { id = Guid.Parse("2578d946-7c48-41a6-baf2-0386979c9de1")
@@ -323,3 +343,94 @@ let rec recomputeSumThenMinScores graph =
         newGraph
     else
         recomputeSumThenMinScores newGraph
+
+// AccessBase
+let rec cart1 (LL) =
+    match LL with
+    | [] -> Seq.singleton []
+    | L :: Ls ->
+        seq {
+            for x in L do
+                for xs in cart1 Ls -> x :: xs
+        }
+
+let rec private recomputeAccessBases
+    (accesses: IdAccess list) // [(t: D, fs: {A,B}), (t: A, fs: {A}), (t: A, fs: {E,F})]
+    (accessBases: Dictionary<Guid, AccessBase>) // A: {{A}, {E,F}}; B: {{B}}, D: {{}}
+    : Dictionary<Guid, AccessBase> =
+    let mutable updated = false
+
+    accesses
+    |> List.iter (fun access ->
+        let accessBasesOfFactors =
+            access.factors
+            |> Set.map (fun f -> accessBases.[f])
+            |> List.ofSeq
+
+        let accessSets =
+            cart1 (
+                accessBasesOfFactors
+                |> List.map (fun accessBase -> accessBase.accessSets)
+            )
+            |> Seq.map (fun accessSets ->
+                { factors =
+                    accessSets
+                    |> List.collect (fun accessSet -> accessSet.factors |> List.ofSeq)
+                    |> Set.ofList })
+            |> Set.ofSeq
+
+        let oldAccessBaseSets = accessBases.[access.target].accessSets
+        let newAccessBaseSets = (accessSets + oldAccessBaseSets)
+
+        let newAccessBaseSets =
+            newAccessBaseSets
+            |> Set.filter (fun set1 ->
+                not (
+                    newAccessBaseSets
+                    |> Set.exists (fun set2 ->
+                        set1 <> set2
+                        && Set.isSubset set2.factors set1.factors)
+                ))
+
+
+        let newAccessBase = { accessSets = newAccessBaseSets }
+
+        updated <-
+            if updated then
+                updated
+            else
+                oldAccessBaseSets <> newAccessBase.accessSets
+
+        accessBases.[access.target] <- newAccessBase)
+
+    printfn "compute"
+
+    if updated then
+        recomputeAccessBases accesses accessBases
+    else
+        accessBases
+
+let computeAccessBase graph : Graph =
+    let accesses =
+        graph.edges
+        |> List.groupBy (fun e -> (e.``to``, e.colorIndex))
+        |> List.map (fun ((vertexId, _), edges) ->
+            { target = vertexId
+              factors = edges |> Seq.map (fun e -> e.from) |> Set.ofSeq })
+
+    let accessBases = Dictionary<Guid, AccessBase>()
+
+    graph.vertices
+    |> List.iter (fun v ->
+        accessBases.[v.id] <-
+            if v.isVinit then
+                AccessBase.Singleton(AccessSet.Singleton v.id)
+            else
+                AccessBase.Empty)
+
+    let accessBases = recomputeAccessBases accesses accessBases
+
+    { graph with
+        vertices =
+            graph.vertices
+            |> List.map (fun v -> { v with accessBase = accessBases.[v.id] }) }

@@ -124,7 +124,7 @@ function updateNetwork(networkDTO) {
       (step == "ModifyVertex" && subjectVertexId == node.id) ||
       step == "AnalysisScore"
     ) {
-      label += "\n" + node.score;
+      label += "\n" + node.score + "\n" + node.accessBase;
     }
 
     if (step == "AnalysisScore") {

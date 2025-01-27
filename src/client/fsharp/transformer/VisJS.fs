@@ -12,7 +12,8 @@ type Node =
       isTransitivelyCompromised: bool
       isVinit: bool
       score: int
-      _score: int }
+      _score: int
+      accessBase: string }
 
 type Edge =
     { id: Guid
@@ -47,7 +48,16 @@ let private transformVertex (model: Model) (vertex: AAG.Vertex) =
       isTransitivelyCompromised = isTransitivelyCompromised
       isVinit = vertex.isVinit
       score = vertex.score
-      _score = vertex._score }
+      _score = vertex._score
+      accessBase =
+        (vertex.accessBase.accessSets
+         |> Set.map (fun accessSet ->
+             accessSet.factors
+             |> Set.map (fun f ->
+                 AAG.tryFindVertexById f model.graph
+                 |> Option.map (fun v -> v.name)
+                 |> Option.defaultValue "")))
+            .ToString() }
 
 let private transformEdge (model: Model) (edge: AAG.Edge) =
     { id = edge.id

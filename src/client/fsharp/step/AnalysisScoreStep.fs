@@ -24,7 +24,7 @@ let ``open`` model =
 
 // Functionality
 let computeSumThenMin (model: Model) =
-    { model with graph = AAG.recomputeSumThenMinScores model.graph }
+    { model with graph = AAG.computeAccessBase model.graph }
 
 // View
 let view (model: Model) dispatch =
