@@ -14,7 +14,8 @@ type Message =
     | OpenModifyVertexStep of Guid option
     | OpenModifyAccessStep of AAG.Access * string
     | OpenAnalysisCompromise
-    | OpenAnalysisScore
+    | OpenAnalysis
+    | OpenAnalysisForVertex of Guid option
     | OpenVinit
     | UnsetVinit of AAG.Vertex
     | SetVinit of AAG.Vertex
@@ -28,7 +29,6 @@ type Message =
     | ClickedClearGraph
     | ClickedExampleGraph
     | ClickedExample2Graph
-    | ClickedSumThenMinButton
     | ModifiedVertexName of Guid * string
     | ModifiedAccessName of AAG.Access option * string
     | ModifiedGraphJson of string

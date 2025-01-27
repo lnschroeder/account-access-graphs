@@ -2,18 +2,33 @@ module AAG.Client.AAG
 
 open System
 
-type Vertex =
+open System.Collections.Generic
+
+type IdAccess = { target: Guid; factors: Guid Set }
+
+and AccessSet =
+    { factors: Guid Set }
+    static member Singleton id = { factors = Set.singleton id }
+
+and AccessBase =
+    { accessSets: AccessSet Set }
+    static member Singleton accessSet =
+        { accessSets = Set.singleton accessSet }
+
+    static member Empty = { accessSets = Set.empty }
+
+and Vertex =
     { id: Guid
       name: string
       isVinit: bool
       score: int
-      _score: int }
+      accessBase: AccessBase }
     static member Default =
         { id = Guid.NewGuid()
           name = ""
           isVinit = false
           score = 1
-          _score = 1 }
+          accessBase = AccessBase.Empty }
 
 and Edge =
     { id: Guid
@@ -46,21 +61,21 @@ and Graph =
               name = "test"
               isVinit = false
               score = 1
-              _score = 1 }
+              accessBase = AccessBase.Empty }
 
         let v2 =
             { id = Guid.Parse("1578d946-7c48-41a6-baf2-0386979c9de2")
               name = "test2"
               isVinit = false
               score = 2
-              _score = 2 }
+              accessBase = AccessBase.Empty }
 
         let v3 =
             { id = Guid.Parse("1578d946-7c48-41a6-baf2-0386979c9de3")
               name = "test222"
               isVinit = true
               score = 3
-              _score = 3 }
+              accessBase = AccessBase.Empty }
 
         let a1e1 =
             { id = Guid.Parse("2578d946-7c48-41a6-baf2-0386979c9de1")
@@ -169,7 +184,7 @@ let setScore graph score vertexId =
             graph.vertices
             |> List.map (fun v ->
                 if v.id = vertexId then
-                    { v with score = score; _score = score }
+                    { v with score = score }
                 else
                     v) }
 //
@@ -279,47 +294,98 @@ let rec private getCompromisedVertices (compromisedVertexIds: Guid Set) (graph: 
 let getCompromisedVerticesOfGraph (compromisedVertexIds: Guid Set) (graph: Graph) =
     getCompromisedVertices compromisedVertexIds graph graph.vertices
 
-////
-let private reset_Score vertex = { vertex with _score = vertex.score }
+// AccessBase
 
-let resetScores graph =
-    { graph with vertices = graph.vertices |> List.map reset_Score }
+let getScore graph (accessSet: AccessSet) =
+    accessSet.factors
+    |> Set.map (fun f ->
+        tryFindVertexById f graph
+        |> Option.map (fun v -> v.score)
+        |> Option.defaultValue (Int32.MaxValue))
+    |> List.ofSeq
+    |> List.sum
 
-let private tryFindFactorForEdge graph (edge: Edge) = tryFindVertexById edge.from graph
+let rec cart1 (LL) =
+    match LL with
+    | [] -> Seq.singleton []
+    | L :: Ls ->
+        seq {
+            for x in L do
+                for xs in cart1 Ls -> x :: xs
+        }
 
-let private tryFindFactorsForAccess (graph: Graph) (access: Access) =
-    (getEdgesForAccess graph access)
-    |> List.map (tryFindFactorForEdge graph)
+let rec private computeAccessBaseStep
+    (accesses: IdAccess list)
+    (accessBases: Dictionary<Guid, AccessBase>)
+    : Dictionary<Guid, AccessBase> =
+    let mutable updated = false
 
-let get_Score (vertex: Vertex option) =
-    vertex
-    |> Option.map (fun v -> v._score)
-    |> Option.defaultValue Int32.MinValue
+    accesses
+    |> List.iter (fun access ->
+        let accessBasesOfFactors =
+            access.factors
+            |> Set.map (fun f -> accessBases.[f])
+            |> List.ofSeq
 
-let sum_Scores (vertices: Vertex option list) =
-    List.sum (vertices |> List.map get_Score)
+        let accessSets =
+            cart1 (
+                accessBasesOfFactors
+                |> List.map (fun accessBase -> accessBase.accessSets)
+            )
+            |> Seq.map (fun accessSets ->
+                { factors =
+                    accessSets
+                    |> List.collect (fun accessSet -> accessSet.factors |> List.ofSeq)
+                    |> Set.ofList })
+            |> Set.ofSeq
 
-let private recomputeSumThenMinScore graph vertexId =
-    let _scores =
-        getAccesses vertexId graph
-        |> Set.map (tryFindFactorsForAccess graph)
-        |> Set.map sum_Scores
+        let oldAccessBaseSets = accessBases.[access.target].accessSets
+        let newAccessBaseSets = (accessSets + oldAccessBaseSets)
 
-    if _scores.IsEmpty then
-        Int32.MaxValue
+        let newAccessBaseSets =
+            newAccessBaseSets
+            |> Set.filter (fun set1 ->
+                not (
+                    newAccessBaseSets
+                    |> Set.exists (fun set2 ->
+                        set1 <> set2
+                        && Set.isSubset set2.factors set1.factors)
+                ))
+
+        let newAccessBase = { accessSets = newAccessBaseSets }
+
+        updated <-
+            updated
+            || oldAccessBaseSets <> newAccessBase.accessSets
+
+        accessBases.[access.target] <- newAccessBase)
+
+    if updated then
+        computeAccessBaseStep accesses accessBases
     else
-        Set.minElement _scores
+        accessBases
 
-let private stepRecomputeSumThenMinScore graph =
+let computeAccessBase graph : Graph =
+    let accesses =
+        graph.edges
+        |> List.groupBy (fun e -> (e.``to``, e.colorIndex))
+        |> List.map (fun ((vertexId, _), edges) ->
+            { target = vertexId
+              factors = edges |> Seq.map (fun e -> e.from) |> Set.ofSeq })
+
+    let accessBases = Dictionary<Guid, AccessBase>()
+
+    graph.vertices
+    |> List.iter (fun v ->
+        accessBases.[v.id] <-
+            if v.isVinit then
+                AccessBase.Singleton(AccessSet.Singleton v.id)
+            else
+                AccessBase.Empty)
+
+    let accessBases = computeAccessBaseStep accesses accessBases
+
     { graph with
         vertices =
             graph.vertices
-            |> List.map (fun v -> { v with _score = min v._score (recomputeSumThenMinScore graph v.id) }) }
-
-let rec recomputeSumThenMinScores graph =
-    let newGraph = stepRecomputeSumThenMinScore graph
-
-    if newGraph = graph then
-        newGraph
-    else
-        recomputeSumThenMinScores newGraph
+            |> List.map (fun v -> { v with accessBase = accessBases.[v.id] }) }

@@ -113,32 +113,18 @@ function updateNetwork(networkDTO) {
     let borderDashes = false;
     let borderColor = fontColor;
     let label = node.label;
+    let shape = "box";
 
-    if (node.isVinit && (step == "Vinit" || subjectVertexId == node.id)) {
-      backgroundColor = getCssVariable("--bulma-success");
-      fontColor = getCssVariable("--bulma-text-bold-invert");
-      borderColor = fontColor;
-    }
-
-    if (
-      (step == "ModifyVertex" && subjectVertexId == node.id) ||
-      step == "AnalysisScore"
-    ) {
-      label += "\n" + node.score;
-    }
-
-    if (step == "AnalysisScore") {
-      label += " (" + node._score + ")";
+    if (node.isVinit) {
+      borderWidth = 3;
     }
 
     if (node.isSubject) {
       borderColor = getCssVariable("--bulma-warning-on-scheme");
-      borderWidth = 3;
     }
 
     if (node.isFactor) {
       borderColor = getCssVariable("--bulma-warning-on-scheme");
-      borderWidth = 3;
       borderDashes = [5, 5];
     }
 
@@ -158,6 +144,7 @@ function updateNetwork(networkDTO) {
       label: label,
       physics: networkDTO.physics,
       borderWidth: borderWidth,
+      borderWidthSelected: borderWidth,
       color: {
         border: borderColor,
         background: backgroundColor,
@@ -167,6 +154,7 @@ function updateNetwork(networkDTO) {
           background: backgroundColor,
         },
       },
+      shape: shape,
       shapeProperties: {
         borderDashes: borderDashes,
       },

@@ -1,10 +1,36 @@
 <h1 class="title">Analyze score</h1>
 
-<div class="buttons">
-  <button class="button is-info is-fullwidth" onclick="${SumThenMinButton}">
-    Compute SumThenMin
-  </button>
+<div class="field">
+  <label class="label">Access Base</label>
+  <table class="table is-hoverable is-narrow">
+    <thead>
+      <tr>
+        <th>Score</th>
+        <th>Factors</th>
+      </tr>
+    </thead>
+    <tbody>
+      ${AccessBase}
+    </tbody>
 
+      <template id="AccessSet">
+        <tr>
+          <th>${Score}</th>
+          <th>
+            <div class="tags">
+              ${AccessSetFactors}
+              <template id="AccessSetFactor">
+                <span class="tag"> ${AccessSetFactorName} </span>
+              </template>
+            </div>
+          </th>
+        </tr>
+      </template>
+  </table>
+</div>
+
+
+<div class="buttons">
   <button class="button is-info is-fullwidth" onclick="${BackButton}">
     Back
   </button>

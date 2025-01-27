@@ -54,7 +54,7 @@ let private handleClickedBackground model dispatch =
     | ModifyVertex -> ModifyVertexStep.handleClickedBackground model dispatch
     | ModifyAccess -> ModifyAccessStep.handleClickedBackground model dispatch
     | AnalysisCompromise -> AnalysisCompromiseStep.handleClickedBackground model dispatch
-    | AnalysisScore -> dispatch Msg.IgnoreAction
+    | AnalysisScore -> AnalysisScoreStep.handleClickedBackground dispatch
     | Vinit -> VinitStep.handleClickedBackground dispatch
 
 let private handleClickedVertex (idAsString: string) model dispatch =
@@ -70,7 +70,7 @@ let private handleClickedVertex (idAsString: string) model dispatch =
         | ModifyVertex -> ModifyVertexStep.handleClickedVertex vertex model dispatch
         | ModifyAccess -> ModifyAccessStep.handleClickedVertex vertex dispatch
         | AnalysisCompromise -> AnalysisCompromiseStep.handleClickedVertex vertex dispatch
-        | AnalysisScore -> dispatch Msg.IgnoreAction
+        | AnalysisScore -> AnalysisScoreStep.handleClickedVertex vertex dispatch
         | Vinit -> VinitStep.handleClickedVertex vertex dispatch
     | None -> dispatch Msg.IgnoreAction
 
@@ -143,8 +143,8 @@ let private update (http: HttpClient) message model =
     | Msg.OpenAnalysisCompromise -> AnalysisCompromiseStep.``open`` model, Cmd.none
     | Msg.ToggleInitialCompromise vertex -> AnalysisCompromiseStep.toggleFactor vertex model, Cmd.none
     // AnalysisScore
-    | Msg.OpenAnalysisScore -> AnalysisScoreStep.``open`` model, Cmd.none
-    | Msg.ClickedSumThenMinButton -> AnalysisScoreStep.computeSumThenMin model, Cmd.none
+    | Msg.OpenAnalysis -> AnalysisScoreStep.``open`` model, Cmd.none
+    | Msg.OpenAnalysisForVertex vertexId -> AnalysisScoreStep.showAnalysisForSubject model vertexId, Cmd.none
     // Vinit
     | Msg.OpenVinit -> VinitStep.``open`` model, Cmd.none
     | Msg.SetVinit vertex -> VinitStep.setVinit vertex true model, Cmd.none
