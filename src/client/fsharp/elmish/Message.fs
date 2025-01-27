@@ -18,12 +18,12 @@ type Message =
     | OpenAnalysisForVertex of Guid option
     | OpenVinit
     | UnsetVinit of AAG.Vertex
+    | UpdateCompromisedVertices of Guid Set
     | SetVinit of AAG.Vertex
     | SetScore of AAG.Vertex * int
     | HighlightAccess of AAG.Access
     | DeHighlightAccess
     | ToggleFactorForSubject of AAG.Vertex
-    | ToggleInitialCompromise of AAG.Vertex
     | ClickedDeleteVertex of Guid
     | ClickedDeleteAccess of AAG.Access option
     | ClickedClearGraph

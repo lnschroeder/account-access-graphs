@@ -127,3 +127,8 @@ let highlightAccess (access: AAG.Access) (model: Model) =
 
 let deHighlightAccess (model: Model) =
     { model with highlightedEdgeIds = Set.empty }
+
+let updateTransitivelyCompromisedVertexIds model vertexIds =
+    { model with
+        initiallyCompromisedVertexIds = vertexIds
+        transitivelyCompromisedVertexIds = AAG.getCompromisedVerticesOfGraph vertexIds model.graph }

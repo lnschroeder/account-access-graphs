@@ -50,12 +50,14 @@ let private showAccessSetFactor (graph: AAG.Graph) factorId =
         )
         .Elt()
 
-let private showAccessSet (graph: AAG.Graph) (accessSet: AAG.AccessSet) =
+let private showAccessSet dispatch (graph: AAG.Graph) (accessSet: AAG.AccessSet) =
     Template
         .AnalysisAutomated
         .AccessSet()
         .Score((AAG.getScore graph accessSet).ToString())
         .AccessSetFactors(forEach accessSet.factors (showAccessSetFactor graph))
+        .Enter(fun _ -> dispatch (Msg.UpdateCompromisedVertices accessSet.factors))
+        .Leave(fun _ -> dispatch (Msg.UpdateCompromisedVertices Set.empty))
         .Elt()
 
 let view (model: Model) dispatch =
@@ -66,7 +68,7 @@ let view (model: Model) dispatch =
             | Some subjectVertex ->
                 Template
                     .AnalysisAutomated()
-                    .AccessBase(forEach subjectVertex.accessBase.accessSets (showAccessSet model.graph))
+                    .AccessBase(forEach subjectVertex.accessBase.accessSets (showAccessSet dispatch model.graph))
             | None -> Template.AnalysisAutomated()
         | None -> Template.AnalysisAutomated()
 

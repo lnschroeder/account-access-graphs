@@ -69,7 +69,7 @@ let private handleClickedVertex (idAsString: string) model dispatch =
         | MainMenu -> MainMenuStep.handleClickedVertex vertex dispatch
         | ModifyVertex -> ModifyVertexStep.handleClickedVertex vertex model dispatch
         | ModifyAccess -> ModifyAccessStep.handleClickedVertex vertex dispatch
-        | AnalysisManual -> AnalysisManualStep.handleClickedVertex vertex dispatch
+        | AnalysisManual -> AnalysisManualStep.handleClickedVertex model vertex dispatch
         | AnalysisAutomated -> AnalysisAutomatedStep.handleClickedVertex vertex dispatch
         | Vinit -> VinitStep.handleClickedVertex vertex dispatch
     | None -> dispatch Msg.IgnoreAction
@@ -141,7 +141,6 @@ let private update (http: HttpClient) message model =
     | Msg.SetScore (vertex, score) -> ModifyVertexStep.setScore vertex score model, Cmd.none
     // AnalysisManual
     | Msg.OpenAnalysisManual -> AnalysisManualStep.``open`` model, Cmd.none
-    | Msg.ToggleInitialCompromise vertex -> AnalysisManualStep.toggleFactor vertex model, Cmd.none
     // AnalysisAutomated
     | Msg.OpenAnalysis -> AnalysisAutomatedStep.``open`` model, Cmd.none
     | Msg.OpenAnalysisForVertex vertexId -> AnalysisAutomatedStep.showAnalysisForSubject model vertexId, Cmd.none
@@ -149,6 +148,8 @@ let private update (http: HttpClient) message model =
     | Msg.OpenVinit -> VinitStep.``open`` model, Cmd.none
     | Msg.SetVinit vertex -> VinitStep.setVinit vertex true model, Cmd.none
     | Msg.UnsetVinit vertex -> VinitStep.setVinit vertex false model, Cmd.none
+    // Model
+    | Msg.UpdateCompromisedVertices vertexIds -> updateTransitivelyCompromisedVertexIds model vertexIds, Cmd.none
 
 let private view (jsRuntime: IJSRuntime) model dispatch =
     jsRuntime.InvokeVoidAsync("updateNetwork", VisJSTransformer.transform model)

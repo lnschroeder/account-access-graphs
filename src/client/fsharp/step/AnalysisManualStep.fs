@@ -4,17 +4,6 @@ open Model
 open Bolero.Html
 
 // Validity
-// Handle actions
-let handleClickedBackground model dispatch =
-    if model.initiallyCompromisedVertexIds.IsEmpty then
-        dispatch Msg.OpenMainMenuStep
-    else
-        dispatch Msg.OpenAnalysisManual
-
-
-let handleClickedVertex (vertex: AAG.Vertex) dispatch =
-    dispatch (Msg.ToggleInitialCompromise vertex)
-
 // Open
 let ``open`` model =
     { page = model.page
@@ -34,27 +23,22 @@ let ``open`` model =
       json = model.json }
 
 // Functionality
-let private removeInitialCompromiseVertex (vertex: AAG.Vertex) (model: Model) =
-    let initiallyCompromisedVertexIds =
-        Set.remove vertex.id model.initiallyCompromisedVertexIds
-
-    { model with
-        initiallyCompromisedVertexIds = initiallyCompromisedVertexIds
-        transitivelyCompromisedVertexIds = AAG.getCompromisedVerticesOfGraph initiallyCompromisedVertexIds model.graph }
-
-let private addInitialCompromiseVertex (vertex: AAG.Vertex) (model: Model) =
-    let initiallyCompromisedVertexIds =
-        Set.add vertex.id model.initiallyCompromisedVertexIds
-
-    { model with
-        initiallyCompromisedVertexIds = initiallyCompromisedVertexIds
-        transitivelyCompromisedVertexIds = AAG.getCompromisedVerticesOfGraph initiallyCompromisedVertexIds model.graph }
-
-let toggleFactor (vertex: AAG.Vertex) (model: Model) =
-    if Set.contains vertex.id model.initiallyCompromisedVertexIds then
-        removeInitialCompromiseVertex vertex model
+// Handle actions
+let handleClickedBackground model dispatch =
+    if model.initiallyCompromisedVertexIds.IsEmpty then
+        dispatch Msg.OpenMainMenuStep
     else
-        addInitialCompromiseVertex vertex model
+        dispatch Msg.OpenAnalysisManual
+
+let handleClickedVertex model (vertex: AAG.Vertex) dispatch =
+    dispatch (
+        Msg.UpdateCompromisedVertices(
+            if Set.contains vertex.id model.initiallyCompromisedVertexIds then
+                Set.remove vertex.id model.initiallyCompromisedVertexIds
+            else
+                Set.add vertex.id model.initiallyCompromisedVertexIds
+        )
+    )
 
 // View
 let private showFactor (model: Model) id =

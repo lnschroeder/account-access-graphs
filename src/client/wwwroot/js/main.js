@@ -120,11 +120,13 @@ function updateNetwork(networkDTO) {
     }
 
     if (node.isSubject) {
-      borderColor = getCssVariable("--bulma-warning-on-scheme");
+      backgroundColor = getCssVariable("--bulma-primary");
+      fontColor = "#14161A";
     }
 
     if (node.isFactor) {
-      borderColor = getCssVariable("--bulma-warning-on-scheme");
+      backgroundColor = getCssVariable("--bulma-primary");
+      fontColor = "#14161A";
       borderDashes = [5, 5];
     }
 
