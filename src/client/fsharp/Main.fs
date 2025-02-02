@@ -17,8 +17,10 @@ let private init _ = MainMenuStep.clearGraph, Cmd.none
 // TODO this function is just for testing purposes
 let private testAuthenticationPolicyEvaluation =
     let evaluator = JsonLogicEvaluator(EvaluateOperators.Default)
-    let ruleObj = JObject.Parse(
-        """
+
+    let ruleObj =
+        JObject.Parse(
+            """
         {
             "if": [
                 { "var": "passkey" },
@@ -27,11 +29,9 @@ let private testAuthenticationPolicyEvaluation =
             ]
         }
         """
-    )
-    let data = {|
-        passkey = false
-        isPremium = true
-    |}
+        )
+
+    let data = {| passkey = false; isPremium = true |}
     let result = evaluator.Apply(ruleObj, data)
     printfn "%A" result
 
@@ -56,6 +56,7 @@ let private handleClickedBackground model dispatch =
     | AnalysisManual -> AnalysisManualStep.handleClickedBackground model dispatch
     | AnalysisAutomated -> AnalysisAutomatedStep.handleClickedBackground dispatch
     | Vinit -> VinitStep.handleClickedBackground dispatch
+    | AddComponent -> dispatch Msg.IgnoreAction
 
 let private handleClickedVertex (idAsString: string) model dispatch =
     let vertex =
@@ -72,6 +73,7 @@ let private handleClickedVertex (idAsString: string) model dispatch =
         | AnalysisManual -> AnalysisManualStep.handleClickedVertex model vertex dispatch
         | AnalysisAutomated -> AnalysisAutomatedStep.handleClickedVertex vertex dispatch
         | Vinit -> VinitStep.handleClickedVertex vertex dispatch
+        | AddComponent -> dispatch Msg.IgnoreAction
     | None -> dispatch Msg.IgnoreAction
 
 let private handleClickedVisEdge (idAsString: string) model dispatch =
@@ -93,7 +95,6 @@ let getJsonOutputHint (model: Model) =
     | Graph _ -> Hint.Info
     | ErrorMsg msg -> msg
 
-
 let handleUpdatedJson jsonAsString (model: Model) =
     match Json.tryDeserializeGraph jsonAsString with
     | Graph graph ->
@@ -106,6 +107,7 @@ let handleUpdatedJson jsonAsString (model: Model) =
 
 let private update (http: HttpClient) message model =
     testAuthenticationPolicyEvaluation
+
     match message with
     | Msg.IgnoreAction -> model, Cmd.none
     | Msg.Error _ -> model, Cmd.none // TODO
@@ -144,6 +146,24 @@ let private update (http: HttpClient) message model =
     // AnalysisAutomated
     | Msg.OpenAnalysis -> AnalysisAutomatedStep.``open`` model, Cmd.none
     | Msg.OpenAnalysisForVertex vertexId -> AnalysisAutomatedStep.showAnalysisForSubject model vertexId, Cmd.none
+    // AddComponent
+    | Msg.OpenAddComponentStep ->
+        let getComponents () =
+            http.GetFromJsonAsync<string list>("resources/components.json")
+
+        let cmd = Cmd.OfTask.either getComponents () Msg.GotComponents Msg.Error
+
+        model, cmd
+    | Msg.GotComponents components -> AddComponentStep.``open`` model components, Cmd.none
+    | Msg.GotComponent graph -> AddComponentStep.importComponent model graph, Cmd.none
+    | Msg.SetComponentSelection c -> { model with newComponentSelection = c }, Cmd.none
+    | Msg.ModifiedComponentName name -> { model with componentNameInput = name }, Cmd.none
+    | Msg.ImportSelectedComponent ->
+        let getComponent () =
+            http.GetFromJsonAsync<AAG.Graph>("resources/components/" + model.newComponentSelection)
+
+        let cmd = Cmd.OfTask.either getComponent () Msg.GotComponent Msg.Error
+        model, cmd
     // Vinit
     | Msg.OpenVinit -> VinitStep.``open`` model, Cmd.none
     | Msg.SetVinit vertex -> VinitStep.setVinit vertex true model, Cmd.none
@@ -179,6 +199,7 @@ let private view (jsRuntime: IJSRuntime) model dispatch =
                     | AnalysisManual -> AnalysisManualStep.view model dispatch
                     | AnalysisAutomated -> AnalysisAutomatedStep.view model dispatch
                     | Vinit -> VinitStep.view model dispatch
+                    | AddComponent -> AddComponentStep.view jsRuntime model dispatch
         )
         .ClickedVertexInput("", (fun idAsString -> handleClickedVertex idAsString model dispatch))
         .ClickedEdgeInput("", (fun idAsString -> handleClickedVisEdge idAsString model dispatch))

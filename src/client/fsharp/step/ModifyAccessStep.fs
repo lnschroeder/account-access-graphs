@@ -39,6 +39,9 @@ let ``open`` (access: AAG.Access) addAccessNameInput model =
             |> Set.ofList
           initiallyCompromisedVertexIds = Set.empty
           transitivelyCompromisedVertexIds = Set.empty
+          newComponentSelection = ""
+          components = []
+          componentNameInput = ""
           json = model.json }
     | None -> model
 

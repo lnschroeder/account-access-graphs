@@ -22,6 +22,7 @@ and Step =
     | AnalysisManual
     | AnalysisAutomated
     | Vinit
+    | AddComponent
 
 and DeserializedGraph =
     | Graph of AAG.Graph
@@ -42,6 +43,9 @@ and Model =
       highlightedEdgeIds: Guid Set
       initiallyCompromisedVertexIds: Guid Set
       transitivelyCompromisedVertexIds: Guid Set
+      newComponentSelection: string
+      components: string list
+      componentNameInput: string
       json: string }
     static member Init =
         { page = Endpoint.Main
@@ -58,6 +62,9 @@ and Model =
           highlightedEdgeIds = Set.empty
           initiallyCompromisedVertexIds = Set.empty
           transitivelyCompromisedVertexIds = Set.empty
+          newComponentSelection = ""
+          components = []
+          componentNameInput = ""
           json = """{ "vertices": [] }""" }
 
     static member Example = { Model.Init with graph = AAG.Graph.Example }
@@ -113,6 +120,22 @@ let initiallyCompromisedVertexIds (model: Model) =
         Hint.Error "Select at least one vertex to be compromised"
     else
         Hint.Info
+let newComponentHint (model: Model) =
+
+    Hint.Info
+
+let componentNameInput (model: Model) =
+    let value = model.componentNameInput
+
+    if value = "" then
+        Hint.Required
+    elif not (isValidTextValue value) then
+        Hint.Error "No leading and trailing whitespaces allowed"
+    elif Seq.length (AAG.getComponentsWithName (Some value) model.graph) > 1 then
+        Hint.Error "Component already exists"
+    else
+        Hint.Info
+
 
 let isValid (model: Model) f =
     (f model).level <> Error

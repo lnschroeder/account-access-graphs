@@ -31,6 +31,9 @@ let ``open`` model =
       highlightedEdgeIds = Set.empty
       initiallyCompromisedVertexIds = Set.empty
       transitivelyCompromisedVertexIds = Set.empty
+      newComponentSelection = ""
+      components = []
+      componentNameInput = ""
       json = model.json }
 
 // Functionality
@@ -40,6 +43,7 @@ let view dispatch =
     Template
         .MainMenu()
         .AddVertexButton(fun _ -> dispatch (Msg.OpenModifyVertexStep None))
+        .AddComponentButton(fun _ -> dispatch Msg.OpenAddComponentStep)
         .AnalysisCompromiseButton(fun _ -> dispatch (Msg.OpenAnalysisManual))
         .AnalysisScore(fun _ -> dispatch Msg.OpenAnalysis)
         .VinitButton(fun _ -> dispatch (Msg.OpenVinit))

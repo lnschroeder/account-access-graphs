@@ -31,6 +31,9 @@ let private openPrivate model graph vertexId =
       highlightedEdgeIds = Set.empty
       initiallyCompromisedVertexIds = Set.empty
       transitivelyCompromisedVertexIds = Set.empty
+      newComponentSelection = ""
+      components = []
+      componentNameInput = ""
       json = model.json }
 
 let ``open`` model =

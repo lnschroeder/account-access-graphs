@@ -7,6 +7,11 @@ type Message =
     | Error of exn
     | IgnoreAction
     | GotGraph of AAG.Graph
+    | GotComponents of string list
+    | GotComponent of AAG.Graph
+    | SetComponentSelection of string
+    | ImportSelectedComponent
+    | ModifiedComponentName of string
     | SetPage of Endpoint.Page
     | SetPhysics of bool
     | SetEdgeLabels of bool
@@ -17,6 +22,7 @@ type Message =
     | OpenAnalysis
     | OpenAnalysisForVertex of Guid option
     | OpenVinit
+    | OpenAddComponentStep
     | UnsetVinit of AAG.Vertex
     | UpdateCompromisedVertices of Guid Set
     | SetVinit of AAG.Vertex

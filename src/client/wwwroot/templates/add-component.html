@@ -1,0 +1,46 @@
+<h1 class="title">Add component</h1>
+
+<div class="field">
+  <label class="label"
+    >Name of component</label
+  >
+  <div class="control">
+    <input
+      type="text"
+      class="input"
+      bind="${ComponentNameInput}"
+    />
+  </div>
+  <p class="help is-danger">${ComponentNameHint}</p>
+</div>
+
+<div class="field">
+  <label class="label">Type of component</label>
+  <div class="select is-primary">
+    <select bind="${SelectedOption}">
+      ${ComponentOptions}
+      <template id="ComponentOption">
+        <option value="${FileName}">${FileName}</option>
+      </template>
+    </select>
+  </div>
+  <p class="help is-danger">${DropDownHint}</p>
+</div>
+
+<div class="columns">
+  <div class="column is-half">
+    <button class="button is-danger is-fullwidth" onclick="${Cancel}">
+      Cancel
+    </button>
+  </div>
+  <div class="column is-half">
+    <button
+      class="button is-info is-fullwidth"
+      onclick="${Confirm}"
+      id="ConfirmAddComponentButton"
+      disabled
+    >
+      Confirm
+    </button>
+  </div>
+</div>

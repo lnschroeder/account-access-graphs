@@ -29,6 +29,9 @@ let ``open`` model =
       highlightedEdgeIds = model.highlightedEdgeIds
       initiallyCompromisedVertexIds = model.initiallyCompromisedVertexIds
       transitivelyCompromisedVertexIds = model.transitivelyCompromisedVertexIds
+      newComponentSelection = ""
+      components = []
+      componentNameInput = ""
       json = model.json }
 
 // Functionality

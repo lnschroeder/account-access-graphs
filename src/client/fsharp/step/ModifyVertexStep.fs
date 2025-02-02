@@ -61,6 +61,9 @@ let private openInternal (vertex: AAG.Vertex) model =
       highlightedEdgeIds = Set.empty
       initiallyCompromisedVertexIds = Set.empty
       transitivelyCompromisedVertexIds = Set.empty
+      newComponentSelection = ""
+      components = []
+      componentNameInput = ""
       json = model.json }
 
 let ``open`` vertexId model =
