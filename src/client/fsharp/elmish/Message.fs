@@ -8,7 +8,7 @@ type Message =
     | IgnoreAction
     | GotGraph of AAG.Graph
     | GotComponents of string list
-    | GotComponent of AAG.Graph
+    | GotComponent of AAGC.Component
     | SetComponentSelection of string
     | ImportSelectedComponent
     | ModifiedComponentName of string

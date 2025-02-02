@@ -29,9 +29,9 @@ let ``open`` model (components: string list) =
       json = model.json }
 
 // Functionality
-let importComponent model (c: AAG.Graph) =
+let importComponent model (c: AAGC.Component) =
     { model with
-        graph = AAG.importComponent model.graph c model.componentNameInput}
+        graph = AAGC.importComponent model.graph c model.componentNameInput}
 
 // View
 let private showComponentOption (model: Model) (filename: string) =

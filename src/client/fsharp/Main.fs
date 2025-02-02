@@ -160,7 +160,7 @@ let private update (http: HttpClient) message model =
     | Msg.ModifiedComponentName name -> { model with componentNameInput = name }, Cmd.none
     | Msg.ImportSelectedComponent ->
         let getComponent () =
-            http.GetFromJsonAsync<AAG.Graph>("resources/components/" + model.newComponentSelection)
+            http.GetFromJsonAsync<AAGC.Component>("resources/components/" + model.newComponentSelection)
 
         let cmd = Cmd.OfTask.either getComponent () Msg.GotComponent Msg.Error
         model, cmd

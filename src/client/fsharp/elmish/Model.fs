@@ -78,6 +78,7 @@ let selectedFactors (model: Model) =
     match model.subjectVertexId with
     | Some subjectVertexId ->
         let value = model.selectedFactors
+
         if value.IsEmpty then
             Hint.Error "Select at least one factor or delete the access"
         elif Seq.contains subjectVertexId value then
@@ -106,11 +107,25 @@ let addAccessNameInput (model: Model) =
 let modifyVertexNameInput (model: Model) =
     let value = model.modifyVertexNameInput
 
+    let component =
+        match model.subjectVertexId with
+        | Some subjectVertexId ->
+            match AAG.tryFindVertexById subjectVertexId model.graph with
+            | Some subjectVertex -> subjectVertex.component
+            | None -> None
+        | None -> None
+
     if value = "" then
         Hint.Required
     elif not (isValidTextValue value) then
         Hint.Error "No leading and trailing whitespaces allowed"
-    elif Seq.length (AAG.getVerticesWithName value model.graph) > 1 then
+    elif
+        Seq.length
+            (
+                (AAG.getVerticesWithName value model.graph)
+                |> Seq.filter (fun v -> v.component = component)
+            ) > 1
+    then
         Hint.Error "Vertex already exists"
     else
         Hint.Info
@@ -120,8 +135,8 @@ let initiallyCompromisedVertexIds (model: Model) =
         Hint.Error "Select at least one vertex to be compromised"
     else
         Hint.Info
-let newComponentHint (model: Model) =
 
+let newComponentHint (model: Model) =
     Hint.Info
 
 let componentNameInput (model: Model) =
@@ -137,8 +152,7 @@ let componentNameInput (model: Model) =
         Hint.Info
 
 
-let isValid (model: Model) f =
-    (f model).level <> Error
+let isValid (model: Model) f = (f model).level <> Error
 
 let highlightAccess (access: AAG.Access) (model: Model) =
     let edges =
