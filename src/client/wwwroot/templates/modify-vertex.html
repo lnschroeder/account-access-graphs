@@ -53,9 +53,19 @@
       placeholder="1"
       name="score"
       min="0"
-      onkeydown="return false"
     />
   </div>
+</div>
+
+<div class="field">
+  <label class="label">Component</label>
+  ${ComponentInfo}
+  <template id="NoneComponentInfo">None</template>
+  <template id="SomeComponentInfo">
+    <button class="tag is-info" onclick="${ModifyComponentButton}">
+      ${ComponentName}
+    </button>
+  </template>
 </div>
 
 <div class="columns">

@@ -136,7 +136,18 @@ let view jsRuntime (model: Model) dispatch =
                         else
                             dispatch (Msg.UnsetVinit subjectVertex))
                 )
-                .ScoreInput(subjectVertex.score, fun i -> dispatch (Msg.SetScore (subjectVertex, i)))
+                .ScoreInput(subjectVertex.score, (fun i -> dispatch (Msg.SetScore(subjectVertex, i))))
+                .ComponentInfo(
+                    match subjectVertex.``component`` with
+                    | Some c ->
+                        Template
+                            .ModifyVertex
+                            .SomeComponentInfo()
+                            .ComponentName(c)
+                            .ModifyComponentButton(fun _ -> dispatch Msg.OpenMainMenuStep)
+                            .Elt()
+                    | None -> Template.ModifyVertex.NoneComponentInfo().Elt()
+                )
                 .BackButton(fun _ -> dispatch Msg.OpenMainMenuStep)
                 .DeleteButton(fun _ -> dispatch (Msg.ClickedDeleteVertex subjectVertexId))
                 .Elt()
