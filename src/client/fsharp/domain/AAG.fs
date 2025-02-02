@@ -23,7 +23,7 @@ and Vertex =
       isVinit: bool
       score: int
       accessBase: AccessBase
-      component: string option }
+      ``component``: string option }
 
     static member Default =
         { id = Guid.NewGuid()
@@ -31,7 +31,7 @@ and Vertex =
           isVinit = false
           score = 1
           accessBase = AccessBase.Empty
-          component = None }
+          ``component`` = None }
 
 and Edge =
     { id: Guid
@@ -65,7 +65,7 @@ and Graph =
               isVinit = false
               score = 1
               accessBase = AccessBase.Empty
-              component = None }
+              ``component`` = None }
 
         let v2 =
             { id = Guid.Parse("1578d946-7c48-41a6-baf2-0386979c9de2")
@@ -73,7 +73,7 @@ and Graph =
               isVinit = false
               score = 2
               accessBase = AccessBase.Empty
-              component = None }
+              ``component`` = None }
 
         let v3 =
             { id = Guid.Parse("1578d946-7c48-41a6-baf2-0386979c9de3")
@@ -81,7 +81,7 @@ and Graph =
               isVinit = true
               score = 3
               accessBase = AccessBase.Empty
-              component = None }
+              ``component`` = None }
 
         let a1e1 =
             { id = Guid.Parse("2578d946-7c48-41a6-baf2-0386979c9de1")
@@ -139,7 +139,7 @@ let getVerticesWithName vertexName graph =
 
 let getComponentsWithName componentName graph =
     graph.vertices
-    |> Seq.filter (fun v -> v.component = componentName)
+    |> Seq.filter (fun v -> v.``component`` = componentName)
 
 let tryFindVertexById id graph =
     graph.vertices
@@ -442,6 +442,8 @@ let importComponent graph ``component`` name =
     let updatedGraph = updateIds ``component``
 
     { vertices =
-        List.append graph.vertices updatedGraph.vertices
-        |> List.map (fun v -> { v with ``component`` = Some name })
+        List.append
+            graph.vertices
+            (updatedGraph.vertices
+             |> List.map (fun v -> { v with ``component`` = Some name }))
       edges = List.append graph.edges updatedGraph.edges }
