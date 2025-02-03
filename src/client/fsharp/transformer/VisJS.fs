@@ -20,6 +20,7 @@ type Edge =
       ``to``: Guid
       isProvisional: bool
       isHighlighted: bool
+      isDisabled: bool
       label: string
       colorIndex: byte }
 
@@ -61,6 +62,7 @@ let private transformEdge (model: Model) (edge: AAG.Edge) =
         model.subjectVertexId = Some edge.``to``
         && model.subjectAccessColor = Some edge.colorIndex
       colorIndex = edge.colorIndex
+      isDisabled = edge.disabled
       isHighlighted = Set.contains edge.id model.highlightedEdgeIds }
 
 let transform (model: Model) =

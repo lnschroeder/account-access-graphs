@@ -41,7 +41,7 @@ let private getDebugText (model: Model) =
     let accessLen =
         Seq.length (
             model.graph.vertices
-            |> Seq.collect (fun v -> AAG.getAccesses v.id model.graph)
+            |> Seq.collect (fun v -> AAG.getEnabledAccesses v.id model.graph)
         )
 
     let edgesLen = Seq.length (model.graph.edges)

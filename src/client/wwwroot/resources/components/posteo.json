@@ -152,6 +152,7 @@
         "id": "681783e7-5c60-42c7-a090-bb72d9316ab0",
         "accessName": "webinterfaceOutbox",
         "colorIndex": 0,
+        "disabled": false,
         "from": "eee6bc86-0b4c-478e-86d1-bf609c32764b",
         "to": "e7d8fe83-6c3f-43af-9b21-ff284ac28818"
       },
@@ -159,6 +160,7 @@
         "id": "d0cb93cf-e958-43c4-92ab-0afcf75d402e",
         "accessName": "serverSideTotpSeed",
         "colorIndex": 0,
+        "disabled": false,
         "from": "e6e4109b-3085-42ec-a717-a80fea0c2533",
         "to": "de37c0e8-05aa-4963-a3e8-785f4ee33efc"
       },
@@ -166,6 +168,7 @@
         "id": "0eb1eb25-b9ae-40af-b956-4a376461486e",
         "accessName": "serversideTotpSeedDatabase",
         "colorIndex": 0,
+        "disabled": false,
         "from": "7d037f92-332c-40dd-b01a-b85e1ae8d571",
         "to": "ae9ae284-881c-45a1-b7a3-4449c757acad"
       },
@@ -173,6 +176,7 @@
         "id": "0e676cfa-b8fd-4c18-bbb0-9815cb7a625c",
         "accessName": "totpCodeBySeed",
         "colorIndex": 0,
+        "disabled": false,
         "from": "de37c0e8-05aa-4963-a3e8-785f4ee33efc",
         "to": "ae664e82-a0ec-4ef2-9093-b071d6f363a7"
       },
@@ -180,6 +184,7 @@
         "id": "87e31dde-274d-43af-ae7a-6a63a5e6ef86",
         "accessName": "serverSideTotpSeed",
         "colorIndex": 0,
+        "disabled": false,
         "from": "ae9ae284-881c-45a1-b7a3-4449c757acad",
         "to": "de37c0e8-05aa-4963-a3e8-785f4ee33efc"
       },
@@ -187,6 +192,7 @@
         "id": "599154f2-6e04-4bdd-8d68-ee18c1490a3f",
         "accessName": "newPasswordViaRecEmail",
         "colorIndex": 1,
+        "disabled": false,
         "from": "2844cab1-9268-4960-aa03-69689861a002",
         "to": "c7ec3e36-d830-4048-acab-3d01395258af"
       },
@@ -194,6 +200,7 @@
         "id": "63dab19d-9d13-427a-b223-d5ca3cb2b0d6",
         "accessName": "newPasswordViaRecEmail",
         "colorIndex": 1,
+        "disabled": false,
         "from": "52afdf26-880a-47f8-8a09-e9e1a7e896c4",
         "to": "c7ec3e36-d830-4048-acab-3d01395258af"
       },
@@ -201,6 +208,7 @@
         "id": "62f6556c-bbb6-41b2-8970-2179aea6cdb8",
         "accessName": "newPasswordViaRecSms",
         "colorIndex": 0,
+        "disabled": false,
         "from": "29c115e4-9094-4450-92e4-75bdc370de0d",
         "to": "c7ec3e36-d830-4048-acab-3d01395258af"
       },
@@ -208,6 +216,7 @@
         "id": "23677a3e-1dd8-40d2-9bb8-66af7b22e063",
         "accessName": "newPasswordViaRecSms",
         "colorIndex": 0,
+        "disabled": false,
         "from": "2844cab1-9268-4960-aa03-69689861a002",
         "to": "c7ec3e36-d830-4048-acab-3d01395258af"
       },
@@ -215,6 +224,7 @@
         "id": "bb8c948c-7843-4435-9982-bcd5ba40eec4",
         "accessName": "2fa-with-totp-app",
         "colorIndex": 1,
+        "disabled": false,
         "from": "c7ec3e36-d830-4048-acab-3d01395258af",
         "to": "eee6bc86-0b4c-478e-86d1-bf609c32764b"
       },
@@ -222,6 +232,7 @@
         "id": "21666abc-555d-4aac-8f08-031b12b72589",
         "accessName": "2fa-with-totp-app",
         "colorIndex": 1,
+        "disabled": false,
         "from": "2844cab1-9268-4960-aa03-69689861a002",
         "to": "eee6bc86-0b4c-478e-86d1-bf609c32764b"
       },
@@ -229,6 +240,7 @@
         "id": "ba502720-f8d3-4465-b5ef-4c33b984b5a6",
         "accessName": "2fa-with-totp-app",
         "colorIndex": 1,
+        "disabled": false,
         "from": "ae664e82-a0ec-4ef2-9093-b071d6f363a7",
         "to": "eee6bc86-0b4c-478e-86d1-bf609c32764b"
       },
@@ -236,6 +248,7 @@
         "id": "edd152fb-fa30-4ac2-9538-1505b91001ad",
         "accessName": "password-only",
         "colorIndex": 0,
+        "disabled": false,
         "from": "2844cab1-9268-4960-aa03-69689861a002",
         "to": "eee6bc86-0b4c-478e-86d1-bf609c32764b"
       },
@@ -243,6 +256,7 @@
         "id": "52edba7a-69e7-4c68-9dad-64f44f56e5f8",
         "accessName": "password-only",
         "colorIndex": 0,
+        "disabled": false,
         "from": "c7ec3e36-d830-4048-acab-3d01395258af",
         "to": "eee6bc86-0b4c-478e-86d1-bf609c32764b"
       },
@@ -250,6 +264,7 @@
         "id": "90b93761-99a0-4e37-9d5d-dad844de8fc5",
         "accessName": "webinterfaceInbox",
         "colorIndex": 0,
+        "disabled": false,
         "from": "eee6bc86-0b4c-478e-86d1-bf609c32764b",
         "to": "93057729-7344-4500-aa6b-82f37078417b"
       }

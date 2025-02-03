@@ -59,12 +59,14 @@ and Edge =
     { id: Guid
       accessName: string
       colorIndex: byte
+      disabled: bool
       from: Guid
       ``to``: Guid }
     static member New (fromId: Guid) (access: Access) =
         { id = Guid.NewGuid()
           accessName = access.name
           colorIndex = access.colorIndex
+          disabled = false
           from = fromId
           ``to`` = access.vertexId }
 
@@ -110,6 +112,7 @@ and Graph =
             { id = Guid.Parse("2578d946-7c48-41a6-baf2-0386979c9de1")
               accessName = "access 1"
               colorIndex = 1uy
+              disabled = false
               from = v1.id
               ``to`` = v2.id }
 
@@ -117,6 +120,7 @@ and Graph =
             { id = Guid.Parse("2578d946-7c48-41a6-baf2-0386979c9de2")
               accessName = "access 1"
               colorIndex = 1uy
+              disabled = false
               from = v3.id
               ``to`` = v2.id }
 
@@ -124,6 +128,7 @@ and Graph =
             { id = Guid.Parse("2578d946-7c48-41a6-baf2-0386979c9de3")
               accessName = "access 2"
               colorIndex = 2uy
+              disabled = false
               from = v3.id
               ``to`` = v2.id }
 
@@ -131,6 +136,7 @@ and Graph =
             { id = Guid.Parse("2578d946-7c48-41a6-baf2-0386979c9de4")
               accessName = "access 3"
               colorIndex = 3uy
+              disabled = false
               from = v1.id
               ``to`` = v3.id }
 
@@ -154,6 +160,7 @@ let private isEdgeInAccess (access: Access) (edge: Edge) =
     && edge.``to`` = access.vertexId
     && edge.colorIndex = access.colorIndex
 
+// TODO
 let private isAccessFulfilled (vertexIds: Guid Set) (edges: Edge list) =
     Set.isSubset (edges |> List.map (fun e -> e.from) |> Set.ofList) vertexIds
 
@@ -222,9 +229,9 @@ let setScore graph score vertexId =
                 else
                     v) }
 //
-let getAccesses vertexId (graph: Graph) =
+let getEnabledAccesses vertexId (graph: Graph) =
     graph.edges
-    |> List.filter (fun e -> e.``to`` = vertexId)
+    |> List.filter (fun e -> e.``to`` = vertexId && e.disabled = false) // TODO optimize
     |> List.map transformEdgeToAccess
     |> Set.ofList
 
@@ -265,13 +272,13 @@ let private isAccessible (graph: Graph) (vertexIds: Guid Set) (vertex: Vertex) =
     match vertex with
     | vertex when Set.contains vertex.id vertexIds -> true
     | _ ->
-        getAccesses vertex.id graph
+        getEnabledAccesses vertex.id graph
         |> Set.map (getEdgesForAccess graph)
         |> Set.exists (isAccessFulfilled vertexIds)
 
 let getNextAvailableColor vertexId graph =
     let usedColors =
-        getAccesses vertexId graph
+        getEnabledAccesses vertexId graph
         |> Set.map (fun a -> a.colorIndex)
         |> Seq.sort
 
@@ -283,7 +290,7 @@ let getNextAvailableColor vertexId graph =
 
 let getNextAvailableName vertexId graph =
     let usedNames =
-        getAccesses vertexId graph
+        getEnabledAccesses vertexId graph
         |> Set.map (fun a -> a.name)
         |> Seq.sort
 
@@ -294,7 +301,7 @@ let getNextAvailableName vertexId graph =
         | None -> $"{Seq.length usedNames |> int}"
 
 let getAccessesWithFactors vertexId factors graph =
-    getAccesses vertexId graph
+    getEnabledAccesses vertexId graph
     |> List.ofSeq
     |> List.filter (fun a ->
         ((getEdgesForAccess graph a)
@@ -302,7 +309,7 @@ let getAccessesWithFactors vertexId factors graph =
          |> Set.ofList) = factors)
 
 let getAccessesWithName vertexId name graph =
-    getAccesses vertexId graph
+    getEnabledAccesses vertexId graph
     |> Set.filter (fun a -> a.name = name)
 
 //
@@ -402,6 +409,7 @@ let rec private computeAccessBaseStep
 let computeAccessBase graph : Graph =
     let accesses =
         graph.edges
+        |> List.filter(fun e -> e.disabled = false)
         |> List.groupBy (fun e -> (e.``to``, e.colorIndex))
         |> List.map (fun ((vertexId, _), edges) ->
             { target = vertexId

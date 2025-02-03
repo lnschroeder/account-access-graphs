@@ -119,7 +119,7 @@ let view jsRuntime (model: Model) dispatch =
                     (fun v -> dispatch (Msg.ModifiedVertexName(subjectVertexId, v)))
                 )
                 .SubjectNameHint((modifyVertexNameInput model).value)
-                .Accesses(forEach (AAG.getAccesses subjectVertex.id model.graph) (showAccess dispatch))
+                .Accesses(forEach (AAG.getEnabledAccesses subjectVertex.id model.graph) (showAccess dispatch))
                 .AddAccessButton(fun _ ->
                     dispatch (
                         Msg.OpenModifyAccessStep(

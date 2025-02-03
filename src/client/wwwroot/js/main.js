@@ -176,6 +176,7 @@ function updateNetwork(networkDTO) {
       let color = colors[edge.colorIndex % colors.length]; // TODO use random color instead
       let width = 1;
       let label = " ";
+      let opacity = 1.0;
 
       if (networkDTO.edgeLabels) {
         label = edge.label;
@@ -194,6 +195,10 @@ function updateNetwork(networkDTO) {
         width = 3;
       }
 
+      if (edge.isDisabled) {
+        opacity = 0.3
+      }
+
       data.edges.update({
         id: edge.id,
         from: edge.from,
@@ -204,6 +209,7 @@ function updateNetwork(networkDTO) {
         // smooth: networkDTO.physics, // enable/disable straight edges
         color: {
           color: color,
+          opacity: opacity,
         },
         width: width,
       });
