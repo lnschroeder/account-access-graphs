@@ -9,9 +9,9 @@ type IdAccess = { target: Guid; factors: Guid Set }
 
 type Rule = { description: string; logic: JObject }
 
-and Condition = { name: string; description: string }
+and Condition = { name: string; description: string; answer: bool }
 
-and OptionalAccessMethod = { name: string; description: string }
+and OptionalAccessMethod = { name: string; description: string; answer: bool }
 
 and Component =
     { name: string
@@ -483,7 +483,7 @@ let private updateIds (graph: Graph) =
 
     updateVertexIds graph (graph.vertices |> List.map (fun v -> v.id))
 
-let private setDisableEdgesByComponentNameAndAccessName graph componentName accessName disabled = //
+let setDisableEdgesByComponentNameAndAccessName graph componentName accessName disabled =
     { graph with
         edges =
             graph.edges
@@ -494,12 +494,6 @@ let private setDisableEdgesByComponentNameAndAccessName graph componentName acce
                 else
                     e) }
 
-let disableEdgesByComponentNameAndAccessName graph componentName accessName =
-    setDisableEdgesByComponentNameAndAccessName graph componentName accessName true
-
-let enableEdgesByComponentNameAndAccessName graph componentName accessName = 
-    setDisableEdgesByComponentNameAndAccessName graph componentName accessName false
-
 let rec private disableAllEdgesForOptionalAccessMethods
     (graph: Graph)
     componentName
@@ -509,7 +503,7 @@ let rec private disableAllEdgesForOptionalAccessMethods
     | [] -> graph
     | accessMethod :: accessMethods ->
         let updatedComponent =
-            disableEdgesByComponentNameAndAccessName graph componentName accessMethod.name
+            setDisableEdgesByComponentNameAndAccessName graph componentName accessMethod.name (not accessMethod.answer)
 
         disableAllEdgesForOptionalAccessMethods updatedComponent componentName accessMethods
 

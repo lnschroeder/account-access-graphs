@@ -3,45 +3,55 @@
   "conditions": [
     {
       "name": "isPremium",
-      "description": "Do you have GitHub Premium?"
+      "description": "Do you have GitHub Premium?",
+      "answer": true
     },
     {
       "name": "hasPermissionX",
-      "description": "Do you have permission X enabled?"
+      "description": "Do you have permission X enabled?",
+      "answer": false
     }
   ],
   "accessMethods": [
     {
       "name": "simple",
-      "description": "Do you use GitHub without 2FA?"
+      "description": "Do you use GitHub without 2FA?",
+      "answer": true
     },
     {
       "name": "verifiedEmailOtp",
-      "description": "Do you have a back email set up?"
+      "description": "Do you have a back email set up?",
+      "answer": false
     },
     {
       "name": "recoveryCodeOtp",
-      "description": "Do have recovery otp codes saved somewhere?"
+      "description": "Do have recovery otp codes saved somewhere?",
+      "answer": false
     },
     {
       "name": "totpOtp",
-      "description": "Do have TOTP setup?"
+      "description": "Do have TOTP setup?",
+      "answer": false
     },
     {
       "name": "smsOtp",
-      "description": "Do you use sms OTP codes as second factor?"
+      "description": "Do you use sms OTP codes as second factor?",
+      "answer": false
     },
     {
       "name": "passkey",
-      "description": "Do you use PassKeys?"
+      "description": "Do you use PassKeys?",
+      "answer": false
     },
     {
       "name": "mobileApp",
-      "description": "Do you use GitHub mobile App"
+      "description": "Do you use GitHub mobile App",
+      "answer": false
     },
     {
       "name": "securityKey",
-      "description": "Do you use security keys?"
+      "description": "Do you use security keys?",
+      "answer": false
     }
   ],
   "rules": [

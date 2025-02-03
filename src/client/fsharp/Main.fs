@@ -162,13 +162,25 @@ let private update (http: HttpClient) message model =
     | Msg.ModifiedComponentName name -> { model with componentNameInput = name }, Cmd.none
     | Msg.ImportSelectedComponent ->
         let getComponent () =
-            http.GetFromJsonAsync<AAG.Component>("resources/components/" + model.newComponentSelection)
+            http.GetFromJsonAsync<AAG.Component>(
+                "resources/components/"
+                + model.newComponentSelection
+            )
 
         let cmd = Cmd.OfTask.either getComponent () Msg.GotComponent Msg.Error
         model, cmd
     // ModifyComponent
     | Msg.OpenModifyComponent name -> ModifyComponentStep.``open`` model name, Cmd.none
     | Msg.ClickedDeleteComponent name -> ModifyComponentStep.deleteComponent model name, Cmd.none
+    | Msg.ToggleOptionalAccessMethod (b, accessMethod) ->
+        { model with
+            graph =
+                AAG.setDisableEdgesByComponentNameAndAccessName
+                    model.graph
+                    model.subjectComponentName
+                    accessMethod.name
+                    (not b) },
+        Cmd.none
     // Vinit
     | Msg.OpenVinit -> VinitStep.``open`` model, Cmd.none
     | Msg.SetVinit vertex -> VinitStep.setVinit vertex true model, Cmd.none

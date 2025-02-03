@@ -39,7 +39,11 @@ let ``open`` model componentName =
 
 // Functionality
 let deleteComponent (model: Model) componentName =
-    {model with graph = AAG.deleteComponent model.graph componentName}
+    { model with
+        step = MainMenu
+        subjectVertexId = None
+        newComponentSelection = model.subjectComponentName
+        graph = AAG.deleteComponent model.graph componentName}
 
 // View
 let private showCondition dispatch (condition: AAG.Condition) =
@@ -54,7 +58,7 @@ let private showAccessMethod dispatch (accessMethod: AAG.OptionalAccessMethod) =
     Template
         .ModifyComponent
         .Question()
-        // .EnabledInput()
+        .EnabledInput(accessMethod.answer, (fun b -> dispatch (Msg.ToggleOptionalAccessMethod (b, accessMethod))))
         .Description(accessMethod.description)
         .Elt()
 
