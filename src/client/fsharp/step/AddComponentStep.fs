@@ -31,8 +31,7 @@ let ``open`` model (components: string list) =
 
 // Functionality
 let importComponent model (c: AAG.Component) =
-    { model with
-        graph = AAG.importComponent model.graph {c with name = model.componentNameInput}}
+    { model with graph = AAG.importComponent model.graph { c with name = model.componentNameInput } }
 
 // View
 let private showComponentOption (model: Model) (filename: string) =
@@ -52,10 +51,7 @@ let view jsRuntime (model: Model) dispatch =
         .Confirm(fun _ -> dispatch Msg.ImportSelectedComponent)
         .ComponentOptions(forEach model.components (showComponentOption model))
         .SelectedOption(model.components.Head, (fun c -> dispatch (Msg.SetComponentSelection c)))
-        .ComponentNameInput(
-            model.componentNameInput,
-            (fun v -> dispatch (Msg.ModifiedComponentName v))
-        )
+        .ComponentNameInput(model.componentNameInput, (fun v -> dispatch (Msg.ModifiedComponentName v)))
         .ComponentNameHint((componentNameInput model).value)
         .DropDownHint((newComponentHint model).value)
         .Elt()

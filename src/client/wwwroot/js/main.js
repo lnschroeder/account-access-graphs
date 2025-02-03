@@ -196,7 +196,7 @@ function updateNetwork(networkDTO) {
       }
 
       if (edge.isDisabled) {
-        opacity = 0.3
+        opacity = 0.2
       }
 
       data.edges.update({

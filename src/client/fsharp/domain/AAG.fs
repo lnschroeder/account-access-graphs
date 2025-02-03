@@ -7,9 +7,7 @@ open Newtonsoft.Json.Linq
 
 type IdAccess = { target: Guid; factors: Guid Set }
 
-type Rule =
-    { description: string
-      logic: JObject }
+type Rule = { description: string; logic: JObject }
 
 and Condition = { name: string; description: string }
 
@@ -61,14 +59,16 @@ and Edge =
       colorIndex: byte
       disabled: bool
       from: Guid
-      ``to``: Guid }
+      ``to``: Guid
+      component: string option }
     static member New (fromId: Guid) (access: Access) =
         { id = Guid.NewGuid()
           accessName = access.name
           colorIndex = access.colorIndex
           disabled = false
           from = fromId
-          ``to`` = access.vertexId }
+          ``to`` = access.vertexId
+          component = None }
 
 and Access =
     { name: String
@@ -80,7 +80,10 @@ and Graph =
     { vertices: Vertex list
       edges: Edge list
       components: Component list }
-    static member Empty = { vertices = []; edges = []; components = []}
+    static member Empty =
+        { vertices = []
+          edges = []
+          components = [] }
 
     static member Example =
 
@@ -114,7 +117,8 @@ and Graph =
               colorIndex = 1uy
               disabled = false
               from = v1.id
-              ``to`` = v2.id }
+              ``to`` = v2.id
+              component = None }
 
         let a1e2 =
             { id = Guid.Parse("2578d946-7c48-41a6-baf2-0386979c9de2")
@@ -122,7 +126,8 @@ and Graph =
               colorIndex = 1uy
               disabled = false
               from = v3.id
-              ``to`` = v2.id }
+              ``to`` = v2.id
+              component = None }
 
         let a2e1 =
             { id = Guid.Parse("2578d946-7c48-41a6-baf2-0386979c9de3")
@@ -130,7 +135,8 @@ and Graph =
               colorIndex = 2uy
               disabled = false
               from = v3.id
-              ``to`` = v2.id }
+              ``to`` = v2.id
+              component = None }
 
         let a3e1 =
             { id = Guid.Parse("2578d946-7c48-41a6-baf2-0386979c9de4")
@@ -138,7 +144,8 @@ and Graph =
               colorIndex = 3uy
               disabled = false
               from = v1.id
-              ``to`` = v3.id }
+              ``to`` = v3.id
+              component = None }
 
         { vertices = [ v1; v2; v3 ]
           edges = [ a1e1; a1e2; a2e1; a3e1 ]
@@ -409,7 +416,7 @@ let rec private computeAccessBaseStep
 let computeAccessBase graph : Graph =
     let accesses =
         graph.edges
-        |> List.filter(fun e -> e.disabled = false)
+        |> List.filter (fun e -> e.disabled = false)
         |> List.groupBy (fun e -> (e.``to``, e.colorIndex))
         |> List.map (fun ((vertexId, _), edges) ->
             { target = vertexId
@@ -458,7 +465,7 @@ let private updateVertexId graph oldId =
                         newId
                     else
                         e.``to`` })
-      components = graph.components}
+      components = graph.components }
 
 let rec private updateVertexIds graph vertexIds =
     match vertexIds with
@@ -476,16 +483,55 @@ let private updateIds (graph: Graph) =
 
     updateVertexIds graph (graph.vertices |> List.map (fun v -> v.id))
 
-let importComponent graph (component: Component) =
-    let updatedGraph = updateIds component.graph
+let private setDisableEdgesByComponentNameAndAccessName graph componentName accessName disabled = //
+    { graph with
+        edges =
+            graph.edges
+            |> List.map (fun e ->
+                if e.accessName = accessName
+                   && e.component = Some componentName then
+                    { e with disabled = disabled }
+                else
+                    e) }
 
-    { vertices =
-        List.append
-            graph.vertices
-            (updatedGraph.vertices
-             |> List.map (fun v -> { v with component = Some component.name }))
-      edges = List.append graph.edges updatedGraph.edges
-      components = List.append graph.components [ component ] }
+let disableEdgesByComponentNameAndAccessName graph componentName accessName =
+    setDisableEdgesByComponentNameAndAccessName graph componentName accessName true
+
+let enableEdgesByComponentNameAndAccessName graph componentName accessName = 
+    setDisableEdgesByComponentNameAndAccessName graph componentName accessName false
+
+let rec private disableAllEdgesForOptionalAccessMethods
+    (graph: Graph)
+    componentName
+    (accessMethods: OptionalAccessMethod list)
+    =
+    match accessMethods with
+    | [] -> graph
+    | accessMethod :: accessMethods ->
+        let updatedComponent =
+            disableEdgesByComponentNameAndAccessName graph componentName accessMethod.name
+
+        disableAllEdgesForOptionalAccessMethods updatedComponent componentName accessMethods
+
+let importComponent aag (aagc: Component) =
+    let aagc =
+        { aagc with
+            graph =
+                disableAllEdgesForOptionalAccessMethods
+                    { aagc.graph with
+                        vertices =
+                            aagc.graph.vertices
+                            |> List.map (fun v -> { v with component = Some aagc.name })
+                        edges =
+                            aagc.graph.edges
+                            |> List.map (fun e -> { e with component = Some aagc.name }) }
+                    aagc.name
+                    aagc.accessMethods
+                |> updateIds }
+
+    { vertices = List.append aag.vertices aagc.graph.vertices
+      edges = List.append aag.edges aagc.graph.edges
+      components = List.append aag.components [ aagc ] }
 
 let deleteComponent graph componentName =
     graph.vertices
