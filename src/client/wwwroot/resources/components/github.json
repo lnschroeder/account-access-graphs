@@ -117,49 +117,49 @@
     "edges": [
       {
         "id": "da415b31-c875-4a6d-bb1e-445932b4fd7f",
-        "accessName": "3",
+        "accessName": "verifiedEmailOtp",
         "colorIndex": 3,
         "from": "3df1ca04-33f1-4505-97af-004c55c6cd8d",
         "to": "94e86f6b-c42d-4459-8b91-6a8e716d2596"
       },
       {
         "id": "ed046334-4b0e-40b9-a9df-e28bab0de454",
-        "accessName": "2",
+        "accessName": "recoveryCodeOtp",
         "colorIndex": 2,
         "from": "24d81d7b-6908-4eec-ba0f-3e3757b9ca22",
         "to": "94e86f6b-c42d-4459-8b91-6a8e716d2596"
       },
       {
         "id": "7f552470-4698-42ed-9147-f215235db56e",
-        "accessName": "otp",
+        "accessName": "generalOtp",
         "colorIndex": 1,
         "from": "3fdf063a-33f1-40e8-bd24-db8ab06a2087",
         "to": "fb507954-9e8f-4f78-995f-bea1355c4c42"
       },
       {
         "id": "cf19d8a4-ce37-478c-ba53-518fbeee5cc9",
-        "accessName": "otp",
+        "accessName": "generalOtp",
         "colorIndex": 1,
         "from": "0530b86a-9a98-4dda-92e4-8ba9d9274558",
         "to": "fb507954-9e8f-4f78-995f-bea1355c4c42"
       },
       {
         "id": "611d6d85-85de-4bbf-9406-5406b31ab893",
-        "accessName": "otp",
+        "accessName": "generalOtp",
         "colorIndex": 1,
         "from": "94e86f6b-c42d-4459-8b91-6a8e716d2596",
         "to": "fb507954-9e8f-4f78-995f-bea1355c4c42"
       },
       {
         "id": "43dc11aa-d54d-45bf-a19f-cf04d8cd05ab",
-        "accessName": "1",
+        "accessName": "totpOtp",
         "colorIndex": 1,
         "from": "845404e6-0a5b-4b29-93f8-b1859adb770d",
         "to": "94e86f6b-c42d-4459-8b91-6a8e716d2596"
       },
       {
         "id": "ed010383-3cd0-4eac-b742-cd37bbe618c8",
-        "accessName": "0",
+        "accessName": "smsOtp",
         "colorIndex": 0,
         "from": "389e3a22-29d9-4558-b656-50256660d876",
         "to": "94e86f6b-c42d-4459-8b91-6a8e716d2596"
