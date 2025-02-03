@@ -511,6 +511,21 @@ let setDisableEdgesByComponentNameAndAccessName graph componentName accessName d
                             else
                                 am) }) }
 
+let setConditionByComponentNameAndConditionName graph componentName conditionName answer =
+    { graph with
+        components =
+            graph.components
+            |> List.map (fun component ->
+                { component with
+                    conditions =
+                        component.conditions
+                        |> List.map (fun c ->
+                            if c.name = conditionName
+                               && component.name = componentName then
+                                { c with answer = answer }
+                            else
+                                c) }) }
+
 let rec private disableAllEdgesForOptionalAccessMethods
     (graph: Graph)
     componentName

@@ -13,6 +13,7 @@ type Message =
     | ImportSelectedComponent
     | ModifiedComponentName of string
     | ToggleOptionalAccessMethod of bool * AAG.OptionalAccessMethod
+    | ToggleCondition of bool * AAG.Condition
     | SetPage of Endpoint.Page
     | SetPhysics of bool
     | SetEdgeLabels of bool

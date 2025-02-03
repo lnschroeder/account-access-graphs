@@ -50,7 +50,7 @@ let private showCondition dispatch (condition: AAG.Condition) =
     Template
         .ModifyComponent
         .Question()
-        // .EnabledInput()
+        .EnabledInput(condition.answer, (fun b -> dispatch (Msg.ToggleCondition (b, condition))))
         .Description(condition.description)
         .Elt()
 

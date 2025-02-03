@@ -181,6 +181,15 @@ let private update (http: HttpClient) message model =
                     accessMethod.name
                     (not b) },
         Cmd.none
+    | Msg.ToggleCondition (b, condition) ->
+        { model with
+            graph =
+                AAG.setConditionByComponentNameAndConditionName
+                    model.graph
+                    model.subjectComponentName
+                    condition.name
+                    b },
+        Cmd.none
     // Vinit
     | Msg.OpenVinit -> VinitStep.``open`` model, Cmd.none
     | Msg.SetVinit vertex -> VinitStep.setVinit vertex true model, Cmd.none
