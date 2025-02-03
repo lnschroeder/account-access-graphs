@@ -110,11 +110,11 @@ let addAccessNameInput (model: Model) =
 let modifyVertexNameInput (model: Model) =
     let value = model.modifyVertexNameInput
 
-    let component =
+    let component_ =
         match model.subjectVertexId with
         | Some subjectVertexId ->
             match AAG.tryFindVertexById subjectVertexId model.graph with
-            | Some subjectVertex -> subjectVertex.component
+            | Some subjectVertex -> subjectVertex.component_
             | None -> None
         | None -> None
 
@@ -126,7 +126,7 @@ let modifyVertexNameInput (model: Model) =
         Seq.length
             (
                 (AAG.getVerticesWithName value model.graph)
-                |> Seq.filter (fun v -> v.component = component)
+                |> Seq.filter (fun v -> v.component_ = component_)
             ) > 1
     then
         Hint.Error "Vertex already exists"

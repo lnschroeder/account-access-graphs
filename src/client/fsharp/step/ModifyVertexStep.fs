@@ -139,7 +139,7 @@ let view jsRuntime (model: Model) dispatch =
                 )
                 .ScoreInput(subjectVertex.score, (fun i -> dispatch (Msg.SetScore(subjectVertex, i))))
                 .ComponentInfo(
-                    match subjectVertex.component with
+                    match subjectVertex.component_ with
                     | Some c ->
                         Template
                             .ModifyVertex

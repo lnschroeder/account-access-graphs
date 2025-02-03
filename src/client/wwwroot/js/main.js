@@ -141,8 +141,8 @@ function updateNetwork(networkDTO) {
       borderDashes = [5, 5];
     }
 
-    if (node.component != "") {
-      label += "\n_" + node.component +"_";
+    if (node.component_ != "") {
+      label += "\n_" + node.component_ +"_";
     }
 
     data.nodes.update({

@@ -49,7 +49,7 @@ and Vertex =
       isVinit: bool
       score: int
       accessBase: AccessBase
-      component: string option }
+      component_: string option }
 
     static member Default =
         { id = Guid.NewGuid()
@@ -57,7 +57,7 @@ and Vertex =
           isVinit = false
           score = 1
           accessBase = AccessBase.Empty
-          component = None }
+          component_ = None }
 
 and Edge =
     { id: Guid
@@ -66,7 +66,7 @@ and Edge =
       disabled: bool
       from: Guid
       ``to``: Guid
-      component: string option }
+      component_: string option }
     static member New (fromId: Guid) (access: Access) =
         { id = Guid.NewGuid()
           accessName = access.name
@@ -74,7 +74,7 @@ and Edge =
           disabled = false
           from = fromId
           ``to`` = access.vertexId
-          component = None }
+          component_ = None }
 
 and Access =
     { name: String
@@ -99,7 +99,7 @@ and Graph =
               isVinit = false
               score = 1
               accessBase = AccessBase.Empty
-              component = None }
+              component_ = None }
 
         let v2 =
             { id = Guid.Parse("1578d946-7c48-41a6-baf2-0386979c9de2")
@@ -107,7 +107,7 @@ and Graph =
               isVinit = false
               score = 2
               accessBase = AccessBase.Empty
-              component = None }
+              component_ = None }
 
         let v3 =
             { id = Guid.Parse("1578d946-7c48-41a6-baf2-0386979c9de3")
@@ -115,7 +115,7 @@ and Graph =
               isVinit = true
               score = 3
               accessBase = AccessBase.Empty
-              component = None }
+              component_ = None }
 
         let a1e1 =
             { id = Guid.Parse("2578d946-7c48-41a6-baf2-0386979c9de1")
@@ -124,7 +124,7 @@ and Graph =
               disabled = false
               from = v1.id
               ``to`` = v2.id
-              component = None }
+              component_ = None }
 
         let a1e2 =
             { id = Guid.Parse("2578d946-7c48-41a6-baf2-0386979c9de2")
@@ -133,7 +133,7 @@ and Graph =
               disabled = false
               from = v3.id
               ``to`` = v2.id
-              component = None }
+              component_ = None }
 
         let a2e1 =
             { id = Guid.Parse("2578d946-7c48-41a6-baf2-0386979c9de3")
@@ -142,7 +142,7 @@ and Graph =
               disabled = false
               from = v3.id
               ``to`` = v2.id
-              component = None }
+              component_ = None }
 
         let a3e1 =
             { id = Guid.Parse("2578d946-7c48-41a6-baf2-0386979c9de4")
@@ -151,7 +151,7 @@ and Graph =
               disabled = false
               from = v1.id
               ``to`` = v3.id
-              component = None }
+              component_ = None }
 
         { vertices = [ v1; v2; v3 ]
           edges = [ a1e1; a1e2; a2e1; a3e1 ]
@@ -183,7 +183,7 @@ let getVerticesWithName vertexName graph =
 
 let getComponentsWithName componentName graph =
     graph.vertices
-    |> Seq.filter (fun v -> v.component = componentName)
+    |> Seq.filter (fun v -> v.component_ = componentName)
 
 let tryFindVertexById id graph =
     graph.vertices
@@ -495,7 +495,7 @@ let setDisableEdgesByComponentNameAndAccessName graph componentName accessName d
             graph.edges
             |> List.map (fun e ->
                 if e.accessName = accessName
-                   && e.component = Some componentName then
+                   && e.component_ = Some componentName then
                     { e with disabled = disabled }
                 else
                     e)
@@ -515,13 +515,13 @@ let setConditionByComponentNameAndConditionName graph componentName conditionNam
     { graph with
         components =
             graph.components
-            |> List.map (fun component ->
-                { component with
+            |> List.map (fun component_ ->
+                { component_ with
                     conditions =
-                        component.conditions
+                        component_.conditions
                         |> List.map (fun c ->
                             if c.name = conditionName
-                               && component.name = componentName then
+                               && component_.name = componentName then
                                 { c with answer = answer }
                             else
                                 c) }) }
@@ -547,10 +547,10 @@ let importComponent aag (aagc: Component) =
                     { aagc.graph with
                         vertices =
                             aagc.graph.vertices
-                            |> List.map (fun v -> { v with component = Some aagc.name })
+                            |> List.map (fun v -> { v with component_ = Some aagc.name })
                         edges =
                             aagc.graph.edges
-                            |> List.map (fun e -> { e with component = Some aagc.name }) }
+                            |> List.map (fun e -> { e with component_ = Some aagc.name }) }
                     aagc.name
                     aagc.accessMethods
                 |> updateIds }
@@ -561,7 +561,7 @@ let importComponent aag (aagc: Component) =
 
 let deleteComponent graph componentName =
     graph.vertices
-    |> List.filter (fun v -> v.component = Some componentName)
+    |> List.filter (fun v -> v.component_ = Some componentName)
     |> List.fold (fun g v -> removeVertexFromGraph v.id g) graph
 
 // Authentication policy
@@ -581,15 +581,15 @@ let private optionalAccessMethodToJsonLogicData (am: OptionalAccessMethod) =
 let evaluateAuthenticationPolicyRule (graph: Graph) componentName (rule: Rule): bool =
     let evaluator = JsonLogicEvaluator(EvaluateOperators.Default)
     let rule = JObject.Parse(rule.logic.ToString())
-    let component =
+    let component_ =
         graph.components
         |> List.find (fun c -> c.name = componentName)
 
     let items =
         List.append
-            (component.conditions
+            (component_.conditions
              |> List.map conditionToJsonLogicData)
-            (component.accessMethods
+            (component_.accessMethods
              |> List.map optionalAccessMethodToJsonLogicData)
 
     let dataString = "{" + $"""{String.Join(",", items)}""" + "}"
