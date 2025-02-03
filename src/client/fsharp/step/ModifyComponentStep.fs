@@ -6,14 +6,6 @@ open Bolero.Html
 // Validity
 
 // Handle actions
-let handleClickedVertex (vertex: AAG.Vertex) (model: Model) dispatch =
-    dispatch Msg.IgnoreAction
-
-let handleClickedBackground (model: Model) dispatch =
-    Msg.IgnoreAction
-
-let handleClickedEdge (access: AAG.Access) (model: Model) dispatch =
-    dispatch Msg.IgnoreAction
 
 // Open
 let ``open`` model componentName =
@@ -62,46 +54,29 @@ let private showAccessMethod dispatch (accessMethod: AAG.OptionalAccessMethod) =
         .Description(accessMethod.description)
         .Elt()
 
-let view jsRuntime (model: Model) dispatch =
+let private showPolicyInfo graph componentName (rule: AAG.Rule) =
+    let result = AAG.evaluateAuthenticationPolicyRule graph componentName rule
+    printfn "%A" result
+    if result then
+        Template
+            .ModifyComponent
+            .SomePolicyInfo()
+            .Description(rule.description)
+            .Elt()
+    else
+        Template
+            .ModifyComponent
+            .NonePolicyInfo()
+            .Elt()
+
+let view (model: Model) dispatch =
+    let subjectComponent = AAG.getComponent model.graph model.subjectComponentName
     Template
         .ModifyComponent()
-        // .SubjectNameInput(
-        //     model.modifyVertexNameInput,
-        //     (fun v -> dispatch (Msg.ModifiedVertexName(subjectVertexId, v)))
-        // )
-        // .SubjectNameHint((modifyVertexNameInput model).value)
         .ComponentName(model.subjectComponentName)
-        .Conditions(forEach ((AAG.getComponent model.graph model.subjectComponentName).conditions) (showCondition dispatch))
-        .AccessMethods(forEach ((AAG.getComponent model.graph model.subjectComponentName).accessMethods) (showAccessMethod dispatch))
-        // .AddAccessButton(fun _ ->
-        //     dispatch (
-        //         Msg.OpenModifyAccessStep(
-        //             { vertexId = subjectVertexId
-        //                 colorIndex = AAG.getNextAvailableColor subjectVertex.id model.graph
-        //                 name = AAG.getNextAvailableName subjectVertex.id model.graph },
-        //             ""
-        //         )
-        //     ))
-        // .VinitInput(
-        //     subjectVertex.isVinit,
-        //     (fun b ->
-        //         if b then
-        //             dispatch (Msg.SetVinit subjectVertex)
-        //         else
-        //             dispatch (Msg.UnsetVinit subjectVertex))
-        // )
-        // .ScoreInput(subjectVertex.score, (fun i -> dispatch (Msg.SetScore(subjectVertex, i))))
-        // .ComponentInfo(
-        //     match subjectVertex.``component`` with
-        //     | Some c ->
-        //         Template
-        //             .ModifyVertex
-        //             .SomeComponentInfo()
-        //             .ComponentName(c)
-        //             .ModifyComponentButton(fun _ -> dispatch Msg.OpenMainMenuStep)
-        //             .Elt()
-        //     | None -> Template.ModifyVertex.NoneComponentInfo().Elt()
-        // )
+        .Conditions(forEach (subjectComponent.conditions) (showCondition dispatch))
+        .AccessMethods(forEach (subjectComponent.accessMethods) (showAccessMethod dispatch))
+        .PolicyInfos(forEach (subjectComponent.rules) (showPolicyInfo model.graph model.subjectComponentName))
         .DeleteButton(fun _ -> dispatch (Msg.ClickedDeleteComponent model.subjectComponentName))
         .BackButton(fun _ -> dispatch (Msg.OpenModifyVertexStep model.subjectVertexId))
         .Elt()

@@ -26,11 +26,13 @@
 <div class="field">
   <label class="label">Authentication policy</label>
   ${PolicyInfos}
-  <template id="PolicyInfo">
-    <div class="field">
-      <p class="block">
-        ${Description}
-      </p>
+  <template id="NonePolicyInfo"></template>
+  <template id="SomePolicyInfo">
+    <div class="icon-text">
+      <span class="icon has-text-warning">
+        <i class="fas fa-exclamation-triangle"></i>
+      </span>
+      <span>${Description}</span>
     </div>
   </template>
 </div>

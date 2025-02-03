@@ -15,11 +15,7 @@
       "description": "Can you receive password recovery SMS?"
     },
     {
-      "name": "newPasswordViaRecSms",
-      "description": "Can you receive password recovery email?"
-    },
-    {
-      "name": "newPasswordViaRecSms",
+      "name": "newPasswordViaRecEmail",
       "description": "Can you receive password recovery email?"
     }
   ],

@@ -57,11 +57,11 @@
   "rules": [
     {
       "description": "Either 2FA using OTP codes must be enabled or just single passwords",
-      "logic": {}
+      "logic": "{\"if\": [{ \"var\": \"passkey\" }, { \"var\": \"isPremium\" }, true]}"
     },
     {
       "description": "When 2FA is enabled, you also need a backup code",
-      "logic": {}
+      "logic": "{\"if\": [{ \"var\": \"passkey\" }, { \"var\": \"isPremium\" }, false]}"
     }
   ],
   "graph": {

@@ -7,7 +7,7 @@ open Newtonsoft.Json.Linq
 
 type IdAccess = { target: Guid; factors: Guid Set }
 
-type Rule = { description: string; logic: JObject }
+type Rule = { description: string; logic: string }
 
 and Condition =
     { name: string
@@ -563,3 +563,35 @@ let deleteComponent graph componentName =
     graph.vertices
     |> List.filter (fun v -> v.component = Some componentName)
     |> List.fold (fun g v -> removeVertexFromGraph v.id g) graph
+
+// Authentication policy
+open JsonLogic.Net
+
+let private questionToJsonLogicData (name: string) (answer: bool) =
+    let answer = if answer then "true" else "false"
+    $""" "{name}": {answer} """
+
+let private conditionToJsonLogicData (condition: Condition) =
+    questionToJsonLogicData condition.name condition.answer
+
+let private optionalAccessMethodToJsonLogicData (am: OptionalAccessMethod) =
+    questionToJsonLogicData am.name am.answer
+
+
+let evaluateAuthenticationPolicyRule (graph: Graph) componentName (rule: Rule): bool =
+    let evaluator = JsonLogicEvaluator(EvaluateOperators.Default)
+    let rule = JObject.Parse(rule.logic |> String.filter (fun c -> c <> '\\'))
+    let component =
+        graph.components
+        |> List.find (fun c -> c.name = componentName)
+
+    let items =
+        List.append
+            (component.conditions
+             |> List.map conditionToJsonLogicData)
+            (component.accessMethods
+             |> List.map optionalAccessMethodToJsonLogicData)
+
+    let dataString = "{" + $"""{String.Join(",", items)}""" + "}"
+    let dataObj = JObject.Parse(dataString)
+    evaluator.Apply(rule, dataObj) :?> bool
