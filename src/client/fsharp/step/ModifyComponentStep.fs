@@ -66,6 +66,7 @@ let view jsRuntime (model: Model) dispatch =
         //     (fun v -> dispatch (Msg.ModifiedVertexName(subjectVertexId, v)))
         // )
         // .SubjectNameHint((modifyVertexNameInput model).value)
+        .ComponentName(model.subjectComponentName)
         .Conditions(forEach ((AAG.getComponent model.graph model.subjectComponentName).conditions) (showCondition dispatch))
         .AccessMethods(forEach ((AAG.getComponent model.graph model.subjectComponentName).accessMethods) (showAccessMethod dispatch))
         // .AddAccessButton(fun _ ->
