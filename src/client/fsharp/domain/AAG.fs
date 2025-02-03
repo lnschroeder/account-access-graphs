@@ -7,7 +7,7 @@ open Newtonsoft.Json.Linq
 
 type IdAccess = { target: Guid; factors: Guid Set }
 
-type Rule = { description: string; logic: string }
+type Rule = { description: string; logic: obj }
 
 and Condition =
     { name: string
@@ -580,7 +580,7 @@ let private optionalAccessMethodToJsonLogicData (am: OptionalAccessMethod) =
 
 let evaluateAuthenticationPolicyRule (graph: Graph) componentName (rule: Rule): bool =
     let evaluator = JsonLogicEvaluator(EvaluateOperators.Default)
-    let rule = JObject.Parse(rule.logic |> String.filter (fun c -> c <> '\\'))
+    let rule = JObject.Parse(rule.logic.ToString())
     let component =
         graph.components
         |> List.find (fun c -> c.name = componentName)

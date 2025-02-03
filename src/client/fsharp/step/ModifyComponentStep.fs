@@ -56,7 +56,6 @@ let private showAccessMethod dispatch (accessMethod: AAG.OptionalAccessMethod) =
 
 let private showPolicyInfo graph componentName (rule: AAG.Rule) =
     let result = AAG.evaluateAuthenticationPolicyRule graph componentName rule
-    printfn "%A" result
     if result then
         Template
             .ModifyComponent
