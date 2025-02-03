@@ -9,9 +9,15 @@ type IdAccess = { target: Guid; factors: Guid Set }
 
 type Rule = { description: string; logic: JObject }
 
-and Condition = { name: string; description: string; answer: bool }
+and Condition =
+    { name: string
+      description: string
+      answer: bool }
 
-and OptionalAccessMethod = { name: string; description: string; answer: bool }
+and OptionalAccessMethod =
+    { name: string
+      description: string
+      answer: bool }
 
 and Component =
     { name: string
@@ -492,7 +498,18 @@ let setDisableEdgesByComponentNameAndAccessName graph componentName accessName d
                    && e.component = Some componentName then
                     { e with disabled = disabled }
                 else
-                    e) }
+                    e)
+        components =
+            graph.components
+            |> List.map (fun c ->
+                { c with
+                    accessMethods =
+                        c.accessMethods
+                        |> List.map (fun am ->
+                            if am.name = accessName && c.name = componentName then
+                                { am with answer = not disabled }
+                            else
+                                am) }) }
 
 let rec private disableAllEdgesForOptionalAccessMethods
     (graph: Graph)
