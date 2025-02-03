@@ -34,6 +34,7 @@ let ``open`` model =
       newComponentSelection = ""
       components = []
       componentNameInput = ""
+      subjectComponentName = ""
       json = model.json }
 
 // Functionality

@@ -34,6 +34,7 @@ let private openPrivate model graph vertexId =
       newComponentSelection = ""
       components = []
       componentNameInput = ""
+      subjectComponentName = ""
       json = model.json }
 
 let ``open`` model =

@@ -1,5 +1,28 @@
 {
-  "permissions": [],
+  "name": "Posteo",
+  "conditions": [],
+  "accessMethods": [
+    {
+      "name": "password-only",
+      "description": "Can you login using just your password and email address?"
+    },
+    {
+      "name": "2fa-with-totp-app",
+      "description": "Do you have TOTP setup?"
+    },
+    {
+      "name": "newPasswordViaRecSms",
+      "description": "Can you receive password recovery SMS?"
+    },
+    {
+      "name": "newPasswordViaRecSms",
+      "description": "Can you receive password recovery email?"
+    },
+    {
+      "name": "newPasswordViaRecSms",
+      "description": "Can you receive password recovery email?"
+    }
+  ],
   "rules": [],
   "graph": {
     "vertices": [

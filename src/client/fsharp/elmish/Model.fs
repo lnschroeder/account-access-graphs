@@ -23,6 +23,7 @@ and Step =
     | AnalysisAutomated
     | Vinit
     | AddComponent
+    | ModifyComponent
 
 and DeserializedGraph =
     | Graph of AAG.Graph
@@ -46,6 +47,7 @@ and Model =
       newComponentSelection: string
       components: string list
       componentNameInput: string
+      subjectComponentName: string
       json: string }
     static member Init =
         { page = Endpoint.Main
@@ -65,6 +67,7 @@ and Model =
           newComponentSelection = ""
           components = []
           componentNameInput = ""
+          subjectComponentName = ""
           json = """{ "vertices": [] }""" }
 
     static member Example = { Model.Init with graph = AAG.Graph.Example }

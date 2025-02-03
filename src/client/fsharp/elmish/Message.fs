@@ -8,7 +8,7 @@ type Message =
     | IgnoreAction
     | GotGraph of AAG.Graph
     | GotComponents of string list
-    | GotComponent of AAGC.Component
+    | GotComponent of AAG.Component
     | SetComponentSelection of string
     | ImportSelectedComponent
     | ModifiedComponentName of string
@@ -23,6 +23,7 @@ type Message =
     | OpenAnalysisForVertex of Guid option
     | OpenVinit
     | OpenAddComponentStep
+    | OpenModifyComponent of string
     | UnsetVinit of AAG.Vertex
     | UpdateCompromisedVertices of Guid Set
     | SetVinit of AAG.Vertex
@@ -31,6 +32,7 @@ type Message =
     | DeHighlightAccess
     | ToggleFactorForSubject of AAG.Vertex
     | ClickedDeleteVertex of Guid
+    | ClickedDeleteComponent of string
     | ClickedDeleteAccess of AAG.Access option
     | ClickedClearGraph
     | ClickedExampleGraph

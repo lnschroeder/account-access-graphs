@@ -6,7 +6,6 @@
   <ItemGroup>
     <Compile Include="fsharp/Utility.fs" />
     <Compile Include="fsharp/domain/AAG.fs" />
-    <Compile Include="fsharp/domain/AAGC.fs" />
     <Compile Include="fsharp/elmish/Template.fs" />
     <Compile Include="fsharp/elmish/Endpoint.fs" />
     <Compile Include="fsharp/elmish/Message.fs" />

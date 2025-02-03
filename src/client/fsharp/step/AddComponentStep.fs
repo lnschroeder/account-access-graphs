@@ -26,12 +26,13 @@ let ``open`` model (components: string list) =
       newComponentSelection = components.Head
       components = components
       componentNameInput = ""
+      subjectComponentName = ""
       json = model.json }
 
 // Functionality
-let importComponent model (c: AAGC.Component) =
+let importComponent model (c: AAG.Component) =
     { model with
-        graph = AAGC.importComponent model.graph c model.componentNameInput}
+        graph = AAG.importComponent model.graph {c with name = model.componentNameInput}}
 
 // View
 let private showComponentOption (model: Model) (filename: string) =

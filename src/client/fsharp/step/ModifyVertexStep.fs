@@ -64,6 +64,7 @@ let private openInternal (vertex: AAG.Vertex) model =
       newComponentSelection = ""
       components = []
       componentNameInput = ""
+      subjectComponentName = ""
       json = model.json }
 
 let ``open`` vertexId model =
@@ -138,13 +139,13 @@ let view jsRuntime (model: Model) dispatch =
                 )
                 .ScoreInput(subjectVertex.score, (fun i -> dispatch (Msg.SetScore(subjectVertex, i))))
                 .ComponentInfo(
-                    match subjectVertex.``component`` with
+                    match subjectVertex.component with
                     | Some c ->
                         Template
                             .ModifyVertex
                             .SomeComponentInfo()
                             .ComponentName(c)
-                            .ModifyComponentButton(fun _ -> dispatch Msg.OpenMainMenuStep)
+                            .ModifyComponentButton(fun _ -> dispatch (Msg.OpenModifyComponent c))
                             .Elt()
                     | None -> Template.ModifyVertex.NoneComponentInfo().Elt()
                 )

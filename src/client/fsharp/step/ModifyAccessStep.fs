@@ -42,6 +42,7 @@ let ``open`` (access: AAG.Access) addAccessNameInput model =
           newComponentSelection = ""
           components = []
           componentNameInput = ""
+          subjectComponentName = ""
           json = model.json }
     | None -> model
 

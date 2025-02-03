@@ -3,8 +3,30 @@ module AAG.Client.AAG
 open System
 
 open System.Collections.Generic
+open Newtonsoft.Json.Linq
 
 type IdAccess = { target: Guid; factors: Guid Set }
+
+type Rule =
+    { description: string
+      logic: JObject }
+
+and Condition = { name: string; description: string }
+
+and OptionalAccessMethod = { name: string; description: string }
+
+and Component =
+    { name: string
+      conditions: Condition list
+      rules: Rule list
+      accessMethods: OptionalAccessMethod list
+      graph: Graph }
+    static member Empty =
+        { name = ""
+          conditions = []
+          accessMethods = []
+          rules = []
+          graph = Graph.Empty }
 
 and AccessSet =
     { factors: Guid Set }
@@ -23,7 +45,7 @@ and Vertex =
       isVinit: bool
       score: int
       accessBase: AccessBase
-      ``component``: string option }
+      component: string option }
 
     static member Default =
         { id = Guid.NewGuid()
@@ -31,7 +53,7 @@ and Vertex =
           isVinit = false
           score = 1
           accessBase = AccessBase.Empty
-          ``component`` = None }
+          component = None }
 
 and Edge =
     { id: Guid
@@ -54,8 +76,9 @@ and Access =
 
 and Graph =
     { vertices: Vertex list
-      edges: Edge list }
-    static member Empty = { vertices = []; edges = [] }
+      edges: Edge list
+      components: Component list }
+    static member Empty = { vertices = []; edges = []; components = []}
 
     static member Example =
 
@@ -65,7 +88,7 @@ and Graph =
               isVinit = false
               score = 1
               accessBase = AccessBase.Empty
-              ``component`` = None }
+              component = None }
 
         let v2 =
             { id = Guid.Parse("1578d946-7c48-41a6-baf2-0386979c9de2")
@@ -73,7 +96,7 @@ and Graph =
               isVinit = false
               score = 2
               accessBase = AccessBase.Empty
-              ``component`` = None }
+              component = None }
 
         let v3 =
             { id = Guid.Parse("1578d946-7c48-41a6-baf2-0386979c9de3")
@@ -81,7 +104,7 @@ and Graph =
               isVinit = true
               score = 3
               accessBase = AccessBase.Empty
-              ``component`` = None }
+              component = None }
 
         let a1e1 =
             { id = Guid.Parse("2578d946-7c48-41a6-baf2-0386979c9de1")
@@ -112,7 +135,8 @@ and Graph =
               ``to`` = v3.id }
 
         { vertices = [ v1; v2; v3 ]
-          edges = [ a1e1; a1e2; a2e1; a3e1 ] }
+          edges = [ a1e1; a1e2; a2e1; a3e1 ]
+          components = [] }
 
 let private transformEdgeToAccess (edge: Edge) =
     { name = edge.accessName
@@ -139,7 +163,7 @@ let getVerticesWithName vertexName graph =
 
 let getComponentsWithName componentName graph =
     graph.vertices
-    |> Seq.filter (fun v -> v.``component`` = componentName)
+    |> Seq.filter (fun v -> v.component = componentName)
 
 let tryFindVertexById id graph =
     graph.vertices
@@ -399,3 +423,63 @@ let computeAccessBase graph : Graph =
         vertices =
             graph.vertices
             |> List.map (fun v -> { v with accessBase = accessBases.[v.id] }) }
+
+// component
+let getComponent (graph: Graph) componentName =
+    graph.components
+    |> List.tryFind (fun c -> c.name = componentName)
+    |> Option.defaultValue Component.Empty
+
+let private updateVertexId graph oldId =
+    let newId = Guid.NewGuid()
+
+    { vertices =
+        graph.vertices
+        |> List.map (fun v ->
+            if v.id = oldId then
+                { v with id = newId }
+            else
+                v)
+      edges =
+        graph.edges
+        |> List.map (fun e ->
+            { e with
+                from = if e.from = oldId then newId else e.from
+                ``to`` =
+                    if e.``to`` = oldId then
+                        newId
+                    else
+                        e.``to`` })
+      components = graph.components}
+
+let rec private updateVertexIds graph vertexIds =
+    match vertexIds with
+    | [] -> graph
+    | oldId :: rest ->
+        let updatedGraph = updateVertexId graph oldId
+        updateVertexIds updatedGraph rest
+
+let private updateIds (graph: Graph) =
+    let graph =
+        { graph with
+            edges =
+                graph.edges
+                |> List.map (fun e -> { e with id = Guid.NewGuid() }) }
+
+    updateVertexIds graph (graph.vertices |> List.map (fun v -> v.id))
+
+let importComponent graph (component: Component) =
+    let updatedGraph = updateIds component.graph
+
+    { vertices =
+        List.append
+            graph.vertices
+            (updatedGraph.vertices
+             |> List.map (fun v -> { v with component = Some component.name }))
+      edges = List.append graph.edges updatedGraph.edges
+      components = List.append graph.components [ component ] }
+
+let deleteComponent graph componentName =
+    graph.vertices
+    |> List.filter (fun v -> v.component = Some componentName)
+    |> List.fold (fun g v -> removeVertexFromGraph v.id g) graph

@@ -57,6 +57,7 @@ let private handleClickedBackground model dispatch =
     | AnalysisAutomated -> AnalysisAutomatedStep.handleClickedBackground dispatch
     | Vinit -> VinitStep.handleClickedBackground dispatch
     | AddComponent -> dispatch Msg.IgnoreAction
+    | ModifyComponent -> dispatch Msg.IgnoreAction
 
 let private handleClickedVertex (idAsString: string) model dispatch =
     let vertex =
@@ -74,6 +75,7 @@ let private handleClickedVertex (idAsString: string) model dispatch =
         | AnalysisAutomated -> AnalysisAutomatedStep.handleClickedVertex vertex dispatch
         | Vinit -> VinitStep.handleClickedVertex vertex dispatch
         | AddComponent -> dispatch Msg.IgnoreAction
+        | ModifyComponent -> dispatch Msg.IgnoreAction
     | None -> dispatch Msg.IgnoreAction
 
 let private handleClickedVisEdge (idAsString: string) model dispatch =
@@ -160,10 +162,13 @@ let private update (http: HttpClient) message model =
     | Msg.ModifiedComponentName name -> { model with componentNameInput = name }, Cmd.none
     | Msg.ImportSelectedComponent ->
         let getComponent () =
-            http.GetFromJsonAsync<AAGC.Component>("resources/components/" + model.newComponentSelection)
+            http.GetFromJsonAsync<AAG.Component>("resources/components/" + model.newComponentSelection)
 
         let cmd = Cmd.OfTask.either getComponent () Msg.GotComponent Msg.Error
         model, cmd
+    // ModifyComponent
+    | Msg.OpenModifyComponent name -> ModifyComponentStep.``open`` model name, Cmd.none
+    | Msg.ClickedDeleteComponent name -> ModifyComponentStep.deleteComponent model name, Cmd.none
     // Vinit
     | Msg.OpenVinit -> VinitStep.``open`` model, Cmd.none
     | Msg.SetVinit vertex -> VinitStep.setVinit vertex true model, Cmd.none
@@ -200,6 +205,7 @@ let private view (jsRuntime: IJSRuntime) model dispatch =
                     | AnalysisAutomated -> AnalysisAutomatedStep.view model dispatch
                     | Vinit -> VinitStep.view model dispatch
                     | AddComponent -> AddComponentStep.view jsRuntime model dispatch
+                    | ModifyComponent -> ModifyComponentStep.view jsRuntime model dispatch
         )
         .ClickedVertexInput("", (fun idAsString -> handleClickedVertex idAsString model dispatch))
         .ClickedEdgeInput("", (fun idAsString -> handleClickedVisEdge idAsString model dispatch))

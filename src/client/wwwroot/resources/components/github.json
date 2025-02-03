@@ -1,6 +1,59 @@
 {
-  "permissions": [],
-  "rules": [],
+  "name": "GitHub",
+  "conditions": [
+    {
+      "name": "isPremium",
+      "description": "Do you have GitHub Premium?"
+    },
+    {
+      "name": "hasPermissionX",
+      "description": "Do you have permission X enabled?"
+    }
+  ],
+  "accessMethods": [
+    {
+      "name": "simple",
+      "description": "Do you use GitHub without 2FA?"
+    },
+    {
+      "name": "verifiedEmailOtp",
+      "description": "Do you have a back email set up?"
+    },
+    {
+      "name": "recoveryCodeOtp",
+      "description": "Do have recovery otp codes saved somewhere?"
+    },
+    {
+      "name": "totpOtp",
+      "description": "Do have TOTP setup?"
+    },
+    {
+      "name": "smsOtp",
+      "description": "Do you use sms OTP codes as second factor?"
+    },
+    {
+      "name": "passkey",
+      "description": "Do you use PassKeys?"
+    },
+    {
+      "name": "mobileApp",
+      "description": "Do you use GitHub mobile App"
+    },
+    {
+      "name": "securityKey",
+      "description": "Do you use security keys?"
+    }
+  ],
+  "rules": [
+    {
+      "description": "Either 2FA using OTP codes must be enabled or just single passwords",
+      "logic": {}
+    },
+    {
+      "description": "When 2FA is enabled, you also need a backup code",
+      "logic": {}
+    }
+  ],
   "graph": {
     "vertices": [
       {
