@@ -93,8 +93,7 @@
     },
     {
       "id": "6c284e0c-92f5-4f4b-97dd-9dff2410198e",
-      "name": "pwdlaptop",,
-      "component": null
+      "name": "pwdlaptop",
       "isVinit": true,
       "score": 3,
       "accessBase": {
@@ -104,8 +103,7 @@
     },
     {
       "id": "38013cd0-4e8f-4d80-863c-1c6da5557271",
-      "name": "laptop\u2217",,
-      "component": null
+      "name": "laptop\u2217",
       "isVinit": false,
       "score": 1024,
       "accessBase": {
@@ -115,8 +113,7 @@
     },
     {
       "id": "5efbe769-44bd-428f-8247-1650a2836b7e",
-      "name": "laptop",,
-      "component": null
+      "name": "laptop",
       "isVinit": false,
       "score": 1024,
       "accessBase": {
@@ -231,7 +228,8 @@
       "score": 1,
       "accessBase": {
         "accessSets": []
-      }
+      },
+      "component": null
     }
   ],
   "edges": [
