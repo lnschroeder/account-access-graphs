@@ -106,7 +106,11 @@ let private update (http: HttpClient) message model =
         model, cmd
     // ModifyAccess
     | Msg.OpenModifyAccessStep (access, addAccessNameInput) ->
-        ModifyAccessStep.``open`` access addAccessNameInput model, Cmd.none
+        match AAG.tryFindVertexById access.vertexId model.graph with
+        | Some vertex when vertex.component_.IsSome ->
+            ModifyComponentStep.``open`` { model with subjectVertexId = Some vertex.id } (Option.get vertex.component_),
+            Cmd.none
+        | _ -> ModifyAccessStep.``open`` access addAccessNameInput model, Cmd.none
     | Msg.ModifiedAccessName (access, name) -> ModifyAccessStep.updateAccessName access name model, Cmd.none
     | Msg.ToggleFactorForSubject vertex -> ModifyAccessStep.toggleFactorForSubject vertex model, Cmd.none
     | Msg.ClickedDeleteAccess access -> ModifyAccessStep.exitDeletingAccess access model, Cmd.none
@@ -159,11 +163,7 @@ let private update (http: HttpClient) message model =
     | Msg.ToggleCondition (b, condition) ->
         { model with
             graph =
-                AAG.setConditionByComponentNameAndConditionName
-                    model.graph
-                    model.subjectComponentName
-                    condition.name
-                    b },
+                AAG.setConditionByComponentNameAndConditionName model.graph model.subjectComponentName condition.name b },
         Cmd.none
     // Vinit
     | Msg.OpenVinit -> VinitStep.``open`` model, Cmd.none
