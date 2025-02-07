@@ -6,6 +6,8 @@ open Bolero.Html
 // Validity
 
 // Handle actions
+let handleClickedBackground model dispatch =
+    dispatch (Msg.OpenModifyVertexStep model.subjectVertexId)
 
 // Open
 let ``open`` model componentName =

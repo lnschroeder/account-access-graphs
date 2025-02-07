@@ -29,7 +29,8 @@ let private handleClickedBackground model dispatch =
     match model.step with
     | MainMenu -> MainMenuStep.handleClickedBackground dispatch
     | ModifyVertex -> ModifyVertexStep.handleClickedBackground model dispatch
-    | ModifyAccess | ModifyComponent -> ModifyAccessStep.handleClickedBackground model dispatch
+    | ModifyAccess -> ModifyAccessStep.handleClickedBackground model dispatch
+    | ModifyComponent -> ModifyComponentStep.handleClickedBackground model dispatch
     | AnalysisManual -> AnalysisManualStep.handleClickedBackground model dispatch
     | AnalysisAutomated -> AnalysisAutomatedStep.handleClickedBackground dispatch
     | Vinit -> VinitStep.handleClickedBackground dispatch
@@ -45,7 +46,8 @@ let private handleClickedVertex (idAsString: string) model dispatch =
     | Some vertex ->
         match model.step with
         | MainMenu | AddComponent -> MainMenuStep.handleClickedVertex vertex dispatch
-        | ModifyVertex | ModifyComponent -> ModifyVertexStep.handleClickedVertex vertex model dispatch
+        | ModifyVertex -> ModifyVertexStep.handleClickedVertex vertex model dispatch
+        | ModifyComponent -> dispatch Msg.IgnoreAction
         | ModifyAccess -> ModifyAccessStep.handleClickedVertex vertex dispatch
         | AnalysisManual -> AnalysisManualStep.handleClickedVertex model vertex dispatch
         | AnalysisAutomated -> AnalysisAutomatedStep.handleClickedVertex vertex dispatch
