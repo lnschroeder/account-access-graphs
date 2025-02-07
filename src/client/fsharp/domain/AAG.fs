@@ -245,6 +245,12 @@ let setScore graph score vertexId =
                 else
                     v) }
 //
+let getAccesses vertexId (graph: Graph) =
+    graph.edges
+    |> List.filter (fun e -> e.``to`` = vertexId)
+    |> List.map transformEdgeToAccess
+    |> Set.ofList
+
 let getEnabledAccesses vertexId (graph: Graph) =
     graph.edges
     |> List.filter (fun e -> e.``to`` = vertexId && e.disabled = false) // TODO optimize
@@ -294,7 +300,7 @@ let private isAccessible (graph: Graph) (vertexIds: Guid Set) (vertex: Vertex) =
 
 let getNextAvailableColor vertexId graph =
     let usedColors =
-        getEnabledAccesses vertexId graph
+        getAccesses vertexId graph
         |> Set.map (fun a -> a.colorIndex)
         |> Seq.sort
 
@@ -306,7 +312,7 @@ let getNextAvailableColor vertexId graph =
 
 let getNextAvailableName vertexId graph =
     let usedNames =
-        getEnabledAccesses vertexId graph
+        getAccesses vertexId graph
         |> Set.map (fun a -> a.name)
         |> Seq.sort
 
@@ -317,7 +323,7 @@ let getNextAvailableName vertexId graph =
         | None -> $"{Seq.length usedNames |> int}"
 
 let getAccessesWithFactors vertexId factors graph =
-    getEnabledAccesses vertexId graph
+    getAccesses vertexId graph
     |> List.ofSeq
     |> List.filter (fun a ->
         ((getEdgesForAccess graph a)
@@ -325,7 +331,7 @@ let getAccessesWithFactors vertexId factors graph =
          |> Set.ofList) = factors)
 
 let getAccessesWithName vertexId name graph =
-    getEnabledAccesses vertexId graph
+    getAccesses vertexId graph
     |> Set.filter (fun a -> a.name = name)
 
 //
