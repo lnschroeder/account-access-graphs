@@ -106,11 +106,14 @@ let private update (http: HttpClient) message model =
         model, cmd
     // ModifyAccess
     | Msg.OpenModifyAccessStep (access, addAccessNameInput) ->
-        match AAG.tryFindVertexById access.vertexId model.graph with
-        | Some vertex when vertex.component_.IsSome ->
-            ModifyComponentStep.``open`` { model with subjectVertexId = Some vertex.id } (Option.get vertex.component_),
-            Cmd.none
-        | _ -> ModifyAccessStep.``open`` access addAccessNameInput model, Cmd.none
+        if (AAG.getEdgesForAccess model.graph access) |> List.filter (fun e -> e.component_.IsSome) |> List.isEmpty then
+            ModifyAccessStep.``open`` access addAccessNameInput model, Cmd.none
+        else
+            match AAG.tryFindVertexById access.vertexId model.graph with
+            | Some vertex when vertex.component_.IsSome ->
+                ModifyComponentStep.``open`` { model with subjectVertexId = Some vertex.id } (Option.get vertex.component_),
+                Cmd.none
+            | _ -> ModifyAccessStep.``open`` access addAccessNameInput model, Cmd.none
     | Msg.ModifiedAccessName (access, name) -> ModifyAccessStep.updateAccessName access name model, Cmd.none
     | Msg.ToggleFactorForSubject vertex -> ModifyAccessStep.toggleFactorForSubject vertex model, Cmd.none
     | Msg.ClickedDeleteAccess access -> ModifyAccessStep.exitDeletingAccess access model, Cmd.none
