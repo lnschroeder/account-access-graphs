@@ -76,7 +76,7 @@ let view (model: Model) dispatch =
                     .Component(subjectVertex.component_ |> Option.defaultValue "")
                     .VertexScore(subjectVertex.score.ToString())
                     .VertexScoreHint((scoreHint subjectVertex).value)
-                    .AccessBase(forEach subjectVertex.accessBase.accessSets (showAccessSet dispatch model.graph))
+                    .AccessBase(forEach (subjectVertex.accessBase.accessSets |> List.ofSeq |> List.sortBy (fun x -> x.score)) (showAccessSet dispatch model.graph))
             | None -> Template.AnalysisAutomated()
         | None -> Template.AnalysisAutomated()
 
