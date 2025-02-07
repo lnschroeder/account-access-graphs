@@ -352,11 +352,11 @@ let getCompromisedVerticesOfGraph (compromisedVertexIds: Guid Set) (graph: Graph
 
 let getScore graph (accessSet: AccessSet) =
     accessSet.factors
-    |> Set.map (fun f ->
+    |> List.ofSeq
+    |> List.map (fun f ->
         tryFindVertexById f graph
         |> Option.map (fun v -> v.score)
         |> Option.defaultValue (Int32.MaxValue))
-    |> List.ofSeq
     |> List.sum
 
 let rec cart1 (LL) =
