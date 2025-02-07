@@ -15,6 +15,42 @@
 </div>
 
 <div class="field">
+  <label class="checkbox">
+    <label class="label">V_init</label>
+    <input type="checkbox" bind="${VinitInput}" />
+  </label>
+</div>
+
+<div class="field">
+  <label class="label">Score</label>
+  <div class="control">
+    <input
+      type="number"
+      class="input"
+      bind="${ScoreInput}"
+      placeholder="1"
+      name="score"
+      min="0"
+    />
+  </div>
+</div>
+
+<div class="field">
+  <label class="label">Component</label>
+  ${ComponentInfo}
+  <template id="NoneComponentInfo">None</template>
+  <template id="SomeComponentInfo">
+    ${ComponentName}
+
+    <button class="tag is-info" onclick="${ModifyComponentButton}">
+      <span class="icon is-small">
+        <i class="fas fa-edit"></i>
+      </span>
+    </button>
+  </template>
+</div>
+
+<div class="field">
   <label class="label">Access methods</label>
   <table class="table is-hoverable is-narrow">
     <thead>
@@ -62,42 +98,6 @@
         </tr>
       </template>
   </table>
-</div>
-
-<div class="field">
-  <label class="checkbox">
-    <label class="label">V_init</label>
-    <input type="checkbox" bind="${VinitInput}" />
-  </label>
-</div>
-
-<div class="field">
-  <label class="label">Score</label>
-  <div class="control">
-    <input
-      type="number"
-      class="input"
-      bind="${ScoreInput}"
-      placeholder="1"
-      name="score"
-      min="0"
-    />
-  </div>
-</div>
-
-<div class="field">
-  <label class="label">Component</label>
-  ${ComponentInfo}
-  <template id="NoneComponentInfo">None</template>
-  <template id="SomeComponentInfo">
-    ${ComponentName}
-
-    <button class="tag is-info" onclick="${ModifyComponentButton}">
-      <span class="icon is-small">
-        <i class="fas fa-edit"></i>
-      </span>
-    </button>
-  </template>
 </div>
 
 <div class="columns">

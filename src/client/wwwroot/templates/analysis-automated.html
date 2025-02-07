@@ -1,13 +1,23 @@
 <h1 class="title">Automated analysis</h1>
 
 <div class="field">
-  <label class="label">Vertex name</label>
-  ${VertexName}
-</div>
-
-<div class="field">
-  <label class="label">Vertex score</label>
-  ${VertexScore}
+  <label class="label">Vertex</label>
+  <table class="table is-narrow">
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Score</th>
+        <th>Component</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>${VertexName}</td>
+        <td>${VertexScore}</td>
+        <td>${Component}</td>
+      </tr>
+    </tbody>
+  </table>
   <p class="help is-danger">${VertexScoreHint}</p>
 </div>
 

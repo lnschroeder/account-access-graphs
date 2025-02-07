@@ -72,7 +72,8 @@ let view (model: Model) dispatch =
             | Some subjectVertex ->
                 Template
                     .AnalysisAutomated()
-                    .VertexName(if subjectVertex.component_ = None then subjectVertex.name else $"{subjectVertex.name} (component: {subjectVertex.component_})" )
+                    .VertexName(subjectVertex.name)
+                    .Component(subjectVertex.component_ |> Option.defaultValue "")
                     .VertexScore(subjectVertex.score.ToString())
                     .VertexScoreHint((scoreHint subjectVertex).value)
                     .AccessBase(forEach subjectVertex.accessBase.accessSets (showAccessSet dispatch model.graph))
