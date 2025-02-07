@@ -129,6 +129,8 @@ let view jsRuntime (model: Model) dispatch =
     | Some subjectVertexId ->
         match AAG.tryFindVertexById subjectVertexId model.graph with
         | Some subjectVertex ->
+            Utility.toggleButtonEnabled "ModifyVertexDeleteButton" (subjectVertex.component_.IsNone) jsRuntime
+            |> ignore
             Template
                 .ModifyVertex()
                 .SubjectNameInput(
