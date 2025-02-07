@@ -29,12 +29,11 @@ let private handleClickedBackground model dispatch =
     match model.step with
     | MainMenu -> MainMenuStep.handleClickedBackground dispatch
     | ModifyVertex -> ModifyVertexStep.handleClickedBackground model dispatch
-    | ModifyAccess -> ModifyAccessStep.handleClickedBackground model dispatch
+    | ModifyAccess | ModifyComponent -> ModifyAccessStep.handleClickedBackground model dispatch
     | AnalysisManual -> AnalysisManualStep.handleClickedBackground model dispatch
     | AnalysisAutomated -> AnalysisAutomatedStep.handleClickedBackground dispatch
     | Vinit -> VinitStep.handleClickedBackground dispatch
-    | AddComponent -> dispatch Msg.IgnoreAction
-    | ModifyComponent -> dispatch Msg.IgnoreAction
+    | AddComponent ->  dispatch Msg.OpenMainMenuStep
 
 let private handleClickedVertex (idAsString: string) model dispatch =
     let vertex =
@@ -45,14 +44,12 @@ let private handleClickedVertex (idAsString: string) model dispatch =
     match vertex with
     | Some vertex ->
         match model.step with
-        | MainMenu -> MainMenuStep.handleClickedVertex vertex dispatch
-        | ModifyVertex -> ModifyVertexStep.handleClickedVertex vertex model dispatch
+        | MainMenu | AddComponent -> MainMenuStep.handleClickedVertex vertex dispatch
+        | ModifyVertex | ModifyComponent -> ModifyVertexStep.handleClickedVertex vertex model dispatch
         | ModifyAccess -> ModifyAccessStep.handleClickedVertex vertex dispatch
         | AnalysisManual -> AnalysisManualStep.handleClickedVertex model vertex dispatch
         | AnalysisAutomated -> AnalysisAutomatedStep.handleClickedVertex vertex dispatch
         | Vinit -> VinitStep.handleClickedVertex vertex dispatch
-        | AddComponent -> dispatch Msg.IgnoreAction
-        | ModifyComponent -> dispatch Msg.IgnoreAction
     | None -> dispatch Msg.IgnoreAction
 
 let private handleClickedVisEdge (idAsString: string) model dispatch =
@@ -64,8 +61,7 @@ let private handleClickedVisEdge (idAsString: string) model dispatch =
     match access with
     | Some access ->
         match model.step with
-        | MainMenu -> MainMenuStep.handleClickedAccess access dispatch
-        | ModifyVertex -> ModifyVertexStep.handleClickedEdge access model dispatch
+        | MainMenu | AddComponent -> MainMenuStep.handleClickedAccess access dispatch
         | _ -> dispatch Msg.IgnoreAction
     | None -> dispatch Msg.IgnoreAction
 
