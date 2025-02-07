@@ -33,15 +33,18 @@ and Component =
           graph = Graph.Empty }
 
 and AccessSet =
-    { factors: Guid Set }
-    static member Singleton id = { factors = Set.singleton id }
+    { factors: Guid Set
+      score: int }
+    static member Singleton (vertex: Vertex) = { factors = Set.singleton vertex.id; score = vertex.score }
 
 and AccessBase =
-    { accessSets: AccessSet Set }
+    { accessSets: AccessSet Set
+      score: int }
     static member Singleton accessSet =
-        { accessSets = Set.singleton accessSet }
+        { accessSets = Set.singleton accessSet
+          score = accessSet.score }
 
-    static member Empty = { accessSets = Set.empty }
+    static member Empty = { accessSets = Set.empty; score = Int32.MaxValue }
 
 and Vertex =
     { id: Guid
@@ -350,14 +353,28 @@ let getCompromisedVerticesOfGraph (compromisedVertexIds: Guid Set) (graph: Graph
 
 // AccessBase
 
-let getScore graph (accessSet: AccessSet) =
-    accessSet.factors
+let private getScore graph (factors: Guid Set) =
+    factors
     |> List.ofSeq
     |> List.map (fun f ->
         tryFindVertexById f graph
         |> Option.map (fun v -> v.score)
         |> Option.defaultValue (Int32.MaxValue))
     |> List.sum
+
+let rec private getLowestScore graph (accessSets: AccessSet list) lowestScore : int =
+    match accessSets with
+    | [] -> lowestScore
+    | accessSet :: accessSets ->
+        let score = getScore graph accessSet.factors
+
+        let lowestScore =
+            if score < lowestScore then
+                score
+            else
+                lowestScore
+
+        getLowestScore graph accessSets lowestScore
 
 let rec cart1 (LL) =
     match LL with
@@ -369,6 +386,7 @@ let rec cart1 (LL) =
         }
 
 let rec private computeAccessBaseStep
+    graph
     (accesses: IdAccess list)
     (accessBases: Dictionary<Guid, AccessBase>)
     : Dictionary<Guid, AccessBase> =
@@ -387,10 +405,12 @@ let rec private computeAccessBaseStep
                 |> List.map (fun accessBase -> accessBase.accessSets)
             )
             |> Seq.map (fun accessSets ->
-                { factors =
-                    accessSets
-                    |> List.collect (fun accessSet -> accessSet.factors |> List.ofSeq)
-                    |> Set.ofList })
+                accessSets
+                |> List.collect (fun accessSet -> accessSet.factors |> List.ofSeq)
+                |> Set.ofList)
+            |> Seq.map (fun accessSet ->
+                { factors = accessSet
+                  score = getScore graph accessSet })
             |> Set.ofSeq
 
         let oldAccessBaseSets = accessBases.[access.target].accessSets
@@ -406,7 +426,8 @@ let rec private computeAccessBaseStep
                         && Set.isSubset set2.factors set1.factors)
                 ))
 
-        let newAccessBase = { accessSets = newAccessBaseSets }
+        let newAccessBase = { accessSets = newAccessBaseSets
+                              score = getLowestScore graph (newAccessBaseSets |> List.ofSeq) Int32.MaxValue }
 
         updated <-
             updated
@@ -415,7 +436,7 @@ let rec private computeAccessBaseStep
         accessBases.[access.target] <- newAccessBase)
 
     if updated then
-        computeAccessBaseStep accesses accessBases
+        computeAccessBaseStep graph accesses accessBases
     else
         accessBases
 
@@ -434,16 +455,20 @@ let computeAccessBase graph : Graph =
     |> List.iter (fun v ->
         accessBases.[v.id] <-
             if v.isVinit then
-                AccessBase.Singleton(AccessSet.Singleton v.id)
+                AccessBase.Singleton(AccessSet.Singleton v)
             else
                 AccessBase.Empty)
 
-    let accessBases = computeAccessBaseStep accesses accessBases
+    let accessBases = computeAccessBaseStep graph accesses accessBases
 
     { graph with
         vertices =
             graph.vertices
-            |> List.map (fun v -> { v with accessBase = accessBases.[v.id] }) }
+            |> List.map (fun v ->
+                let accessBase = accessBases.[v.id]
+
+                { v with
+                    accessBase = accessBase }) }
 
 // component
 let getComponent (graph: Graph) componentName =
@@ -578,9 +603,10 @@ let private optionalAccessMethodToJsonLogicData (am: OptionalAccessMethod) =
     questionToJsonLogicData am.name am.answer
 
 
-let evaluateAuthenticationPolicyRule (graph: Graph) componentName (rule: Rule): bool =
+let evaluateAuthenticationPolicyRule (graph: Graph) componentName (rule: Rule) : bool =
     let evaluator = JsonLogicEvaluator(EvaluateOperators.Default)
     let rule = JObject.Parse(rule.logic.ToString())
+
     let component_ =
         graph.components
         |> List.find (fun c -> c.name = componentName)

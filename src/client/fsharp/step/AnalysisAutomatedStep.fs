@@ -58,7 +58,7 @@ let private showAccessSet dispatch (graph: AAG.Graph) (accessSet: AAG.AccessSet)
     Template
         .AnalysisAutomated
         .AccessSet()
-        .Score((AAG.getScore graph accessSet).ToString())
+        .Score((accessSet.score).ToString())
         .AccessSetFactors(forEach accessSet.factors (showAccessSetFactor graph))
         .Enter(fun _ -> dispatch (Msg.UpdateCompromisedVertices accessSet.factors))
         .Leave(fun _ -> dispatch (Msg.UpdateCompromisedVertices Set.empty))
@@ -72,6 +72,9 @@ let view (model: Model) dispatch =
             | Some subjectVertex ->
                 Template
                     .AnalysisAutomated()
+                    .VertexName(if subjectVertex.component_ = None then subjectVertex.name else $"{subjectVertex.name} (component: {subjectVertex.component_})" )
+                    .VertexScore(subjectVertex.score.ToString())
+                    .VertexScoreHint((scoreHint subjectVertex).value)
                     .AccessBase(forEach subjectVertex.accessBase.accessSets (showAccessSet dispatch model.graph))
             | None -> Template.AnalysisAutomated()
         | None -> Template.AnalysisAutomated()

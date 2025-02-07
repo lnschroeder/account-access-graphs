@@ -145,6 +145,10 @@ function updateNetwork(networkDTO) {
       label += "\n_" + node.component_ +"_";
     }
 
+    if (node.hasBackdoor && step == "AnalysisAutomated") {
+      label += "\n⚠️"
+    }
+
     data.nodes.update({
       id: node.id,
       label: label,

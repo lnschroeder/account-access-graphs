@@ -154,6 +154,11 @@ let componentNameInput (model: Model) =
     else
         Hint.Info
 
+let scoreHint (vertex: AAG.Vertex) =
+    if vertex.score > vertex.accessBase.score then
+        Hint.Error "At least one access set has a lower score"
+    else
+        Hint.Info
 
 let isValid (model: Model) f = (f model).level <> Error
 

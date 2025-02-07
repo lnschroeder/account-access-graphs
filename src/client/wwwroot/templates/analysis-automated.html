@@ -1,12 +1,23 @@
 <h1 class="title">Automated analysis</h1>
 
 <div class="field">
-  <label class="label">Access Base</label>
+  <label class="label">Vertex name</label>
+  ${VertexName}
+</div>
+
+<div class="field">
+  <label class="label">Vertex score</label>
+  ${VertexScore}
+  <p class="help is-danger">${VertexScoreHint}</p>
+</div>
+
+<div class="field">
+  <label class="label">Access base</label>
   <table class="table is-hoverable is-narrow">
     <thead>
       <tr>
         <th>Score</th>
-        <th>Factors</th>
+        <th>Access set</th>
       </tr>
     </thead>
     <tbody>

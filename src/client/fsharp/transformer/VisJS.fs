@@ -11,6 +11,7 @@ type Node =
       isInitiallyCompromised: bool
       isTransitivelyCompromised: bool
       isVinit: bool
+      hasBackdoor: bool
       score: int
       component_: string }
 
@@ -51,6 +52,7 @@ let private transformVertex (model: Model) (vertex: AAG.Vertex) =
       isTransitivelyCompromised = isTransitivelyCompromised
       isVinit = vertex.isVinit
       score = vertex.score
+      hasBackdoor = (scoreHint vertex).level = Error
       component_ = vertex.component_ |> Option.defaultValue "" }
 
 let private transformEdge (model: Model) (edge: AAG.Edge) =
