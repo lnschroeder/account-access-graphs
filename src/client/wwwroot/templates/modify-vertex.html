@@ -15,25 +15,53 @@
 </div>
 
 <div class="field">
-  <label class="label">Accesses</label>
-  <div class="tags">
-    ${Accesses}
-    <template id="Access">
-      <button
-        class="tag is-info"
-        onclick="${Button}"
-        onmouseenter="${Enter}"
-        onmouseleave="${Leave}"
-      >
-        ${Name}
-      </button>
-    </template>
-    <button class="tag is-success" onclick="${AddAccessButton}">
-      <span class="icon is-small">
-        <i class="fas fa-plus"></i>
-      </span>
-    </button>
-  </div>
+  <label class="label">Access methods</label>
+  <table class="table is-hoverable is-narrow">
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Factors</th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody>
+      ${Accesses}
+      <tr>
+        <td></td>
+        <td></td>
+        <td>
+          <button class="tag is-success" onclick="${AddAccessButton}">
+            <span class="icon is-small">
+              <i class="fas fa-plus"></i>
+            </span>
+          </button>
+        </td>
+      </tr>
+    </tbody>
+
+      <template id="Access">
+        <tr
+          onmouseenter="${Enter}"
+          onmouseleave="${Leave}">
+          <td>${Name}</td>
+          <td>
+            <div class="tags">
+              ${FactorNames}
+              <template id="FactorName">
+                <span class="tag">${Name}</span>
+              </template>
+            </div>
+          </td>
+          <td>
+            <button class="tag is-info" onclick="${Button}">
+              <span class="icon is-small">
+                <i class="fas fa-edit"></i>
+              </span>
+            </button>
+          </td>
+        </tr>
+      </template>
+  </table>
 </div>
 
 <div class="field">
@@ -62,8 +90,12 @@
   ${ComponentInfo}
   <template id="NoneComponentInfo">None</template>
   <template id="SomeComponentInfo">
+    ${ComponentName}
+
     <button class="tag is-info" onclick="${ModifyComponentButton}">
-      ${ComponentName}
+      <span class="icon is-small">
+        <i class="fas fa-edit"></i>
+      </span>
     </button>
   </template>
 </div>

@@ -94,11 +94,28 @@ let setScore (vertex: AAG.Vertex) score (model: Model) =
     { model with graph = AAG.setScore model.graph (max 0 score) vertex.id }
 
 // View
-let private showAccess dispatch (access: AAG.Access) =
+let private showFactor graph vertexId =
+    Template
+        .ModifyVertex
+        .FactorName()
+        .Name(
+            AAG.tryFindVertexById vertexId graph
+            |> Option.map (fun v -> v.name)
+            |> Option.defaultValue "INVALID"
+        ).Elt()
+
+let private showAccess dispatch graph (access: AAG.Access) =
     Template
         .ModifyVertex
         .Access()
         .Name(access.name)
+        .FactorNames(
+            forEach
+                (AAG.getEdgesForAccess graph access
+                 |> List.map (fun e -> e.from)
+                 |> Set.ofList)
+                (showFactor graph)
+        )
         .Button(fun _ -> dispatch (Msg.OpenModifyAccessStep(access, access.name)))
         .Enter(fun _ -> dispatch (Msg.HighlightAccess(access)))
         .Leave(fun _ -> dispatch (Msg.DeHighlightAccess))
@@ -119,7 +136,9 @@ let view jsRuntime (model: Model) dispatch =
                     (fun v -> dispatch (Msg.ModifiedVertexName(subjectVertexId, v)))
                 )
                 .SubjectNameHint((modifyVertexNameInput model).value)
-                .Accesses(forEach (AAG.getEnabledAccesses subjectVertex.id model.graph) (showAccess dispatch))
+                .Accesses(
+                    forEach (AAG.getEnabledAccesses subjectVertex.id model.graph) (showAccess dispatch model.graph)
+                )
                 .AddAccessButton(fun _ ->
                     dispatch (
                         Msg.OpenModifyAccessStep(
