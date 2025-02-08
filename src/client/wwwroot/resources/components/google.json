@@ -1,0 +1,129 @@
+{
+    "name": "Google",
+    "conditions": [
+    ],
+    "accessMethods": [
+      {
+        "name": "simple",
+        "description": "simple",
+        "answer": false
+      },
+      {
+        "name": "recMail",
+        "description": "recMail",
+        "answer": false
+      }
+    ],
+    "rules": [
+      {
+        "description": "At least one primary method must be chosen",
+        "logic": {
+          ">": [
+            { "+": [
+                { "var": "simple" }
+              ]
+            },
+            0
+          ]
+        }
+      }
+    ],
+    "graph": {
+      "vertices": [
+        {
+          "id": "7efcfe23-ae27-4141-bd6d-014d6458e385",
+          "name": "recMail",
+          "isVinit": false,
+          "score": 1,
+          "accessBase": {
+            "accessSets": [],
+            "score": 2147483647
+          },
+          "component_": null
+        },
+        {
+          "id": "7a682970-da6b-44e7-b726-5f09277bd637",
+          "name": "emailAddress",
+          "isVinit": false,
+          "score": 1,
+          "accessBase": {
+            "accessSets": [],
+            "score": 2147483647
+          },
+          "component_": null
+        },
+        {
+          "id": "6a5f5d84-abc9-4fb0-88ee-ed0d47ca310e",
+          "name": "password",
+          "isVinit": false,
+          "score": 1,
+          "accessBase": {
+            "accessSets": [],
+            "score": 2147483647
+          },
+          "component_": null
+        },
+        {
+          "id": "07d2099c-0ecb-4d87-8450-edc4c51dad4f",
+          "name": "emailInbox",
+          "isVinit": false,
+          "score": 1,
+          "accessBase": {
+            "accessSets": [],
+            "score": 2147483647
+          },
+          "component_": null
+        },
+        {
+          "id": "9f3fbfae-756b-4c5e-9567-25dfdd6ea554",
+          "name": "Google",
+          "isVinit": false,
+          "score": 1,
+          "accessBase": {
+            "accessSets": [],
+            "score": 2147483647
+          },
+          "component_": null
+        }
+      ],
+      "edges": [
+        {
+          "id": "d91a3b23-afb8-4869-a9a0-05d1fb5d9173",
+          "accessName": "recMail",
+          "colorIndex": 1,
+          "disabled": false,
+          "from": "7efcfe23-ae27-4141-bd6d-014d6458e385",
+          "to": "9f3fbfae-756b-4c5e-9567-25dfdd6ea554",
+          "component_": null
+        },
+        {
+          "id": "11266bc6-4427-4d5b-b8f3-3266ef5fcb4b",
+          "accessName": "simple",
+          "colorIndex": 0,
+          "disabled": false,
+          "from": "7a682970-da6b-44e7-b726-5f09277bd637",
+          "to": "9f3fbfae-756b-4c5e-9567-25dfdd6ea554",
+          "component_": null
+        },
+        {
+          "id": "fc8ac680-60e4-411f-b1ce-6543ed3f3149",
+          "accessName": "simple",
+          "colorIndex": 0,
+          "disabled": false,
+          "from": "6a5f5d84-abc9-4fb0-88ee-ed0d47ca310e",
+          "to": "9f3fbfae-756b-4c5e-9567-25dfdd6ea554",
+          "component_": null
+        },
+        {
+          "id": "2c4e72f2-36e4-41b5-b877-678f1b9b7437",
+          "accessName": "inbox",
+          "colorIndex": 0,
+          "disabled": false,
+          "from": "9f3fbfae-756b-4c5e-9567-25dfdd6ea554",
+          "to": "07d2099c-0ecb-4d87-8450-edc4c51dad4f",
+          "component_": null
+        }
+      ],
+      "components": []
+    }
+  }

@@ -1,0 +1,271 @@
+{
+  "name": "Twitter",
+  "conditions": [
+    {
+      "name": "isBlue",
+      "description": "Do you have Twitter Blue?",
+      "answer": false
+    }
+  ],
+  "accessMethods": [
+    {
+      "name": "simple",
+      "description": "simple",
+      "answer": false
+    },
+    {
+      "name": "secKeyOtp",
+      "description": "secKeyOtp",
+      "answer": false
+    },
+    {
+      "name": "tOtp",
+      "description": "tOtp",
+      "answer": false
+    },
+    {
+      "name": "smsOtp",
+      "description": "smsOtp",
+      "answer": false
+    }
+  ],
+  "rules": [
+    {
+      "description": "2FA via SMS is only available for Twitter Blue users",
+      "logic": {
+        "if": [
+          { "var": "smsOtp" },
+          { "var": "isBlue" },
+          true
+        ]
+      }
+    },
+    {
+      "description": "At least one primary method must be chosen",
+      "logic": {
+        ">": [
+          { "+": [
+              { "var": "simple" },
+              { "var": "secKeyOtp" },
+              { "var": "tOtp" },
+              { "var": "smsOtp" }
+            ]
+          },
+          0
+        ]
+      }
+    },
+    {
+      "description": "2FA authentication methods are mutually exclusive with the password-only method",
+      "logic": {
+        "if": [
+          { "var": "simple" },
+          {
+            "==": [
+              { "+": [
+                  { "var": "secKeyOtp" },
+                  { "var": "tOtp" },
+                  { "var": "smsOtp" }
+                ]
+              },
+              0
+            ]
+          },
+          true
+        ]
+      }
+    }
+  ],
+  "graph": {
+    "vertices": [
+      {
+        "id": "bb221552-5ff3-4f91-be9e-5a5da699bf65",
+        "name": "recMail",
+        "isVinit": false,
+        "score": 1,
+        "accessBase": {
+          "accessSets": [],
+          "score": 2147483647
+        },
+        "component_": null
+      },
+      {
+        "id": "dd55c52d-9014-48a4-9989-5218f92c2a07",
+        "name": "securityKey",
+        "isVinit": false,
+        "score": 1,
+        "accessBase": {
+          "accessSets": [],
+          "score": 2147483647
+        },
+        "component_": null
+      },
+      {
+        "id": "07cc6695-a6ba-4eab-9ca9-faed39d12a44",
+        "name": "tOtp",
+        "isVinit": false,
+        "score": 1,
+        "accessBase": {
+          "accessSets": [],
+          "score": 2147483647
+        },
+        "component_": null
+      },
+      {
+        "id": "d014dbc1-61e4-4a82-ab54-b12ba9ac3b61",
+        "name": "smsOtp",
+        "isVinit": false,
+        "score": 1,
+        "accessBase": {
+          "accessSets": [],
+          "score": 2147483647
+        },
+        "component_": null
+      },
+      {
+        "id": "7dd8407e-8fc8-4aae-80f0-5a63d473dc8e",
+        "name": "password",
+        "isVinit": false,
+        "score": 1,
+        "accessBase": {
+          "accessSets": [],
+          "score": 2147483647
+        },
+        "component_": null
+      },
+      {
+        "id": "de170d34-0366-44f2-95f7-fe4a528755ef",
+        "name": "emailAddress",
+        "isVinit": true,
+        "score": 1,
+        "accessBase": {
+          "accessSets": [],
+          "score": 2147483647
+        },
+        "component_": null
+      },
+      {
+        "id": "479aac8b-8c0e-4622-a577-38c7aa9060c6",
+        "name": "Twitter",
+        "isVinit": false,
+        "score": 1,
+        "accessBase": {
+          "accessSets": [],
+          "score": 2147483647
+        },
+        "component_": null
+      }
+    ],
+    "edges": [
+      {
+        "id": "52ec8854-db8a-4999-823e-ede59ac77d96",
+        "accessName": "recMail",
+        "colorIndex": 0,
+        "disabled": false,
+        "from": "bb221552-5ff3-4f91-be9e-5a5da699bf65",
+        "to": "7dd8407e-8fc8-4aae-80f0-5a63d473dc8e",
+        "component_": null
+      },
+      {
+        "id": "9756aac4-3b59-4c33-939f-47fd04409026",
+        "accessName": "secKeyOtp",
+        "colorIndex": 3,
+        "disabled": false,
+        "from": "de170d34-0366-44f2-95f7-fe4a528755ef",
+        "to": "479aac8b-8c0e-4622-a577-38c7aa9060c6",
+        "component_": null
+      },
+      {
+        "id": "4a4979e2-bd57-4a69-9ac4-6ba387cb4e0d",
+        "accessName": "secKeyOtp",
+        "colorIndex": 3,
+        "disabled": false,
+        "from": "7dd8407e-8fc8-4aae-80f0-5a63d473dc8e",
+        "to": "479aac8b-8c0e-4622-a577-38c7aa9060c6",
+        "component_": null
+      },
+      {
+        "id": "d3f02b16-f127-4032-8a26-9bfff13a0cf5",
+        "accessName": "secKeyOtp",
+        "colorIndex": 3,
+        "disabled": false,
+        "from": "dd55c52d-9014-48a4-9989-5218f92c2a07",
+        "to": "479aac8b-8c0e-4622-a577-38c7aa9060c6",
+        "component_": null
+      },
+      {
+        "id": "eeeb26cb-5c42-48cc-896c-dd91c4589a04",
+        "accessName": "tOtp",
+        "colorIndex": 2,
+        "disabled": false,
+        "from": "07cc6695-a6ba-4eab-9ca9-faed39d12a44",
+        "to": "479aac8b-8c0e-4622-a577-38c7aa9060c6",
+        "component_": null
+      },
+      {
+        "id": "3855e2eb-211c-4ad4-b8f8-0d7eb2c5a1bf",
+        "accessName": "tOtp",
+        "colorIndex": 2,
+        "disabled": false,
+        "from": "de170d34-0366-44f2-95f7-fe4a528755ef",
+        "to": "479aac8b-8c0e-4622-a577-38c7aa9060c6",
+        "component_": null
+      },
+      {
+        "id": "361eba64-6d49-4edb-8039-e609f2916959",
+        "accessName": "tOtp",
+        "colorIndex": 2,
+        "disabled": false,
+        "from": "7dd8407e-8fc8-4aae-80f0-5a63d473dc8e",
+        "to": "479aac8b-8c0e-4622-a577-38c7aa9060c6",
+        "component_": null
+      },
+      {
+        "id": "a4075992-e422-4bb5-8c1e-86783932a5e5",
+        "accessName": "smsOtp",
+        "colorIndex": 1,
+        "disabled": false,
+        "from": "d014dbc1-61e4-4a82-ab54-b12ba9ac3b61",
+        "to": "479aac8b-8c0e-4622-a577-38c7aa9060c6",
+        "component_": null
+      },
+      {
+        "id": "f7a604df-d646-4bad-bbbc-2ef087135047",
+        "accessName": "smsOtp",
+        "colorIndex": 1,
+        "disabled": false,
+        "from": "de170d34-0366-44f2-95f7-fe4a528755ef",
+        "to": "479aac8b-8c0e-4622-a577-38c7aa9060c6",
+        "component_": null
+      },
+      {
+        "id": "9ecce69c-6a79-4bf9-8a7e-6308f459713d",
+        "accessName": "smsOtp",
+        "colorIndex": 1,
+        "disabled": false,
+        "from": "7dd8407e-8fc8-4aae-80f0-5a63d473dc8e",
+        "to": "479aac8b-8c0e-4622-a577-38c7aa9060c6",
+        "component_": null
+      },
+      {
+        "id": "9ef1628a-3f33-4d3d-9123-7162feb9e531",
+        "accessName": "simple",
+        "colorIndex": 0,
+        "disabled": false,
+        "from": "de170d34-0366-44f2-95f7-fe4a528755ef",
+        "to": "479aac8b-8c0e-4622-a577-38c7aa9060c6",
+        "component_": null
+      },
+      {
+        "id": "0102c7dd-33ab-4950-bed4-b0991bb640f8",
+        "accessName": "simple",
+        "colorIndex": 0,
+        "disabled": false,
+        "from": "7dd8407e-8fc8-4aae-80f0-5a63d473dc8e",
+        "to": "479aac8b-8c0e-4622-a577-38c7aa9060c6",
+        "component_": null
+      }
+    ],
+    "components": []
+  }
+}
