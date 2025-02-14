@@ -19,23 +19,47 @@ and OptionalAccessMethod =
       description: string
       answer: bool }
 
+and IComponentBase =
+    abstract member name: string
+    abstract member conditions: Condition list
+    abstract member rules: Rule list
+    abstract member accessMethods: OptionalAccessMethod list
+
 and Component =
     { name: string
       conditions: Condition list
       rules: Rule list
       accessMethods: OptionalAccessMethod list
       graph: Graph }
+    interface IComponentBase with
+        member this.name = this.name
+        member this.conditions = this.conditions
+        member this.rules = this.rules
+        member this.accessMethods = this.accessMethods
+
+and ComponentInUse =
+    { name: string
+      conditions: Condition list
+      rules: Rule list
+      accessMethods: OptionalAccessMethod list }
+    interface IComponentBase with
+        member this.name = this.name
+        member this.conditions = this.conditions
+        member this.rules = this.rules
+        member this.accessMethods = this.accessMethods
+
     static member Empty =
         { name = ""
           conditions = []
           accessMethods = []
-          rules = []
-          graph = Graph.Empty }
+          rules = [] }
 
 and AccessSet =
     { factors: Guid Set
       score: int }
-    static member Singleton (vertex: Vertex) = { factors = Set.singleton vertex.id; score = vertex.score }
+    static member Singleton(vertex: Vertex) =
+        { factors = Set.singleton vertex.id
+          score = vertex.score }
 
 and AccessBase =
     { accessSets: AccessSet Set
@@ -44,7 +68,9 @@ and AccessBase =
         { accessSets = Set.singleton accessSet
           score = accessSet.score }
 
-    static member Empty = { accessSets = Set.empty; score = Int32.MaxValue }
+    static member Empty =
+        { accessSets = Set.empty
+          score = Int32.MaxValue }
 
 and Vertex =
     { id: Guid
@@ -88,7 +114,7 @@ and Access =
 and Graph =
     { vertices: Vertex list
       edges: Edge list
-      components: Component list }
+      components: ComponentInUse list }
     static member Empty =
         { vertices = []
           edges = []
@@ -432,8 +458,9 @@ let rec private computeAccessBaseStep
                         && Set.isSubset set2.factors set1.factors)
                 ))
 
-        let newAccessBase = { accessSets = newAccessBaseSets
-                              score = getLowestScore graph (newAccessBaseSets |> List.ofSeq) Int32.MaxValue }
+        let newAccessBase =
+            { accessSets = newAccessBaseSets
+              score = getLowestScore graph (newAccessBaseSets |> List.ofSeq) Int32.MaxValue }
 
         updated <-
             updated
@@ -473,14 +500,13 @@ let computeAccessBase graph : Graph =
             |> List.map (fun v ->
                 let accessBase = accessBases.[v.id]
 
-                { v with
-                    accessBase = accessBase }) }
+                { v with accessBase = accessBase }) }
 
 // component
 let getComponent (graph: Graph) componentName =
     graph.components
     |> List.tryFind (fun c -> c.name = componentName)
-    |> Option.defaultValue Component.Empty
+    |> Option.defaultValue ComponentInUse.Empty
 
 let private updateVertexId graph oldId =
     let newId = Guid.NewGuid()
@@ -570,25 +596,29 @@ let rec private disableAllEdgesForOptionalAccessMethods
 
         disableAllEdgesForOptionalAccessMethods updatedComponent componentName accessMethods
 
-let importComponent aag (aagc: Component) =
-    let aagc =
-        { aagc with
-            graph =
-                disableAllEdgesForOptionalAccessMethods
-                    { aagc.graph with
-                        vertices =
-                            aagc.graph.vertices
-                            |> List.map (fun v -> { v with component_ = Some aagc.name })
-                        edges =
-                            aagc.graph.edges
-                            |> List.map (fun e -> { e with component_ = Some aagc.name }) }
-                    aagc.name
-                    aagc.accessMethods
-                |> updateIds }
+let toComponentInUse (aagc: Component) : ComponentInUse =
+    { name = aagc.name
+      conditions = aagc.conditions
+      rules = aagc.rules
+      accessMethods = aagc.accessMethods }
 
-    { vertices = List.append aag.vertices aagc.graph.vertices
-      edges = List.append aag.edges aagc.graph.edges
-      components = List.append aag.components [ aagc ] }
+let importComponent aag (aagc: Component) =
+    let graph =
+        disableAllEdgesForOptionalAccessMethods
+            { aagc.graph with
+                vertices =
+                    aagc.graph.vertices
+                    |> List.map (fun v -> { v with component_ = Some aagc.name })
+                edges =
+                    aagc.graph.edges
+                    |> List.map (fun e -> { e with component_ = Some aagc.name }) }
+            aagc.name
+            aagc.accessMethods
+        |> updateIds
+
+    { vertices = List.append aag.vertices graph.vertices
+      edges = List.append aag.edges graph.edges
+      components = List.append aag.components [ toComponentInUse aagc ] }
 
 let deleteComponent graph componentName =
     graph.vertices
