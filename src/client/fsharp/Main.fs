@@ -95,10 +95,9 @@ let private update (http: HttpClient) message model =
     // MainMenu
     | Msg.OpenMainMenuStep -> MainMenuStep.``open`` model, Cmd.none
     | Msg.ClickedClearGraph -> MainMenuStep.clearGraph, Cmd.none
-    | Msg.ClickedExampleGraph -> MainMenuStep.exampleGraph, Cmd.none
-    | Msg.ClickedExample2Graph ->
+    | Msg.ClickedExampleGraph -> 
         let getGraph () =
-            http.GetFromJsonAsync<AAG.Graph>("resources/hammann-fig14.json")
+            http.GetFromJsonAsync<AAG.Graph>("resources/example.json")
 
         let cmd = Cmd.OfTask.either getGraph () Msg.GotGraph Msg.Error
         model, cmd

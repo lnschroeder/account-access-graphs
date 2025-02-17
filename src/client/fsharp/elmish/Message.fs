@@ -38,7 +38,6 @@ type Message =
     | ClickedDeleteAccess of AAG.Access option
     | ClickedClearGraph
     | ClickedExampleGraph
-    | ClickedExample2Graph
     | ModifiedVertexName of Guid * string
     | ModifiedAccessName of AAG.Access option * string
     | ModifiedGraphJson of string

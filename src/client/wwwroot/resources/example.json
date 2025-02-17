@@ -4,10 +4,30 @@
       "id": "7ab3cb3e-5271-4893-b5b3-b5aef06b1faf",
       "name": "shop",
       "isVinit": false,
-      "score": 1,
+      "score": 5,
       "accessBase": {
-        "accessSets": [],
-        "score": 2147483647
+        "accessSets": [
+          {
+            "factors": [
+              "0f8a4c36-27b1-4b32-9d31-94cb1ae5dd57",
+              "f0b8905b-b917-4493-848a-3c1ab9b022f9"
+            ],
+            "score": 4
+          },
+          {
+            "factors": [
+              "90cf505e-1fd0-4180-9dca-694ad3c284f2"
+            ],
+            "score": 3
+          },
+          {
+            "factors": [
+              "da08b93e-e41c-48c4-96e0-27c3ad0e6e23"
+            ],
+            "score": 3
+          }
+        ],
+        "score": 3
       },
       "component_": null
     },
@@ -15,21 +35,42 @@
       "id": "0cb3b580-98bf-41fe-8b6f-be840ceb50d2",
       "name": "recMail_shop",
       "isVinit": false,
-      "score": 1,
+      "score": 3,
       "accessBase": {
-        "accessSets": [],
-        "score": 2147483647
+        "accessSets": [
+          {
+            "factors": [
+              "0f8a4c36-27b1-4b32-9d31-94cb1ae5dd57",
+              "f0b8905b-b917-4493-848a-3c1ab9b022f9"
+            ],
+            "score": 4
+          },
+          {
+            "factors": [
+              "90cf505e-1fd0-4180-9dca-694ad3c284f2"
+            ],
+            "score": 3
+          }
+        ],
+        "score": 3
       },
       "component_": null
     },
     {
       "id": "da08b93e-e41c-48c4-96e0-27c3ad0e6e23",
       "name": "pw_shop",
-      "isVinit": false,
-      "score": 1,
+      "isVinit": true,
+      "score": 3,
       "accessBase": {
-        "accessSets": [],
-        "score": 2147483647
+        "accessSets": [
+          {
+            "factors": [
+              "da08b93e-e41c-48c4-96e0-27c3ad0e6e23"
+            ],
+            "score": 3
+          }
+        ],
+        "score": 3
       },
       "component_": null
     },
@@ -37,10 +78,24 @@
       "id": "bb3a9a0b-d399-4c13-8342-a501aaa4fbe7",
       "name": "acc_mail",
       "isVinit": false,
-      "score": 1,
+      "score": 3,
       "accessBase": {
-        "accessSets": [],
-        "score": 2147483647
+        "accessSets": [
+          {
+            "factors": [
+              "0f8a4c36-27b1-4b32-9d31-94cb1ae5dd57",
+              "f0b8905b-b917-4493-848a-3c1ab9b022f9"
+            ],
+            "score": 4
+          },
+          {
+            "factors": [
+              "90cf505e-1fd0-4180-9dca-694ad3c284f2"
+            ],
+            "score": 3
+          }
+        ],
+        "score": 3
       },
       "component_": null
     },
@@ -48,10 +103,17 @@
       "id": "90cf505e-1fd0-4180-9dca-694ad3c284f2",
       "name": "pw_mail",
       "isVinit": true,
-      "score": 1,
+      "score": 3,
       "accessBase": {
-        "accessSets": [],
-        "score": 2147483647
+        "accessSets": [
+          {
+            "factors": [
+              "90cf505e-1fd0-4180-9dca-694ad3c284f2"
+            ],
+            "score": 3
+          }
+        ],
+        "score": 3
       },
       "component_": null
     },
@@ -59,10 +121,18 @@
       "id": "ef3c8536-f514-430c-ac7b-511fa9d890cd",
       "name": "phone*",
       "isVinit": false,
-      "score": 1,
+      "score": 3,
       "accessBase": {
-        "accessSets": [],
-        "score": 2147483647
+        "accessSets": [
+          {
+            "factors": [
+              "0f8a4c36-27b1-4b32-9d31-94cb1ae5dd57",
+              "f0b8905b-b917-4493-848a-3c1ab9b022f9"
+            ],
+            "score": 4
+          }
+        ],
+        "score": 4
       },
       "component_": null
     },
@@ -81,10 +151,17 @@
       "id": "f0b8905b-b917-4493-848a-3c1ab9b022f9",
       "name": "phone",
       "isVinit": true,
-      "score": 1,
+      "score": 3,
       "accessBase": {
-        "accessSets": [],
-        "score": 2147483647
+        "accessSets": [
+          {
+            "factors": [
+              "f0b8905b-b917-4493-848a-3c1ab9b022f9"
+            ],
+            "score": 3
+          }
+        ],
+        "score": 3
       },
       "component_": null
     },
@@ -94,8 +171,15 @@
       "isVinit": true,
       "score": 1,
       "accessBase": {
-        "accessSets": [],
-        "score": 2147483647
+        "accessSets": [
+          {
+            "factors": [
+              "0f8a4c36-27b1-4b32-9d31-94cb1ae5dd57"
+            ],
+            "score": 1
+          }
+        ],
+        "score": 1
       },
       "component_": null
     }
@@ -103,7 +187,7 @@
   "edges": [
     {
       "id": "64b536ac-0e64-4e6d-a9e7-78713b06c3d0",
-      "accessName": "1",
+      "accessName": "finger1",
       "colorIndex": 1,
       "disabled": false,
       "from": "bcd7f339-33bf-482e-a368-9e3f71633104",
@@ -112,7 +196,7 @@
     },
     {
       "id": "9f17ef0b-4c4e-4502-9403-5d34ce295c10",
-      "accessName": "1",
+      "accessName": "finger1",
       "colorIndex": 1,
       "disabled": false,
       "from": "f0b8905b-b917-4493-848a-3c1ab9b022f9",
@@ -121,7 +205,7 @@
     },
     {
       "id": "2f291545-5a09-44f2-b350-810965d24792",
-      "accessName": "0",
+      "accessName": "pin",
       "colorIndex": 0,
       "disabled": false,
       "from": "f0b8905b-b917-4493-848a-3c1ab9b022f9",
@@ -130,7 +214,7 @@
     },
     {
       "id": "9a02b03a-bd3c-46e2-9149-6c7256094187",
-      "accessName": "0",
+      "accessName": "pin",
       "colorIndex": 0,
       "disabled": false,
       "from": "0f8a4c36-27b1-4b32-9d31-94cb1ae5dd57",
@@ -139,7 +223,7 @@
     },
     {
       "id": "d1569174-1e9b-47ec-b0b3-7984957940a0",
-      "accessName": "1",
+      "accessName": "device",
       "colorIndex": 1,
       "disabled": false,
       "from": "ef3c8536-f514-430c-ac7b-511fa9d890cd",
@@ -148,7 +232,7 @@
     },
     {
       "id": "6cf19ddc-9e6b-4cec-b958-9234ae901f62",
-      "accessName": "0",
+      "accessName": "primary",
       "colorIndex": 0,
       "disabled": false,
       "from": "90cf505e-1fd0-4180-9dca-694ad3c284f2",
@@ -166,7 +250,7 @@
     },
     {
       "id": "ed6fe4c6-97a7-482f-9778-9225488ffce7",
-      "accessName": "1",
+      "accessName": "fallback",
       "colorIndex": 1,
       "disabled": false,
       "from": "0cb3b580-98bf-41fe-8b6f-be840ceb50d2",
@@ -175,7 +259,7 @@
     },
     {
       "id": "b8ba4df5-a04b-4ff4-afe2-f915a698ddeb",
-      "accessName": "0",
+      "accessName": "primary",
       "colorIndex": 0,
       "disabled": false,
       "from": "da08b93e-e41c-48c4-96e0-27c3ad0e6e23",

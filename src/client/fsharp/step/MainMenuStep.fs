@@ -4,7 +4,6 @@ open Model
 
 let clearGraph = Model.Init
 
-let exampleGraph = Model.Example
 // Validity
 // Handle actions
 let handleClickedVertex (vertex: AAG.Vertex) dispatch =
@@ -50,5 +49,4 @@ let view dispatch =
         .VinitButton(fun _ -> dispatch (Msg.OpenVinit))
         .ClearGraphButton(fun _ -> dispatch (Msg.ClickedClearGraph))
         .ExampleGraphButton(fun _ -> dispatch (Msg.ClickedExampleGraph))
-        .ExampleGraph2Button(fun _ -> dispatch (Msg.ClickedExample2Graph))
         .Elt()

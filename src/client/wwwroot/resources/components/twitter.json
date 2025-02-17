@@ -14,11 +14,6 @@
       "answer": false
     },
     {
-      "name": "secKeyOtp",
-      "description": "secKeyOtp",
-      "answer": false
-    },
-    {
       "name": "tOtp",
       "description": "tOtp",
       "answer": false
@@ -46,7 +41,6 @@
         ">": [
           { "+": [
               { "var": "simple" },
-              { "var": "secKeyOtp" },
               { "var": "tOtp" },
               { "var": "smsOtp" }
             ]
@@ -63,7 +57,6 @@
           {
             "==": [
               { "+": [
-                  { "var": "secKeyOtp" },
                   { "var": "tOtp" },
                   { "var": "smsOtp" }
                 ]
@@ -79,8 +72,8 @@
   "graph": {
     "vertices": [
       {
-        "id": "bb221552-5ff3-4f91-be9e-5a5da699bf65",
-        "name": "recMail",
+        "id": "ad12f095-994a-45a9-938d-d99508041974",
+        "name": "password",
         "isVinit": false,
         "score": 1,
         "accessBase": {
@@ -90,8 +83,8 @@
         "component_": null
       },
       {
-        "id": "dd55c52d-9014-48a4-9989-5218f92c2a07",
-        "name": "securityKey",
+        "id": "bb221552-5ff3-4f91-be9e-5a5da699bf65",
+        "name": "recMail",
         "isVinit": false,
         "score": 1,
         "accessBase": {
@@ -124,7 +117,7 @@
       },
       {
         "id": "7dd8407e-8fc8-4aae-80f0-5a63d473dc8e",
-        "name": "password",
+        "name": "[firstFactor]",
         "isVinit": false,
         "score": 1,
         "accessBase": {
@@ -158,39 +151,21 @@
     ],
     "edges": [
       {
-        "id": "52ec8854-db8a-4999-823e-ede59ac77d96",
+        "id": "2f522dee-fea6-4f76-9373-511f93731ad0",
         "accessName": "recMail",
-        "colorIndex": 0,
+        "colorIndex": 1,
         "disabled": false,
         "from": "bb221552-5ff3-4f91-be9e-5a5da699bf65",
         "to": "7dd8407e-8fc8-4aae-80f0-5a63d473dc8e",
         "component_": null
       },
       {
-        "id": "9756aac4-3b59-4c33-939f-47fd04409026",
-        "accessName": "secKeyOtp",
-        "colorIndex": 3,
+        "id": "8c799db4-8371-4e5c-aa30-f3538d215ebc",
+        "accessName": "password",
+        "colorIndex": 0,
         "disabled": false,
-        "from": "de170d34-0366-44f2-95f7-fe4a528755ef",
-        "to": "479aac8b-8c0e-4622-a577-38c7aa9060c6",
-        "component_": null
-      },
-      {
-        "id": "4a4979e2-bd57-4a69-9ac4-6ba387cb4e0d",
-        "accessName": "secKeyOtp",
-        "colorIndex": 3,
-        "disabled": false,
-        "from": "7dd8407e-8fc8-4aae-80f0-5a63d473dc8e",
-        "to": "479aac8b-8c0e-4622-a577-38c7aa9060c6",
-        "component_": null
-      },
-      {
-        "id": "d3f02b16-f127-4032-8a26-9bfff13a0cf5",
-        "accessName": "secKeyOtp",
-        "colorIndex": 3,
-        "disabled": false,
-        "from": "dd55c52d-9014-48a4-9989-5218f92c2a07",
-        "to": "479aac8b-8c0e-4622-a577-38c7aa9060c6",
+        "from": "ad12f095-994a-45a9-938d-d99508041974",
+        "to": "7dd8407e-8fc8-4aae-80f0-5a63d473dc8e",
         "component_": null
       },
       {

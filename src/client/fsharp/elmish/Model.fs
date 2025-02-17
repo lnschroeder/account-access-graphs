@@ -70,8 +70,6 @@ and Model =
           subjectComponentName = ""
           json = """{ "vertices": [] }""" }
 
-    static member Example = { Model.Init with graph = AAG.Graph.Example }
-
 let accessNameInputPlaceholder (model: Model) =
     $"Defaults to: {model.subjectAccessName}"
 
