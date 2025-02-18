@@ -11,7 +11,7 @@
     <Compile Include="fsharp/elmish/Message.fs" />
     <Compile Include="fsharp/elmish/Model.fs" />
     <Compile Include="fsharp/transformer/*.fs" />
-    <Compile Include="fsharp/step/*.fs" />
+    <Compile Include="fsharp/view/*.fs" />
     <Compile Include="fsharp/Main.fs" />
     <Compile Include="fsharp/Startup.fs" />
   </ItemGroup>

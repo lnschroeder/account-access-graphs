@@ -1,4 +1,4 @@
-module AAG.Client.ModifyComponentStep
+module AAG.Client.ModifyComponentView
 
 open Model
 open Bolero.Html
@@ -7,12 +7,12 @@ open Bolero.Html
 
 // Handle actions
 let handleClickedBackground model dispatch =
-    dispatch (Msg.OpenModifyVertexStep model.subjectVertexId)
+    dispatch (Msg.OpenModifyVertexView model.subjectVertexId)
 
 // Open
 let ``open`` model componentName =
     { page = model.page
-      step = ModifyComponent
+      view = ModifyComponent
       physics = model.physics
       edgeLabels = model.edgeLabels
       graph = model.graph
@@ -34,7 +34,7 @@ let ``open`` model componentName =
 // Functionality
 let deleteComponent (model: Model) componentName =
     { model with
-        step = MainMenu
+        view = MainMenu
         subjectVertexId = None
         newComponentSelection = model.subjectComponentName
         graph = AAG.deleteComponent model.graph componentName}
@@ -79,5 +79,5 @@ let view (model: Model) dispatch =
         .AccessMethods(forEach (subjectComponent.accessMethods) (showAccessMethod dispatch))
         .PolicyInfos(forEach (subjectComponent.rules) (showPolicyInfo model.graph model.subjectComponentName))
         .DeleteButton(fun _ -> dispatch (Msg.ClickedDeleteComponent model.subjectComponentName))
-        .BackButton(fun _ -> dispatch (Msg.OpenModifyVertexStep model.subjectVertexId))
+        .BackButton(fun _ -> dispatch (Msg.OpenModifyVertexView model.subjectVertexId))
         .Elt()

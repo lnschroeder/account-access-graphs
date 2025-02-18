@@ -351,7 +351,7 @@ let rec cart1 (LL) =
                 for xs in cart1 Ls -> x :: xs
         }
 
-let rec private computeAccessBaseStep
+let rec private computeAccessBaseView
     graph
     (accesses: IdAccess list)
     (accessBases: Dictionary<Guid, AccessBase>)
@@ -403,7 +403,7 @@ let rec private computeAccessBaseStep
         accessBases.[access.target] <- newAccessBase)
 
     if updated then
-        computeAccessBaseStep graph accesses accessBases
+        computeAccessBaseView graph accesses accessBases
     else
         accessBases
 
@@ -426,7 +426,7 @@ let computeAccessBase graph : Graph =
             else
                 AccessBase.Empty)
 
-    let accessBases = computeAccessBaseStep graph accesses accessBases
+    let accessBases = computeAccessBaseView graph accesses accessBases
 
     { graph with
         vertices =

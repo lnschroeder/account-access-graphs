@@ -28,7 +28,7 @@ type Edge =
 type Network =
     { nodes: Node list
       edges: Edge list
-      step: string
+      view: string
       subjectVertexId: Guid option
       physics: bool
       edgeLabels: bool }
@@ -45,7 +45,7 @@ let private transformVertex (model: Model) (vertex: AAG.Vertex) =
       label = vertex.name
       isSubject =
         Some vertex.id = model.subjectVertexId
-        || (model.step = ModifyComponent
+        || (model.view = ModifyComponent
             && vertex.component_ = Some model.subjectComponentName)
       isFactor = Seq.contains vertex.id model.selectedFactors
       isInitiallyCompromised = isInitiallyCompromised
@@ -74,7 +74,7 @@ let transform (model: Model) =
       edges =
         model.graph.edges
         |> List.map (transformEdge model)
-      step = model.step.ToString()
+      view = model.view.ToString()
       subjectVertexId = model.subjectVertexId
       physics = model.physics
       edgeLabels = model.edgeLabels }

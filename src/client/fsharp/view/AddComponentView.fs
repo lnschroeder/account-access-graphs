@@ -1,4 +1,4 @@
-module AAG.Client.AddComponentStep
+module AAG.Client.AddComponentView
 
 open Model
 open Bolero.Html
@@ -10,7 +10,7 @@ open Bolero.Html
 // Open
 let ``open`` model (components: string list) =
     { page = model.page
-      step = AddComponent
+      view = AddComponent
       physics = model.physics
       edgeLabels = model.edgeLabels
       graph = model.graph
@@ -47,7 +47,7 @@ let view jsRuntime (model: Model) dispatch =
 
     Template
         .AddComponent()
-        .Cancel(fun _ -> dispatch Msg.OpenMainMenuStep)
+        .Cancel(fun _ -> dispatch Msg.OpenMainMenuView)
         .Confirm(fun _ -> dispatch Msg.ImportSelectedComponent)
         .ComponentOptions(forEach model.components (showComponentOption model))
         .SelectedOption(model.components.Head, (fun c -> dispatch (Msg.SetComponentSelection c)))

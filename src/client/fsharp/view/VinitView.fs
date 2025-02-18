@@ -1,11 +1,11 @@
-module AAG.Client.VinitStep
+module AAG.Client.VinitView
 
 open Model
 open Bolero.Html
 
 // Validity
 // Handle actions
-let handleClickedBackground dispatch = dispatch Msg.OpenMainMenuStep
+let handleClickedBackground dispatch = dispatch Msg.OpenMainMenuView
 
 let handleClickedVertex (vertex: AAG.Vertex) dispatch =
     if vertex.isVinit then
@@ -16,7 +16,7 @@ let handleClickedVertex (vertex: AAG.Vertex) dispatch =
 // Open
 let ``open`` model =
     { page = model.page
-      step = Vinit
+      view = Vinit
       physics = model.physics
       edgeLabels = model.edgeLabels
       graph = model.graph
@@ -53,5 +53,5 @@ let view (model: Model) dispatch =
     Template
         .Vinit()
         .Factors(forEach (AAG.getVinit model.graph) showFactor)
-        .BackButton(fun _ -> dispatch Msg.OpenMainMenuStep)
+        .BackButton(fun _ -> dispatch Msg.OpenMainMenuView)
         .Elt()

@@ -1,4 +1,4 @@
-module AAG.Client.ModifyVertexStep
+module AAG.Client.ModifyVertexView
 
 open Model
 open Bolero.Html
@@ -23,13 +23,13 @@ let isSubjectVertexEmpty (model: Model) =
 // Handle actions
 let handleClickedVertex (vertex: AAG.Vertex) (model: Model) dispatch =
     if isValidVertex model then
-        dispatch (Msg.OpenModifyVertexStep(Some vertex.id))
+        dispatch (Msg.OpenModifyVertexView(Some vertex.id))
     else
         dispatch Msg.IgnoreAction
 
 let handleClickedBackground (model: Model) dispatch =
     if isValidVertex model then
-        dispatch (Msg.OpenMainMenuStep)
+        dispatch (Msg.OpenMainMenuView)
     elif isSubjectVertexEmpty model then
         dispatch (
             match model.subjectVertexId with
@@ -41,14 +41,14 @@ let handleClickedBackground (model: Model) dispatch =
 
 let handleClickedAccess (access: AAG.Access) (model: Model) dispatch =
     if isValidVertex model then
-        dispatch (Msg.OpenModifyAccessStep(access, access.name))
+        dispatch (Msg.OpenModifyAccessView(access, access.name))
     else
         dispatch Msg.IgnoreAction
 
 // Open
 let private openInternal (vertex: AAG.Vertex) model =
     { page = model.page
-      step = ModifyVertex
+      view = ModifyVertex
       physics = model.physics
       edgeLabels = model.edgeLabels
       graph = model.graph
@@ -86,7 +86,7 @@ let updateVertexName subjectVertexId name (model: Model) =
 
 let exitDeletingVertex vertexId (model: Model) =
     { model with
-        step = MainMenu
+        view = MainMenu
         modifyVertexNameInput = ""
         graph = AAG.removeVertexFromGraph vertexId model.graph }
 
@@ -116,7 +116,7 @@ let private showAccess dispatch graph (access: AAG.Access) =
                  |> Set.ofList)
                 (showFactor graph)
         )
-        .Button(fun _ -> dispatch (Msg.OpenModifyAccessStep(access, access.name)))
+        .Button(fun _ -> dispatch (Msg.OpenModifyAccessView(access, access.name)))
         .Enter(fun _ -> dispatch (Msg.HighlightAccess(access)))
         .Leave(fun _ -> dispatch (Msg.DeHighlightAccess))
         .Elt()
@@ -143,7 +143,7 @@ let view jsRuntime (model: Model) dispatch =
                 )
                 .AddAccessButton(fun _ ->
                     dispatch (
-                        Msg.OpenModifyAccessStep(
+                        Msg.OpenModifyAccessView(
                             { vertexId = subjectVertexId
                               colorIndex = AAG.getNextAvailableColor subjectVertex.id model.graph
                               name = AAG.getNextAvailableName subjectVertex.id model.graph },
@@ -170,7 +170,7 @@ let view jsRuntime (model: Model) dispatch =
                             .Elt()
                     | None -> Template.ModifyVertex.NoneComponentInfo().Elt()
                 )
-                .BackButton(fun _ -> dispatch Msg.OpenMainMenuStep)
+                .BackButton(fun _ -> dispatch Msg.OpenMainMenuView)
                 .DeleteButton(fun _ -> dispatch (Msg.ClickedDeleteVertex subjectVertexId))
                 .Elt()
         | None -> Template.ModifyVertex().Elt()

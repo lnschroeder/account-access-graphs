@@ -10,7 +10,7 @@ open Microsoft.JSInterop
 open System
 open Bolero.Html
 
-let private init _ = MainMenuStep.clearGraph, Cmd.none
+let private init _ = MainMenuView.clearGraph, Cmd.none
 
 let private getDebugText (model: Model) =
     let nodeLen = Seq.length model.graph.vertices
@@ -26,15 +26,15 @@ let private getDebugText (model: Model) =
     $"nodes: {nodeLen}; accesses; {accessLen} edges: {edgesLen}"
 
 let private handleClickedBackground model dispatch =
-    match model.step with
-    | MainMenu -> MainMenuStep.handleClickedBackground dispatch
-    | ModifyVertex -> ModifyVertexStep.handleClickedBackground model dispatch
-    | ModifyAccess -> ModifyAccessStep.handleClickedBackground model dispatch
-    | ModifyComponent -> ModifyComponentStep.handleClickedBackground model dispatch
-    | AnalysisManual -> AnalysisManualStep.handleClickedBackground model dispatch
-    | AnalysisAutomated -> AnalysisAutomatedStep.handleClickedBackground dispatch
-    | Vinit -> VinitStep.handleClickedBackground dispatch
-    | AddComponent ->  dispatch Msg.OpenMainMenuStep
+    match model.view with
+    | MainMenu -> MainMenuView.handleClickedBackground dispatch
+    | ModifyVertex -> ModifyVertexView.handleClickedBackground model dispatch
+    | ModifyAccess -> ModifyAccessView.handleClickedBackground model dispatch
+    | ModifyComponent -> ModifyComponentView.handleClickedBackground model dispatch
+    | AnalysisManual -> AnalysisManualView.handleClickedBackground model dispatch
+    | AnalysisAutomated -> AnalysisAutomatedView.handleClickedBackground dispatch
+    | Vinit -> VinitView.handleClickedBackground dispatch
+    | AddComponent ->  dispatch Msg.OpenMainMenuView
 
 let private handleClickedVertex (idAsString: string) model dispatch =
     let vertex =
@@ -44,14 +44,14 @@ let private handleClickedVertex (idAsString: string) model dispatch =
 
     match vertex with
     | Some vertex ->
-        match model.step with
-        | MainMenu | AddComponent -> MainMenuStep.handleClickedVertex vertex dispatch
-        | ModifyVertex -> ModifyVertexStep.handleClickedVertex vertex model dispatch
+        match model.view with
+        | MainMenu | AddComponent -> MainMenuView.handleClickedVertex vertex dispatch
+        | ModifyVertex -> ModifyVertexView.handleClickedVertex vertex model dispatch
         | ModifyComponent -> dispatch Msg.IgnoreAction
-        | ModifyAccess -> ModifyAccessStep.handleClickedVertex vertex dispatch
-        | AnalysisManual -> AnalysisManualStep.handleClickedVertex model vertex dispatch
-        | AnalysisAutomated -> AnalysisAutomatedStep.handleClickedVertex vertex dispatch
-        | Vinit -> VinitStep.handleClickedVertex vertex dispatch
+        | ModifyAccess -> ModifyAccessView.handleClickedVertex vertex dispatch
+        | AnalysisManual -> AnalysisManualView.handleClickedVertex model vertex dispatch
+        | AnalysisAutomated -> AnalysisAutomatedView.handleClickedVertex vertex dispatch
+        | Vinit -> VinitView.handleClickedVertex vertex dispatch
     | None -> dispatch Msg.IgnoreAction
 
 let private handleClickedVisEdge (idAsString: string) model dispatch =
@@ -62,8 +62,8 @@ let private handleClickedVisEdge (idAsString: string) model dispatch =
 
     match access with
     | Some access ->
-        match model.step with
-        | MainMenu | AddComponent -> MainMenuStep.handleClickedAccess access dispatch
+        match model.view with
+        | MainMenu | AddComponent -> MainMenuView.handleClickedAccess access dispatch
         | _ -> dispatch Msg.IgnoreAction
     | None -> dispatch Msg.IgnoreAction
 
@@ -93,8 +93,8 @@ let private update (http: HttpClient) message model =
     | Msg.SetPhysics b -> { model with physics = b }, Cmd.none
     | Msg.SetEdgeLabels b -> { model with edgeLabels = b }, Cmd.none
     // MainMenu
-    | Msg.OpenMainMenuStep -> MainMenuStep.``open`` model, Cmd.none
-    | Msg.ClickedClearGraph -> MainMenuStep.clearGraph, Cmd.none
+    | Msg.OpenMainMenuView -> MainMenuView.``open`` model, Cmd.none
+    | Msg.ClickedClearGraph -> MainMenuView.clearGraph, Cmd.none
     | Msg.ClickedExampleGraph -> 
         let getGraph () =
             http.GetFromJsonAsync<AAG.Graph>("resources/example.json")
@@ -102,41 +102,41 @@ let private update (http: HttpClient) message model =
         let cmd = Cmd.OfTask.either getGraph () Msg.GotGraph Msg.Error
         model, cmd
     // ModifyAccess
-    | Msg.OpenModifyAccessStep (access, addAccessNameInput) ->
+    | Msg.OpenModifyAccessView (access, addAccessNameInput) ->
         if (AAG.getEdgesForAccess model.graph access) |> List.filter (fun e -> e.component_.IsSome) |> List.isEmpty then
-            ModifyAccessStep.``open`` access addAccessNameInput model, Cmd.none
+            ModifyAccessView.``open`` access addAccessNameInput model, Cmd.none
         else
             match AAG.tryFindVertexById access.vertexId model.graph with
             | Some vertex when vertex.component_.IsSome ->
-                ModifyComponentStep.``open`` { model with subjectVertexId = Some vertex.id } (Option.get vertex.component_),
+                ModifyComponentView.``open`` { model with subjectVertexId = Some vertex.id } (Option.get vertex.component_),
                 Cmd.none
-            | _ -> ModifyAccessStep.``open`` access addAccessNameInput model, Cmd.none
-    | Msg.ModifiedAccessName (access, name) -> ModifyAccessStep.updateAccessName access name model, Cmd.none
-    | Msg.ToggleFactorForSubject vertex -> ModifyAccessStep.toggleFactorForSubject vertex model, Cmd.none
-    | Msg.ClickedDeleteAccess access -> ModifyAccessStep.exitDeletingAccess access model, Cmd.none
+            | _ -> ModifyAccessView.``open`` access addAccessNameInput model, Cmd.none
+    | Msg.ModifiedAccessName (access, name) -> ModifyAccessView.updateAccessName access name model, Cmd.none
+    | Msg.ToggleFactorForSubject vertex -> ModifyAccessView.toggleFactorForSubject vertex model, Cmd.none
+    | Msg.ClickedDeleteAccess access -> ModifyAccessView.exitDeletingAccess access model, Cmd.none
     // ModifyVertex
-    | Msg.OpenModifyVertexStep vertexId -> ModifyVertexStep.``open`` vertexId model, Cmd.none
+    | Msg.OpenModifyVertexView vertexId -> ModifyVertexView.``open`` vertexId model, Cmd.none
     | Msg.ModifiedVertexName (subjectVertexId, name) ->
-        ModifyVertexStep.updateVertexName subjectVertexId name model, Cmd.none
-    | Msg.ClickedDeleteVertex subjectVertex -> ModifyVertexStep.exitDeletingVertex subjectVertex model, Cmd.none
+        ModifyVertexView.updateVertexName subjectVertexId name model, Cmd.none
+    | Msg.ClickedDeleteVertex subjectVertex -> ModifyVertexView.exitDeletingVertex subjectVertex model, Cmd.none
     | Msg.HighlightAccess access -> highlightAccess access model, Cmd.none
     | Msg.DeHighlightAccess -> deHighlightAccess model, Cmd.none
-    | Msg.SetScore (vertex, score) -> ModifyVertexStep.setScore vertex score model, Cmd.none
+    | Msg.SetScore (vertex, score) -> ModifyVertexView.setScore vertex score model, Cmd.none
     // AnalysisManual
-    | Msg.OpenAnalysisManual -> AnalysisManualStep.``open`` model, Cmd.none
+    | Msg.OpenAnalysisManual -> AnalysisManualView.``open`` model, Cmd.none
     // AnalysisAutomated
-    | Msg.OpenAnalysis -> AnalysisAutomatedStep.``open`` model, Cmd.none
-    | Msg.OpenAnalysisForVertex vertexId -> AnalysisAutomatedStep.showAnalysisForSubject model vertexId, Cmd.none
+    | Msg.OpenAnalysis -> AnalysisAutomatedView.``open`` model, Cmd.none
+    | Msg.OpenAnalysisForVertex vertexId -> AnalysisAutomatedView.showAnalysisForSubject model vertexId, Cmd.none
     // AddComponent
-    | Msg.OpenAddComponentStep ->
+    | Msg.OpenAddComponentView ->
         let getComponents () =
             http.GetFromJsonAsync<string list>("resources/components.json")
 
         let cmd = Cmd.OfTask.either getComponents () Msg.GotComponents Msg.Error
 
         model, cmd
-    | Msg.GotComponents components -> AddComponentStep.``open`` model components, Cmd.none
-    | Msg.GotComponent graph -> AddComponentStep.importComponent model graph, Cmd.none
+    | Msg.GotComponents components -> AddComponentView.``open`` model components, Cmd.none
+    | Msg.GotComponent graph -> AddComponentView.importComponent model graph, Cmd.none
     | Msg.SetComponentSelection c -> { model with newComponentSelection = c }, Cmd.none
     | Msg.ModifiedComponentName name -> { model with componentNameInput = name }, Cmd.none
     | Msg.ImportSelectedComponent ->
@@ -149,8 +149,8 @@ let private update (http: HttpClient) message model =
         let cmd = Cmd.OfTask.either getComponent () Msg.GotComponent Msg.Error
         model, cmd
     // ModifyComponent
-    | Msg.OpenModifyComponent name -> ModifyComponentStep.``open`` model name, Cmd.none
-    | Msg.ClickedDeleteComponent name -> ModifyComponentStep.deleteComponent model name, Cmd.none
+    | Msg.OpenModifyComponent name -> ModifyComponentView.``open`` model name, Cmd.none
+    | Msg.ClickedDeleteComponent name -> ModifyComponentView.deleteComponent model name, Cmd.none
     | Msg.ToggleOptionalAccessMethod (b, accessMethod) ->
         { model with
             graph =
@@ -166,9 +166,9 @@ let private update (http: HttpClient) message model =
                 AAG.setConditionByComponentNameAndConditionName model.graph model.subjectComponentName condition.name b },
         Cmd.none
     // Vinit
-    | Msg.OpenVinit -> VinitStep.``open`` model, Cmd.none
-    | Msg.SetVinit vertex -> VinitStep.setVinit vertex true model, Cmd.none
-    | Msg.UnsetVinit vertex -> VinitStep.setVinit vertex false model, Cmd.none
+    | Msg.OpenVinit -> VinitView.``open`` model, Cmd.none
+    | Msg.SetVinit vertex -> VinitView.setVinit vertex true model, Cmd.none
+    | Msg.UnsetVinit vertex -> VinitView.setVinit vertex false model, Cmd.none
     // Model
     | Msg.UpdateCompromisedVertices vertexIds -> updateTransitivelyCompromisedVertexIds model vertexIds, Cmd.none
 
@@ -193,15 +193,15 @@ let private view (jsRuntime: IJSRuntime) model dispatch =
             cond model.page
             <| function
                 | Endpoint.Main ->
-                    match model.step with
-                    | MainMenu -> MainMenuStep.view dispatch
-                    | ModifyAccess -> ModifyAccessStep.view jsRuntime model dispatch
-                    | ModifyVertex -> ModifyVertexStep.view jsRuntime model dispatch
-                    | AnalysisManual -> AnalysisManualStep.view model dispatch
-                    | AnalysisAutomated -> AnalysisAutomatedStep.view model dispatch
-                    | Vinit -> VinitStep.view model dispatch
-                    | AddComponent -> AddComponentStep.view jsRuntime model dispatch
-                    | ModifyComponent -> ModifyComponentStep.view model dispatch
+                    match model.view with
+                    | MainMenu -> MainMenuView.view dispatch
+                    | ModifyAccess -> ModifyAccessView.view jsRuntime model dispatch
+                    | ModifyVertex -> ModifyVertexView.view jsRuntime model dispatch
+                    | AnalysisManual -> AnalysisManualView.view model dispatch
+                    | AnalysisAutomated -> AnalysisAutomatedView.view model dispatch
+                    | Vinit -> VinitView.view model dispatch
+                    | AddComponent -> AddComponentView.view jsRuntime model dispatch
+                    | ModifyComponent -> ModifyComponentView.view model dispatch
         )
         .ClickedVertexInput("", (fun idAsString -> handleClickedVertex idAsString model dispatch))
         .ClickedEdgeInput("", (fun idAsString -> handleClickedVisEdge idAsString model dispatch))

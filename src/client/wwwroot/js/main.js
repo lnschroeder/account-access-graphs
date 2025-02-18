@@ -78,7 +78,7 @@ const colors = [
 
 // removes, updates, and adds nodes and edges to the network
 function updateNetwork(networkDTO) {
-  let step = networkDTO.step;
+  let view = networkDTO.view;
   let subjectVertexId = networkDTO.subjectVertexId;
   let nodes = networkDTO.nodes;
   let edges = networkDTO.edges;
@@ -145,7 +145,7 @@ function updateNetwork(networkDTO) {
       label += "\n_" + node.component_ +"_";
     }
 
-    if (node.hasBackdoor && step == "AnalysisAutomated") {
+    if (node.hasBackdoor && view == "AnalysisAutomated") {
       label += "\n⚠️"
     }
 

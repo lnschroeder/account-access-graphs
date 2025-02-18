@@ -17,14 +17,14 @@ type Message =
     | SetPage of Endpoint.Page
     | SetPhysics of bool
     | SetEdgeLabels of bool
-    | OpenMainMenuStep
-    | OpenModifyVertexStep of Guid option
-    | OpenModifyAccessStep of AAG.Access * string
+    | OpenMainMenuView
+    | OpenModifyVertexView of Guid option
+    | OpenModifyAccessView of AAG.Access * string
     | OpenAnalysisManual
     | OpenAnalysis
     | OpenAnalysisForVertex of Guid option
     | OpenVinit
-    | OpenAddComponentStep
+    | OpenAddComponentView
     | OpenModifyComponent of string
     | UnsetVinit of AAG.Vertex
     | UpdateCompromisedVertices of Guid Set

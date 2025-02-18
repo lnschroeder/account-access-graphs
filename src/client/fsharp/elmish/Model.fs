@@ -15,7 +15,7 @@ and Hint =
     static member Error value = { value = value; level = Error }
     static member Required = Hint.Error "Field is required"
 
-and Step =
+and View =
     | MainMenu
     | ModifyAccess
     | ModifyVertex
@@ -31,7 +31,7 @@ and DeserializedGraph =
 
 and Model =
     { page: Endpoint.Page
-      step: Step
+      view: View
       graph: AAG.Graph
       physics: bool
       edgeLabels: bool
@@ -51,7 +51,7 @@ and Model =
       json: string }
     static member Init =
         { page = Endpoint.Main
-          step = MainMenu
+          view = MainMenu
           physics = true
           edgeLabels = false
           graph = AAG.Graph.Empty

@@ -1,4 +1,4 @@
-module AAG.Client.ModifyAccessStep
+module AAG.Client.ModifyAccessView
 
 open Model
 open Bolero.Html
@@ -14,7 +14,7 @@ let handleClickedVertex (vertex: AAG.Vertex) dispatch =
 
 let handleClickedBackground model dispatch =
     if isValidAccess model then
-        dispatch (Msg.OpenModifyVertexStep model.subjectVertexId)
+        dispatch (Msg.OpenModifyVertexView model.subjectVertexId)
     else
         dispatch Msg.IgnoreAction
 
@@ -23,7 +23,7 @@ let ``open`` (access: AAG.Access) addAccessNameInput model =
     match AAG.tryFindVertexById access.vertexId model.graph with
     | Some subjectVertex ->
         { page = Endpoint.Main
-          step = ModifyAccess
+          view = ModifyAccess
           physics = model.physics
           edgeLabels = model.edgeLabels
           graph = model.graph
@@ -54,7 +54,7 @@ let exitDeletingAccess access model =
             match access with
             | Some access -> AAG.removeAccessFromGraph access model.graph
             | None -> model.graph
-        step = ModifyVertex }
+        view = ModifyVertex }
 
 // Functionality
 
@@ -141,7 +141,7 @@ let view jsRuntime (model: Model) dispatch =
                 Template
                     .ModifyAccess()
                     .DeleteButton(fun _ -> dispatch (Msg.ClickedDeleteAccess subjectAccess))
-                    .BackButton(fun _ -> dispatch (Msg.OpenModifyVertexStep model.subjectVertexId))
+                    .BackButton(fun _ -> dispatch (Msg.OpenModifyVertexView model.subjectVertexId))
                     .AccessNameInput(
                         model.addAccessNameInput,
                         (fun v -> dispatch (Msg.ModifiedAccessName(subjectAccess, v)))

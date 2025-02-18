@@ -1,4 +1,4 @@
-module AAG.Client.AnalysisAutomatedStep
+module AAG.Client.AnalysisAutomatedView
 
 open Model
 open Bolero.Html
@@ -18,7 +18,7 @@ let private recalculateGraph graph = AAG.computeAccessBase graph
 // Open
 let private openPrivate model graph vertexId =
     { page = model.page
-      step = AnalysisAutomated
+      view = AnalysisAutomated
       physics = model.physics
       edgeLabels = model.edgeLabels
       graph = graph
@@ -81,5 +81,5 @@ let view (model: Model) dispatch =
         | None -> Template.AnalysisAutomated()
 
     template
-        .BackButton(fun _ -> dispatch Msg.OpenMainMenuStep)
+        .BackButton(fun _ -> dispatch Msg.OpenMainMenuView)
         .Elt()

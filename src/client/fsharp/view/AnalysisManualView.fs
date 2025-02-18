@@ -1,4 +1,4 @@
-module AAG.Client.AnalysisManualStep
+module AAG.Client.AnalysisManualView
 
 open Model
 open Bolero.Html
@@ -7,7 +7,7 @@ open Bolero.Html
 // Open
 let ``open`` model =
     { page = model.page
-      step = AnalysisManual
+      view = AnalysisManual
       physics = model.physics
       edgeLabels = model.edgeLabels
       graph = model.graph
@@ -30,7 +30,7 @@ let ``open`` model =
 // Handle actions
 let handleClickedBackground model dispatch =
     if model.initiallyCompromisedVertexIds.IsEmpty then
-        dispatch Msg.OpenMainMenuStep
+        dispatch Msg.OpenMainMenuView
     else
         dispatch Msg.OpenAnalysisManual
 
@@ -65,5 +65,5 @@ let view (model: Model) dispatch =
         .AnalysisManual()
         .Factors(forEach model.initiallyCompromisedVertexIds (showFactor model))
         .FactorsHint((initiallyCompromisedVertexIds model).value)
-        .BackButton(fun _ -> dispatch Msg.OpenMainMenuStep)
+        .BackButton(fun _ -> dispatch Msg.OpenMainMenuView)
         .Elt()
