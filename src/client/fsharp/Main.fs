@@ -21,7 +21,7 @@ let private getDebugText (model: Model) =
             |> Seq.collect (fun v -> AAG.getEnabledAccesses v.id model.graph)
         )
 
-    let edgesLen = Seq.length (model.graph.edges)
+    let edgesLen = Seq.length model.graph.edges
 
     $"nodes: {nodeLen}; accesses; {accessLen} edges: {edgesLen}"
 
@@ -34,18 +34,19 @@ let private handleClickedBackground model dispatch =
     | AnalysisManual -> AnalysisManualView.handleClickedBackground model dispatch
     | AnalysisAutomated -> AnalysisAutomatedView.handleClickedBackground model dispatch
     | Vinit -> VinitView.handleClickedBackground dispatch
-    | AddComponent ->  dispatch Msg.OpenMainMenuView
+    | AddComponent -> dispatch Msg.OpenMainMenuView
 
 let private handleClickedVertex (idAsString: string) model dispatch =
     let vertex =
-        match Guid.TryParse(idAsString) with
-        | (true, guid) -> AAG.tryFindVertexById guid model.graph
-        | (false, _) -> None
+        match Guid.TryParse idAsString with
+        | true, guid -> AAG.tryFindVertexById guid model.graph
+        | false, _ -> None
 
     match vertex with
     | Some vertex ->
         match model.view with
-        | MainMenu | AddComponent -> MainMenuView.handleClickedVertex vertex dispatch
+        | MainMenu
+        | AddComponent -> MainMenuView.handleClickedVertex vertex dispatch
         | ModifyVertex -> ModifyVertexView.handleClickedVertex vertex model dispatch
         | ModifyComponent -> dispatch Msg.IgnoreAction
         | ModifyAccess -> ModifyAccessView.handleClickedVertex vertex dispatch
@@ -56,14 +57,15 @@ let private handleClickedVertex (idAsString: string) model dispatch =
 
 let private handleClickedVisEdge (idAsString: string) model dispatch =
     let access =
-        match Guid.TryParse(idAsString) with
-        | (true, guid) -> AAG.tryFindAccessByEdgeId guid model.graph
-        | (false, _) -> None
+        match Guid.TryParse idAsString with
+        | true, guid -> AAG.tryFindAccessByEdgeId guid model.graph
+        | false, _ -> None
 
     match access with
     | Some access ->
         match model.view with
-        | MainMenu | AddComponent -> MainMenuView.handleClickedAccess access dispatch
+        | MainMenu
+        | AddComponent -> MainMenuView.handleClickedAccess access dispatch
         | _ -> dispatch Msg.IgnoreAction
     | None -> dispatch Msg.IgnoreAction
 
@@ -95,20 +97,24 @@ let private update (http: HttpClient) message model =
     // MainMenu
     | Msg.OpenMainMenuView -> MainMenuView.``open`` model, Cmd.none
     | Msg.ClickedClearGraph -> MainMenuView.clearGraph, Cmd.none
-    | Msg.ClickedExampleGraph -> 
+    | Msg.ClickedExampleGraph ->
         let getGraph () =
-            http.GetFromJsonAsync<AAG.Graph>("resources/example.json")
+            http.GetFromJsonAsync<AAG.Graph> "resources/example.json"
 
         let cmd = Cmd.OfTask.either getGraph () Msg.GotGraph Msg.Error
         model, cmd
     // ModifyAccess
     | Msg.OpenModifyAccessView (access, addAccessNameInput) ->
-        if (AAG.getEdgesForAccess model.graph access) |> List.filter (fun e -> e.component_.IsSome) |> List.isEmpty then
+        if AAG.getEdgesForAccess model.graph access
+           |> List.filter (fun e -> e.component_.IsSome)
+           |> List.isEmpty then
             ModifyAccessView.``open`` access addAccessNameInput model, Cmd.none
         else
             match AAG.tryFindVertexById access.vertexId model.graph with
             | Some vertex when vertex.component_.IsSome ->
-                ModifyComponentView.``open`` { model with subjectVertexId = Some vertex.id } (Option.get vertex.component_),
+                ModifyComponentView.``open``
+                    { model with subjectVertexId = Some vertex.id }
+                    (Option.get vertex.component_),
                 Cmd.none
             | _ -> ModifyAccessView.``open`` access addAccessNameInput model, Cmd.none
     | Msg.ModifiedAccessName (access, name) -> ModifyAccessView.updateAccessName access name model, Cmd.none
@@ -130,7 +136,7 @@ let private update (http: HttpClient) message model =
     // AddComponent
     | Msg.OpenAddComponentView ->
         let getComponents () =
-            http.GetFromJsonAsync<string list>("resources/components.json")
+            http.GetFromJsonAsync<string list> "resources/components.json"
 
         let cmd = Cmd.OfTask.either getComponents () Msg.GotComponents Msg.Error
 

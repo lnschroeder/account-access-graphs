@@ -43,11 +43,7 @@ let setVinit (vertex: AAG.Vertex) isVinit (model: Model) =
 
 // View
 let private showFactor (vertex: AAG.Vertex) =
-    Template
-        .Vinit
-        .Factor()
-        .Name(vertex.name)
-        .Elt()
+    Template.Vinit.Factor().Name(vertex.name).Elt()
 
 let view (model: Model) dispatch =
     Template

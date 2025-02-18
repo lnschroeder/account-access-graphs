@@ -37,14 +37,14 @@ let deleteComponent (model: Model) componentName =
         view = MainMenu
         subjectVertexId = None
         newComponentSelection = model.subjectComponentName
-        graph = AAG.deleteComponent model.graph componentName}
+        graph = AAG.deleteComponent model.graph componentName }
 
 // View
 let private showCondition dispatch (condition: AAG.Condition) =
     Template
         .ModifyComponent
         .Question()
-        .EnabledInput(condition.answer, (fun b -> dispatch (Msg.ToggleCondition (b, condition))))
+        .EnabledInput(condition.answer, (fun b -> dispatch (Msg.ToggleCondition(b, condition))))
         .Description(condition.description)
         .Elt()
 
@@ -52,12 +52,13 @@ let private showAccessMethod dispatch (accessMethod: AAG.OptionalAccessMethod) =
     Template
         .ModifyComponent
         .Question()
-        .EnabledInput(accessMethod.answer, (fun b -> dispatch (Msg.ToggleOptionalAccessMethod (b, accessMethod))))
+        .EnabledInput(accessMethod.answer, (fun b -> dispatch (Msg.ToggleOptionalAccessMethod(b, accessMethod))))
         .Description(accessMethod.description)
         .Elt()
 
 let private showPolicyInfo graph componentName (rule: AAG.Rule) =
     let result = AAG.evaluateAuthenticationPolicyRule graph componentName rule
+
     if not result then
         Template
             .ModifyComponent
@@ -65,19 +66,17 @@ let private showPolicyInfo graph componentName (rule: AAG.Rule) =
             .Description(rule.description)
             .Elt()
     else
-        Template
-            .ModifyComponent
-            .NonePolicyInfo()
-            .Elt()
+        Template.ModifyComponent.NonePolicyInfo().Elt()
 
 let view (model: Model) dispatch =
     let subjectComponent = AAG.getComponent model.graph model.subjectComponentName
+
     Template
         .ModifyComponent()
         .ComponentName(model.subjectComponentName)
-        .Conditions(forEach (subjectComponent.conditions) (showCondition dispatch))
-        .AccessMethods(forEach (subjectComponent.accessMethods) (showAccessMethod dispatch))
-        .PolicyInfos(forEach (subjectComponent.rules) (showPolicyInfo model.graph model.subjectComponentName))
+        .Conditions(forEach subjectComponent.conditions (showCondition dispatch))
+        .AccessMethods(forEach subjectComponent.accessMethods (showAccessMethod dispatch))
+        .PolicyInfos(forEach subjectComponent.rules (showPolicyInfo model.graph model.subjectComponentName))
         .DeleteButton(fun _ -> dispatch (Msg.ClickedDeleteComponent model.subjectComponentName))
         .BackButton(fun _ -> dispatch (Msg.OpenModifyVertexView model.subjectVertexId))
         .Elt()

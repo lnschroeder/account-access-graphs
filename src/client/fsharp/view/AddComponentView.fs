@@ -53,5 +53,5 @@ let view jsRuntime (model: Model) dispatch =
         .SelectedOption(model.components.Head, (fun c -> dispatch (Msg.SetComponentSelection c)))
         .ComponentNameInput(model.componentNameInput, (fun v -> dispatch (Msg.ModifiedComponentName v)))
         .ComponentNameHint((componentNameInput model).value)
-        .DropDownHint((newComponentHint model).value)
+        .DropDownHint(newComponentHint.value)
         .Elt()

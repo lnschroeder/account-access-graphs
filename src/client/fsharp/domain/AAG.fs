@@ -286,9 +286,9 @@ let getAccessesWithFactors vertexId factors graph =
     getAccesses vertexId graph
     |> List.ofSeq
     |> List.filter (fun a ->
-        ((getEdgesForAccess graph a)
-         |> List.map (fun e -> e.from)
-         |> Set.ofList) = factors)
+        getEdgesForAccess graph a
+        |> List.map (fun e -> e.from)
+        |> Set.ofList = factors)
 
 let getAccessesWithName vertexId name graph =
     getAccesses vertexId graph

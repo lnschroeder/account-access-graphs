@@ -45,8 +45,8 @@ let private transformVertex (model: Model) (vertex: AAG.Vertex) =
       label = vertex.name
       isSubject =
         Some vertex.id = model.subjectVertexId
-        || (model.view = ModifyComponent
-            && vertex.component_ = Some model.subjectComponentName)
+        || model.view = ModifyComponent
+           && vertex.component_ = Some model.subjectComponentName
       isFactor = Seq.contains vertex.id model.selectedFactors
       isInitiallyCompromised = isInitiallyCompromised
       isTransitivelyCompromised = isTransitivelyCompromised
@@ -69,8 +69,8 @@ let private transformEdge (model: Model) (edge: AAG.Edge) =
 
 let transform (model: Model) =
     { nodes =
-        (model.graph.vertices
-         |> List.map (transformVertex model))
+        model.graph.vertices
+        |> List.map (transformVertex model)
       edges =
         model.graph.edges
         |> List.map (transformEdge model)

@@ -29,7 +29,7 @@ let handleClickedVertex (vertex: AAG.Vertex) (model: Model) dispatch =
 
 let handleClickedBackground (model: Model) dispatch =
     if isValidVertex model then
-        dispatch (Msg.OpenMainMenuView)
+        dispatch Msg.OpenMainMenuView
     elif isSubjectVertexEmpty model then
         dispatch (
             match model.subjectVertexId with
@@ -102,7 +102,8 @@ let private showFactor graph vertexId =
             AAG.tryFindVertexById vertexId graph
             |> Option.map (fun v -> v.name)
             |> Option.defaultValue "INVALID"
-        ).Elt()
+        )
+        .Elt()
 
 let private showAccess dispatch graph (access: AAG.Access) =
     Template
@@ -117,8 +118,8 @@ let private showAccess dispatch graph (access: AAG.Access) =
                 (showFactor graph)
         )
         .Button(fun _ -> dispatch (Msg.OpenModifyAccessView(access, access.name)))
-        .Enter(fun _ -> dispatch (Msg.HighlightAccess(access)))
-        .Leave(fun _ -> dispatch (Msg.DeHighlightAccess))
+        .Enter(fun _ -> dispatch (Msg.HighlightAccess access))
+        .Leave(fun _ -> dispatch Msg.DeHighlightAccess)
         .Elt()
 
 let view jsRuntime (model: Model) dispatch =
@@ -129,8 +130,9 @@ let view jsRuntime (model: Model) dispatch =
     | Some subjectVertexId ->
         match AAG.tryFindVertexById subjectVertexId model.graph with
         | Some subjectVertex ->
-            Utility.toggleButtonEnabled "ModifyVertexDeleteButton" (subjectVertex.component_.IsNone) jsRuntime
+            Utility.toggleButtonEnabled "ModifyVertexDeleteButton" subjectVertex.component_.IsNone jsRuntime
             |> ignore
+
             Template
                 .ModifyVertex()
                 .SubjectNameInput(

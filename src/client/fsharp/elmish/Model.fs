@@ -123,7 +123,7 @@ let modifyVertexNameInput (model: Model) =
     elif
         Seq.length
             (
-                (AAG.getVerticesWithName value model.graph)
+                AAG.getVerticesWithName value model.graph
                 |> Seq.filter (fun v -> v.component_ = component_)
             ) > 1
     then
@@ -137,8 +137,7 @@ let initiallyCompromisedVertexIds (model: Model) =
     else
         Hint.Info
 
-let newComponentHint (model: Model) =
-    Hint.Info
+let newComponentHint = Hint.Info
 
 let componentNameInput (model: Model) =
     let value = model.componentNameInput
