@@ -8,8 +8,11 @@ open Bolero.Html
 let handleClickedVertex (vertex: AAG.Vertex) dispatch =
     dispatch (Msg.OpenAnalysisForVertex(Some vertex.id))
 
-let handleClickedBackground dispatch =
-    dispatch (Msg.OpenAnalysisForVertex None)
+let handleClickedBackground model dispatch =
+    if model.subjectVertexId.IsNone then
+        dispatch Msg.OpenMainMenuView
+    else
+        dispatch (Msg.OpenAnalysisForVertex None)
 
 
 // Functionality

@@ -32,7 +32,7 @@ let private handleClickedBackground model dispatch =
     | ModifyAccess -> ModifyAccessView.handleClickedBackground model dispatch
     | ModifyComponent -> ModifyComponentView.handleClickedBackground model dispatch
     | AnalysisManual -> AnalysisManualView.handleClickedBackground model dispatch
-    | AnalysisAutomated -> AnalysisAutomatedView.handleClickedBackground dispatch
+    | AnalysisAutomated -> AnalysisAutomatedView.handleClickedBackground model dispatch
     | Vinit -> VinitView.handleClickedBackground dispatch
     | AddComponent ->  dispatch Msg.OpenMainMenuView
 
