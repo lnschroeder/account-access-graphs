@@ -81,6 +81,7 @@ let handleUpdatedJson jsonAsString (model: Model) =
             graph = graph
             physics = model.physics
             edgeLabels = model.edgeLabels
+            straightEdges = model.straightEdges
             json = jsonAsString }
     | ErrorMsg _ -> { model with json = jsonAsString }
 
@@ -94,6 +95,7 @@ let private update (http: HttpClient) message model =
     | Msg.GotGraph graph -> { Model.Init with graph = graph }, Cmd.none
     | Msg.SetPhysics b -> { model with physics = b }, Cmd.none
     | Msg.SetEdgeLabels b -> { model with edgeLabels = b }, Cmd.none
+    | Msg.SetStraightEdges b -> { model with straightEdges = b }, Cmd.none
     // MainMenu
     | Msg.OpenMainMenuView -> MainMenuView.``open`` model, Cmd.none
     | Msg.ClickedClearGraph -> MainMenuView.clearGraph, Cmd.none
@@ -193,6 +195,7 @@ let private view (jsRuntime: IJSRuntime) model dispatch =
         .DebugText(getDebugText model) // TODO
         .PhysicsCheckbox(model.physics, (fun b -> dispatch (Msg.SetPhysics b)))
         .EdgeLabelsCheckbox(model.edgeLabels, (fun b -> dispatch (Msg.SetEdgeLabels b)))
+        .StraightEdgesCheckbox(model.straightEdges, (fun b -> dispatch (Msg.SetStraightEdges b)))
         .JsonOutput(model.json, (fun jsonAsString -> dispatch (Msg.ModifiedGraphJson jsonAsString)))
         .JsonOutputHint((getJsonOutputHint model).value)
         .LeftColumn(

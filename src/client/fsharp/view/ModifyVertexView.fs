@@ -51,6 +51,7 @@ let private openInternal (vertex: AAG.Vertex) model =
       view = ModifyVertex
       physics = model.physics
       edgeLabels = model.edgeLabels
+      straightEdges = model.straightEdges
       graph = model.graph
       addAccessNameInput = ""
       modifyVertexNameInput = vertex.name

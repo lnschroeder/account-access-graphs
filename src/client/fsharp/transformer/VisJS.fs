@@ -23,7 +23,8 @@ type Edge =
       isHighlighted: bool
       isDisabled: bool
       label: string
-      colorIndex: byte }
+      colorIndex: byte
+      straight: bool }
 
 type Network =
     { nodes: Node list
@@ -65,7 +66,12 @@ let private transformEdge (model: Model) (edge: AAG.Edge) =
         && model.subjectAccessColor = Some edge.colorIndex
       colorIndex = edge.colorIndex
       isDisabled = edge.disabled
-      isHighlighted = Set.contains edge.id model.highlightedEdgeIds }
+      isHighlighted = Set.contains edge.id model.highlightedEdgeIds
+      straight =
+        model.straightEdges
+        && model.graph.edges
+           |> List.filter (fun e -> e.from = edge.from && e.``to`` = edge.``to``)
+           |> List.length = 1 }
 
 let transform (model: Model) =
     { nodes =

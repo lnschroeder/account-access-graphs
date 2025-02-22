@@ -24,6 +24,7 @@ let private openPrivate model graph vertexId =
       view = AnalysisAutomated
       physics = model.physics
       edgeLabels = model.edgeLabels
+      straightEdges = model.straightEdges
       graph = graph
       addAccessNameInput = model.addAccessNameInput
       modifyVertexNameInput = model.modifyVertexNameInput

@@ -210,7 +210,7 @@ function updateNetwork(networkDTO) {
         label: label,
         dashes: dashes,
         physics: physics,
-        // smooth: networkDTO.physics, // enable/disable straight edges
+        smooth: !edge.straight,
         color: {
           color: color,
           opacity: opacity,

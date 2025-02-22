@@ -17,6 +17,7 @@ type Message =
     | SetPage of Endpoint.Page
     | SetPhysics of bool
     | SetEdgeLabels of bool
+    | SetStraightEdges of bool
     | OpenMainMenuView
     | OpenModifyVertexView of Guid option
     | OpenModifyAccessView of AAG.Access * string

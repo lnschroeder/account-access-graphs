@@ -20,6 +20,7 @@ let ``open`` model =
       view = MainMenu
       physics = model.physics
       edgeLabels = model.edgeLabels
+      straightEdges = model.straightEdges
       graph = model.graph
       addAccessNameInput = ""
       modifyVertexNameInput = ""

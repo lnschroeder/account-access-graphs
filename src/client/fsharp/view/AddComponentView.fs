@@ -13,6 +13,7 @@ let ``open`` model (components: string list) =
       view = AddComponent
       physics = model.physics
       edgeLabels = model.edgeLabels
+      straightEdges = model.straightEdges
       graph = model.graph
       addAccessNameInput = ""
       modifyVertexNameInput = ""
