@@ -15,7 +15,6 @@ let ``open`` model componentName =
       view = ModifyComponent
       physics = model.physics
       edgeLabels = model.edgeLabels
-      straightEdges = model.straightEdges
       graph = model.graph
       addAccessNameInput = model.addAccessNameInput
       modifyVertexNameInput = model.modifyVertexNameInput

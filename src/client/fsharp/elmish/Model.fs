@@ -35,7 +35,6 @@ and Model =
       graph: AAG.Graph
       physics: bool
       edgeLabels: bool
-      straightEdges: bool
       addAccessNameInput: string
       modifyVertexNameInput: string
       subjectVertexId: Guid option
@@ -55,7 +54,6 @@ and Model =
           view = MainMenu
           physics = true
           edgeLabels = false
-          straightEdges = false
           graph = AAG.Graph.Empty
           addAccessNameInput = ""
           modifyVertexNameInput = ""

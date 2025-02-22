@@ -1,16 +1,6 @@
 {
   "vertices": [
     {
-      "id": "12f8008f-1488-407b-a28e-ae3594c7b9b4",
-      "name": "BogusCreditCard",
-      "isVinit": false,
-      "score": 1,
-      "accessBase": {
-        "accessSets": []
-      },
-      "component_": null
-    },
-    {
       "id": "23743d00-c669-423b-9a3f-fbc79c421dd8",
       "name": "emailAddress_iCloud (masked)",
       "isVinit": false,
@@ -19,27 +9,12 @@
         "accessSets": [
           {
             "factors": [
-              "25b4e254-bcba-49fd-b977-9f8ebd2c0ef5"
-            ]
+              "e9b3a440-969a-4c38-a077-f71f5c69544a"
+            ],
+            "score": 1
           }
-        ]
-      },
-      "component_": null
-    },
-    {
-      "id": "3da5cf0b-2bb8-4670-85c1-b03e821d79dc",
-      "name": "registerNewCreditCard_Amazon",
-      "isVinit": false,
-      "score": 1,
-      "accessBase": {
-        "accessSets": [
-          {
-            "factors": [
-              "25b4e254-bcba-49fd-b977-9f8ebd2c0ef5",
-              "538fd128-50ae-4ef9-bb50-30426913862e"
-            ]
-          }
-        ]
+        ],
+        "score": 1
       },
       "component_": null
     },
@@ -49,15 +24,8 @@
       "isVinit": false,
       "score": 1,
       "accessBase": {
-        "accessSets": [
-          {
-            "factors": [
-              "05b62737-54a4-48f5-b65d-5450b70a20d2",
-              "25b4e254-bcba-49fd-b977-9f8ebd2c0ef5",
-              "538fd128-50ae-4ef9-bb50-30426913862e"
-            ]
-          }
-        ]
+        "accessSets": [],
+        "score": 2147483647
       },
       "component_": null
     },
@@ -67,23 +35,8 @@
       "isVinit": false,
       "score": 1,
       "accessBase": {
-        "accessSets": []
-      },
-      "component_": null
-    },
-    {
-      "id": "25b4e254-bcba-49fd-b977-9f8ebd2c0ef5",
-      "name": "honan.net",
-      "isVinit": true,
-      "score": 1,
-      "accessBase": {
-        "accessSets": [
-          {
-            "factors": [
-              "25b4e254-bcba-49fd-b977-9f8ebd2c0ef5"
-            ]
-          }
-        ]
+        "accessSets": [],
+        "score": 2147483647
       },
       "component_": null
     },
@@ -93,15 +46,8 @@
       "isVinit": false,
       "score": 1,
       "accessBase": {
-        "accessSets": [
-          {
-            "factors": [
-              "05b62737-54a4-48f5-b65d-5450b70a20d2",
-              "25b4e254-bcba-49fd-b977-9f8ebd2c0ef5",
-              "538fd128-50ae-4ef9-bb50-30426913862e"
-            ]
-          }
-        ]
+        "accessSets": [],
+        "score": 2147483647
       },
       "component_": null
     },
@@ -111,7 +57,8 @@
       "isVinit": false,
       "score": 1,
       "accessBase": {
-        "accessSets": []
+        "accessSets": [],
+        "score": 2147483647
       },
       "component_": null
     },
@@ -121,7 +68,8 @@
       "isVinit": false,
       "score": 1,
       "accessBase": {
-        "accessSets": []
+        "accessSets": [],
+        "score": 2147483647
       },
       "component_": null
     },
@@ -131,14 +79,8 @@
       "isVinit": false,
       "score": 1,
       "accessBase": {
-        "accessSets": [
-          {
-            "factors": [
-              "25b4e254-bcba-49fd-b977-9f8ebd2c0ef5",
-              "538fd128-50ae-4ef9-bb50-30426913862e"
-            ]
-          }
-        ]
+        "accessSets": [],
+        "score": 2147483647
       },
       "component_": null
     },
@@ -152,30 +94,29 @@
           {
             "factors": [
               "095fa046-4da9-4501-956e-4e87e2d99b1d"
-            ]
-          },
-          {
-            "factors": [
-              "25b4e254-bcba-49fd-b977-9f8ebd2c0ef5"
-            ]
+            ],
+            "score": 1
           }
-        ]
+        ],
+        "score": 1
       },
       "component_": null
     },
     {
       "id": "7081980b-ae85-48e5-850b-83cd29ca1e0a",
       "name": "billingAddress",
-      "isVinit": false,
+      "isVinit": true,
       "score": 1,
       "accessBase": {
         "accessSets": [
           {
             "factors": [
-              "25b4e254-bcba-49fd-b977-9f8ebd2c0ef5"
-            ]
+              "7081980b-ae85-48e5-850b-83cd29ca1e0a"
+            ],
+            "score": 1
           }
-        ]
+        ],
+        "score": 1
       },
       "component_": null
     },
@@ -185,7 +126,8 @@
       "isVinit": false,
       "score": 1,
       "accessBase": {
-        "accessSets": []
+        "accessSets": [],
+        "score": 2147483647
       },
       "component_": null
     },
@@ -198,10 +140,13 @@
         "accessSets": [
           {
             "factors": [
-              "25b4e254-bcba-49fd-b977-9f8ebd2c0ef5"
-            ]
+              "095fa046-4da9-4501-956e-4e87e2d99b1d",
+              "e9b3a440-969a-4c38-a077-f71f5c69544a"
+            ],
+            "score": 2
           }
-        ]
+        ],
+        "score": 2
       },
       "component_": null
     },
@@ -211,15 +156,8 @@
       "isVinit": false,
       "score": 1,
       "accessBase": {
-        "accessSets": [
-          {
-            "factors": [
-              "05b62737-54a4-48f5-b65d-5450b70a20d2",
-              "25b4e254-bcba-49fd-b977-9f8ebd2c0ef5",
-              "538fd128-50ae-4ef9-bb50-30426913862e"
-            ]
-          }
-        ]
+        "accessSets": [],
+        "score": 2147483647
       },
       "component_": null
     },
@@ -229,15 +167,8 @@
       "isVinit": false,
       "score": 1,
       "accessBase": {
-        "accessSets": [
-          {
-            "factors": [
-              "05b62737-54a4-48f5-b65d-5450b70a20d2",
-              "25b4e254-bcba-49fd-b977-9f8ebd2c0ef5",
-              "538fd128-50ae-4ef9-bb50-30426913862e"
-            ]
-          }
-        ]
+        "accessSets": [],
+        "score": 2147483647
       },
       "component_": null
     },
@@ -247,7 +178,8 @@
       "isVinit": false,
       "score": 1,
       "accessBase": {
-        "accessSets": []
+        "accessSets": [],
+        "score": 2147483647
       },
       "component_": null
     },
@@ -257,7 +189,8 @@
       "isVinit": false,
       "score": 1,
       "accessBase": {
-        "accessSets": []
+        "accessSets": [],
+        "score": 2147483647
       },
       "component_": null
     },
@@ -271,9 +204,11 @@
           {
             "factors": [
               "05b62737-54a4-48f5-b65d-5450b70a20d2"
-            ]
+            ],
+            "score": 1
           }
-        ]
+        ],
+        "score": 1
       },
       "component_": null
     },
@@ -287,9 +222,11 @@
           {
             "factors": [
               "538fd128-50ae-4ef9-bb50-30426913862e"
-            ]
+            ],
+            "score": 1
           }
-        ]
+        ],
+        "score": 1
       },
       "component_": null
     },
@@ -299,14 +236,8 @@
       "isVinit": false,
       "score": 1,
       "accessBase": {
-        "accessSets": [
-          {
-            "factors": [
-              "25b4e254-bcba-49fd-b977-9f8ebd2c0ef5",
-              "538fd128-50ae-4ef9-bb50-30426913862e"
-            ]
-          }
-        ]
+        "accessSets": [],
+        "score": 2147483647
       },
       "component_": null
     },
@@ -316,15 +247,8 @@
       "isVinit": false,
       "score": 1,
       "accessBase": {
-        "accessSets": [
-          {
-            "factors": [
-              "05b62737-54a4-48f5-b65d-5450b70a20d2",
-              "25b4e254-bcba-49fd-b977-9f8ebd2c0ef5",
-              "538fd128-50ae-4ef9-bb50-30426913862e"
-            ]
-          }
-        ]
+        "accessSets": [],
+        "score": 2147483647
       },
       "component_": null
     },
@@ -334,30 +258,26 @@
       "isVinit": false,
       "score": 1,
       "accessBase": {
-        "accessSets": [
-          {
-            "factors": [
-              "25b4e254-bcba-49fd-b977-9f8ebd2c0ef5",
-              "538fd128-50ae-4ef9-bb50-30426913862e"
-            ]
-          }
-        ]
+        "accessSets": [],
+        "score": 2147483647
       },
       "component_": null
     },
     {
       "id": "e9b3a440-969a-4c38-a077-f71f5c69544a",
       "name": "emailAddress_Gmail",
-      "isVinit": false,
+      "isVinit": true,
       "score": 1,
       "accessBase": {
         "accessSets": [
           {
             "factors": [
-              "25b4e254-bcba-49fd-b977-9f8ebd2c0ef5"
-            ]
+              "e9b3a440-969a-4c38-a077-f71f5c69544a"
+            ],
+            "score": 1
           }
-        ]
+        ],
+        "score": 1
       },
       "component_": null
     },
@@ -367,38 +287,40 @@
       "isVinit": false,
       "score": 1,
       "accessBase": {
-        "accessSets": [
-          {
-            "factors": [
-              "05b62737-54a4-48f5-b65d-5450b70a20d2",
-              "25b4e254-bcba-49fd-b977-9f8ebd2c0ef5",
-              "538fd128-50ae-4ef9-bb50-30426913862e"
-            ]
-          }
-        ]
-      },
-      "component_": null
-    },
-    {
-      "id": "052b60bc-f9b8-49ee-950e-1f64680480e0",
-      "name": "Gmail",
-      "isVinit": false,
-      "score": 1,
-      "accessBase": {
-        "accessSets": [
-          {
-            "factors": [
-              "05b62737-54a4-48f5-b65d-5450b70a20d2",
-              "25b4e254-bcba-49fd-b977-9f8ebd2c0ef5",
-              "538fd128-50ae-4ef9-bb50-30426913862e"
-            ]
-          }
-        ]
+        "accessSets": [],
+        "score": 2147483647
       },
       "component_": null
     }
   ],
   "edges": [
+    {
+      "id": "7face4d4-9727-40ca-b691-f774b4e912c1",
+      "accessName": "0",
+      "colorIndex": 0,
+      "disabled": false,
+      "from": "392d3657-8581-41e3-a6dc-b73544e5c5f7",
+      "to": "67bf1839-143f-4e39-8d27-b34fe76f8adc",
+      "component_": null
+    },
+    {
+      "id": "54c802dc-508a-4c42-80d9-3ce3744bb7c5",
+      "accessName": "prim",
+      "colorIndex": 0,
+      "disabled": false,
+      "from": "9f0a7eb5-1933-4a24-b92f-dec3edc8851d",
+      "to": "db86a101-60d6-4020-aabb-6b9fe3821006",
+      "component_": null
+    },
+    {
+      "id": "7cbff673-d88f-43f4-88f4-005bd9cc451e",
+      "accessName": "rec",
+      "colorIndex": 1,
+      "disabled": false,
+      "from": "9f0a7eb5-1933-4a24-b92f-dec3edc8851d",
+      "to": "db86a101-60d6-4020-aabb-6b9fe3821006",
+      "component_": null
+    },
     {
       "id": "74cb701d-f54c-45c6-b3b5-83df0670c47b",
       "accessName": "1",
@@ -445,57 +367,12 @@
       "component_": null
     },
     {
-      "id": "d29a8212-1aa6-46a0-9cfe-6b8202036d3d",
-      "accessName": "0",
-      "colorIndex": 0,
-      "disabled": false,
-      "from": "e9b3a440-969a-4c38-a077-f71f5c69544a",
-      "to": "3da5cf0b-2bb8-4670-85c1-b03e821d79dc",
-      "component_": null
-    },
-    {
-      "id": "1c6df526-c348-4319-9ae4-50852b7c61cb",
-      "accessName": "0",
-      "colorIndex": 0,
-      "disabled": false,
-      "from": "095fa046-4da9-4501-956e-4e87e2d99b1d",
-      "to": "3da5cf0b-2bb8-4670-85c1-b03e821d79dc",
-      "component_": null
-    },
-    {
-      "id": "5e17b509-6a0b-4f28-9251-62a77ac01955",
-      "accessName": "0",
-      "colorIndex": 0,
-      "disabled": false,
-      "from": "7081980b-ae85-48e5-850b-83cd29ca1e0a",
-      "to": "3da5cf0b-2bb8-4670-85c1-b03e821d79dc",
-      "component_": null
-    },
-    {
-      "id": "21daddf0-7291-4c7b-89f1-bcc249f65096",
-      "accessName": "0",
-      "colorIndex": 0,
-      "disabled": false,
-      "from": "538fd128-50ae-4ef9-bb50-30426913862e",
-      "to": "3da5cf0b-2bb8-4670-85c1-b03e821d79dc",
-      "component_": null
-    },
-    {
       "id": "020481df-a1b3-4e2e-81e2-3f60b7f95107",
       "accessName": "0",
       "colorIndex": 0,
       "disabled": false,
       "from": "c6a48989-f714-42d9-a5c4-66dd8b9e5152",
       "to": "2d915ca2-b3ad-48ed-88ff-6759de355bf2",
-      "component_": null
-    },
-    {
-      "id": "93f268db-0820-468f-bcf2-72f2bfee2fe9",
-      "accessName": "0",
-      "colorIndex": 0,
-      "disabled": false,
-      "from": "25b4e254-bcba-49fd-b977-9f8ebd2c0ef5",
-      "to": "095fa046-4da9-4501-956e-4e87e2d99b1d",
       "component_": null
     },
     {
@@ -508,17 +385,8 @@
       "component_": null
     },
     {
-      "id": "8bd2970c-83cf-4e71-900c-b142bffee75c",
-      "accessName": "0",
-      "colorIndex": 0,
-      "disabled": false,
-      "from": "052b60bc-f9b8-49ee-950e-1f64680480e0",
-      "to": "67bf1839-143f-4e39-8d27-b34fe76f8adc",
-      "component_": null
-    },
-    {
       "id": "7f4f0972-a86d-4153-ba11-d7dfcec9fc93",
-      "accessName": "1",
+      "accessName": "rec",
       "colorIndex": 1,
       "disabled": false,
       "from": "67bf1839-143f-4e39-8d27-b34fe76f8adc",
@@ -544,33 +412,6 @@
       "component_": null
     },
     {
-      "id": "b5204875-3263-48d6-b98d-5a00af1921b4",
-      "accessName": "0",
-      "colorIndex": 0,
-      "disabled": false,
-      "from": "392d3657-8581-41e3-a6dc-b73544e5c5f7",
-      "to": "052b60bc-f9b8-49ee-950e-1f64680480e0",
-      "component_": null
-    },
-    {
-      "id": "190ea1bc-550c-448c-80ea-e656f2bdc2a9",
-      "accessName": "0",
-      "colorIndex": 0,
-      "disabled": false,
-      "from": "25b4e254-bcba-49fd-b977-9f8ebd2c0ef5",
-      "to": "7081980b-ae85-48e5-850b-83cd29ca1e0a",
-      "component_": null
-    },
-    {
-      "id": "3c47ce1e-0202-49a8-90e5-cd8394d3d281",
-      "accessName": "0",
-      "colorIndex": 0,
-      "disabled": false,
-      "from": "25b4e254-bcba-49fd-b977-9f8ebd2c0ef5",
-      "to": "e9b3a440-969a-4c38-a077-f71f5c69544a",
-      "component_": null
-    },
-    {
       "id": "d7170b34-c04e-4ba7-bb7e-f5e30a4d5a57",
       "accessName": "0",
       "colorIndex": 0,
@@ -581,7 +422,7 @@
     },
     {
       "id": "2c5302ce-e862-432f-a335-575316a197c4",
-      "accessName": "1",
+      "accessName": "rec",
       "colorIndex": 1,
       "disabled": false,
       "from": "3ea02e78-3f2f-4fa4-b3d0-9e741b03bfad",
@@ -680,8 +521,8 @@
     },
     {
       "id": "ff37a0ea-f4cc-4939-908f-b0219f46885c",
-      "accessName": "1",
-      "colorIndex": 1,
+      "accessName": "prim",
+      "colorIndex": 0,
       "disabled": false,
       "from": "396ebfb9-0e6b-4db6-8317-4f1d39a85ec3",
       "to": "db86a101-60d6-4020-aabb-6b9fe3821006",
@@ -698,8 +539,8 @@
     },
     {
       "id": "71a5b16c-88bb-4967-bdb9-648f2ce55ae5",
-      "accessName": "0",
-      "colorIndex": 0,
+      "accessName": "rec",
+      "colorIndex": 1,
       "disabled": false,
       "from": "66562487-1715-4174-b435-e072f685f009",
       "to": "db86a101-60d6-4020-aabb-6b9fe3821006",

@@ -68,7 +68,7 @@ let private transformEdge (model: Model) (edge: AAG.Edge) =
       isDisabled = edge.disabled
       isHighlighted = Set.contains edge.id model.highlightedEdgeIds
       straight =
-        model.straightEdges
+        not model.physics
         && model.graph.edges
            |> List.filter (fun e -> e.from = edge.from && e.``to`` = edge.``to``)
            |> List.length = 1 }
