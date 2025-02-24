@@ -22,8 +22,9 @@ let private getDebugText (model: Model) =
         )
 
     let edgesLen = Seq.length model.graph.edges
+    let componentsLen = Seq.length model.graph.components
 
-    $"nodes: {nodeLen}; accesses; {accessLen} edges: {edgesLen}"
+    $"nodes: {nodeLen}; accesses: {accessLen}; edges: {edgesLen}; components: {componentsLen}"
 
 let private handleClickedBackground model dispatch =
     match model.view with

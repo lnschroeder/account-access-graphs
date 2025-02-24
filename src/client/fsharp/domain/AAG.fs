@@ -555,9 +555,15 @@ let importComponent aag (aagc: Component) =
       components = List.append aag.components [ toComponentInUse aagc ] }
 
 let deleteComponent graph componentName =
-    graph.vertices
-    |> List.filter (fun v -> v.component_ = Some componentName)
-    |> List.fold (fun g v -> removeVertexFromGraph v.id g) graph
+    let graph =
+        graph.vertices
+        |> List.filter (fun v -> v.component_ = Some componentName)
+        |> List.fold (fun g v -> removeVertexFromGraph v.id g) graph
+
+    { graph with
+        components =
+            graph.components
+            |> List.filter (fun n -> componentName <> n.name) }
 
 // Authentication policy
 open JsonLogic.Net
