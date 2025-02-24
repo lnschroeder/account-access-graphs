@@ -1,34 +1,15 @@
 {
   "name": "iCloud",
   "conditions": [],
-  "accessMethods": [
-    {
-      "name": "simple",
-      "description": "simple",
-      "answer": false
-    }
-  ],
-  "rules": [
-    {
-      "description": "At least one primary method must be chosen",
-      "logic": {
-        ">": [
-          { "+": [
-              { "var": "simple" }
-            ]
-          },
-          0
-        ]
-      }
-    }
-  ],
+  "accessMethods": [],
+  "rules": [],
   "graph": {
     "vertices": [
       {
         "id": "10f490bf-66c2-4cd4-bed4-58aec1fc8231",
         "name": "mailInbox",
         "isVinit": false,
-        "score": 1,
+        "score": 8,
         "accessBase": {
           "accessSets": [],
           "score": 2147483647
@@ -39,7 +20,7 @@
         "id": "bfba9a74-a8b7-472c-8f7a-67f20ba08400",
         "name": "tempPassword",
         "isVinit": false,
-        "score": 1,
+        "score": 5,
         "accessBase": {
           "accessSets": [],
           "score": 2147483647
@@ -61,7 +42,7 @@
         "id": "9866c9c6-19f4-45bd-a078-88daad66dfae",
         "name": "creditCardNr (4 digits)",
         "isVinit": false,
-        "score": 1,
+        "score": 3,
         "accessBase": {
           "accessSets": [],
           "score": 2147483647
@@ -71,8 +52,8 @@
       {
         "id": "f4fa5dfb-7f70-49d3-b918-a33ca0f155dc",
         "name": "support",
-        "isVinit": true,
-        "score": 1,
+        "isVinit": false,
+        "score": 0,
         "accessBase": {
           "accessSets": [],
           "score": 2147483647
@@ -83,7 +64,7 @@
         "id": "b08b4ca9-cf2b-400a-a385-b93567e64985",
         "name": "secQuestions",
         "isVinit": false,
-        "score": 1,
+        "score": 2,
         "accessBase": {
           "accessSets": [],
           "score": 2147483647
@@ -93,7 +74,7 @@
       {
         "id": "3237b9ba-138b-4722-a1d7-eecd171c303b",
         "name": "emailAddress",
-        "isVinit": true,
+        "isVinit": false,
         "score": 1,
         "accessBase": {
           "accessSets": [],
@@ -105,7 +86,7 @@
         "id": "8117b484-555b-4991-ac16-5256fda82a97",
         "name": "password",
         "isVinit": false,
-        "score": 1,
+        "score": 8,
         "accessBase": {
           "accessSets": [],
           "score": 2147483647
@@ -114,9 +95,9 @@
       },
       {
         "id": "ddfd9590-ecac-43cf-9bfe-a15394e17d41",
-        "name": "iCloud",
+        "name": "account",
         "isVinit": false,
-        "score": 1,
+        "score": 8,
         "accessBase": {
           "accessSets": [],
           "score": 2147483647
@@ -173,7 +154,7 @@
       {
         "id": "814f92a7-9836-4c02-b204-dc85fb60037e",
         "accessName": "recTempPw",
-        "colorIndex": 2,
+        "colorIndex": 1,
         "disabled": false,
         "from": "3237b9ba-138b-4722-a1d7-eecd171c303b",
         "to": "ddfd9590-ecac-43cf-9bfe-a15394e17d41",
@@ -182,7 +163,7 @@
       {
         "id": "ddc93843-4213-4406-81ce-7ce7ebae81ff",
         "accessName": "recTempPw",
-        "colorIndex": 2,
+        "colorIndex": 1,
         "disabled": false,
         "from": "bfba9a74-a8b7-472c-8f7a-67f20ba08400",
         "to": "ddfd9590-ecac-43cf-9bfe-a15394e17d41",

@@ -1,65 +1,26 @@
 {
   "name": "Amazon",
   "conditions": [],
-  "accessMethods": [
-    {
-      "name": "simple",
-      "description": "Can you login with just your password?",
-      "answer": false
-    },
-    {
-      "name": "smsOtp",
-      "description": "smsOtp",
-      "answer": false
-    },
-    {
-      "name": "tOtp",
-      "description": "tOtp",
-      "answer": false
-    }
-  ],
-  "rules": [
-    {
-      "description": "At least one primary method must be chosen",
-      "logic": {
-        ">": [
-          { "+": [
-              { "var": "simple" },
-              { "var": "tOtp" },
-              { "var": "smsOtp" }
-            ]
-          },
-          0
-        ]
-      }
-    },
-    {
-      "description": "2FA authentication methods are mutually exclusive with the password-only method",
-      "logic": {
-        "if": [
-          { "var": "simple" },
-          {
-            "==": [
-              { "+": [
-                  { "var": "tOtp" },
-                  { "var": "smsOtp" }
-                ]
-              },
-              0
-            ]
-          },
-          true
-        ]
-      }
-    }
-  ],
+  "accessMethods": [],
+  "rules": [],
   "graph": {
     "vertices": [
+      {
+        "id": "1d4b2d1a-9122-4af9-8a55-2cb173e232cb",
+        "name": "CreditCardNr",
+        "isVinit": false,
+        "score": 3,
+        "accessBase": {
+          "accessSets": [],
+          "score": 2147483647
+        },
+        "component_": null
+      },
       {
         "id": "27d7f355-e471-436a-9062-a6d7baf4e059",
         "name": "CreditCardNr (4 digits)",
         "isVinit": false,
-        "score": 1,
+        "score": 3,
         "accessBase": {
           "accessSets": [],
           "score": 2147483647
@@ -69,8 +30,8 @@
       {
         "id": "a3af5884-d8f6-4785-b94e-94aadc433e28",
         "name": "support",
-        "isVinit": true,
-        "score": 1,
+        "isVinit": false,
+        "score": 0,
         "accessBase": {
           "accessSets": [],
           "score": 2147483647
@@ -92,29 +53,7 @@
         "id": "6cc3a8ea-20be-4d20-84ce-e29e206cfcba",
         "name": "Name",
         "isVinit": false,
-        "score": 1,
-        "accessBase": {
-          "accessSets": [],
-          "score": 2147483647
-        },
-        "component_": null
-      },
-      {
-        "id": "f13cbe77-1e6c-4d9b-84b7-5bbc06a886b8",
-        "name": "tOtp",
-        "isVinit": false,
-        "score": 1,
-        "accessBase": {
-          "accessSets": [],
-          "score": 2147483647
-        },
-        "component_": null
-      },
-      {
-        "id": "28e9b22f-e920-4745-b0c8-573d1236293e",
-        "name": "smsOtp",
-        "isVinit": false,
-        "score": 1,
+        "score": 0,
         "accessBase": {
           "accessSets": [],
           "score": 2147483647
@@ -136,7 +75,7 @@
         "id": "f8927225-c411-4cc8-8983-f1958d92faff",
         "name": "password",
         "isVinit": false,
-        "score": 1,
+        "score": 8,
         "accessBase": {
           "accessSets": [],
           "score": 2147483647
@@ -145,9 +84,9 @@
       },
       {
         "id": "ff1e42a7-3512-451a-9d1c-10c4140039d7",
-        "name": "Amazon",
+        "name": "account",
         "isVinit": false,
-        "score": 1,
+        "score": 8,
         "accessBase": {
           "accessSets": [],
           "score": 2147483647
@@ -156,6 +95,51 @@
       }
     ],
     "edges": [
+      {
+        "id": "e7afb387-2b04-4f95-946c-e769ded903c8",
+        "accessName": "recovery",
+        "colorIndex": 1,
+        "disabled": false,
+        "from": "e57678fc-16bd-4b0d-8fd1-06d84e4f482d",
+        "to": "ff1e42a7-3512-451a-9d1c-10c4140039d7",
+        "component_": null
+      },
+      {
+        "id": "78894e54-b20a-4149-8d6f-2938bde0085d",
+        "accessName": "recovery",
+        "colorIndex": 1,
+        "disabled": false,
+        "from": "a3af5884-d8f6-4785-b94e-94aadc433e28",
+        "to": "ff1e42a7-3512-451a-9d1c-10c4140039d7",
+        "component_": null
+      },
+      {
+        "id": "331b7ac1-c345-4ca9-b6ba-4167e00c82a0",
+        "accessName": "recovery",
+        "colorIndex": 1,
+        "disabled": false,
+        "from": "6cc3a8ea-20be-4d20-84ce-e29e206cfcba",
+        "to": "ff1e42a7-3512-451a-9d1c-10c4140039d7",
+        "component_": null
+      },
+      {
+        "id": "9541ba9c-1457-4bf8-8ac1-42bb846c1ba9",
+        "accessName": "recovery",
+        "colorIndex": 1,
+        "disabled": false,
+        "from": "d587321e-a6ce-44ed-82f2-cb1ee80a0c95",
+        "to": "ff1e42a7-3512-451a-9d1c-10c4140039d7",
+        "component_": null
+      },
+      {
+        "id": "57780f2d-9c07-45b9-a7d9-7527ca71a275",
+        "accessName": "recovery",
+        "colorIndex": 1,
+        "disabled": false,
+        "from": "1d4b2d1a-9122-4af9-8a55-2cb173e232cb",
+        "to": "ff1e42a7-3512-451a-9d1c-10c4140039d7",
+        "component_": null
+      },
       {
         "id": "d5a896d2-2201-4f00-89b6-8880b74d13af",
         "accessName": "ccInfo",
@@ -198,60 +182,6 @@
         "colorIndex": 3,
         "disabled": false,
         "from": "a3af5884-d8f6-4785-b94e-94aadc433e28",
-        "to": "ff1e42a7-3512-451a-9d1c-10c4140039d7",
-        "component_": null
-      },
-      {
-        "id": "683d3036-2c72-4802-8be7-4c1520979502",
-        "accessName": "tOtp",
-        "colorIndex": 2,
-        "disabled": false,
-        "from": "e57678fc-16bd-4b0d-8fd1-06d84e4f482d",
-        "to": "ff1e42a7-3512-451a-9d1c-10c4140039d7",
-        "component_": null
-      },
-      {
-        "id": "b80bb5bf-4b9d-483c-9a57-35e3e3400ef0",
-        "accessName": "tOtp",
-        "colorIndex": 2,
-        "disabled": false,
-        "from": "f8927225-c411-4cc8-8983-f1958d92faff",
-        "to": "ff1e42a7-3512-451a-9d1c-10c4140039d7",
-        "component_": null
-      },
-      {
-        "id": "3048cad7-4f8b-485f-b575-b2084c053ca3",
-        "accessName": "tOtp",
-        "colorIndex": 2,
-        "disabled": false,
-        "from": "f13cbe77-1e6c-4d9b-84b7-5bbc06a886b8",
-        "to": "ff1e42a7-3512-451a-9d1c-10c4140039d7",
-        "component_": null
-      },
-      {
-        "id": "bd15adf6-bc99-47c2-9ec5-b5d345809944",
-        "accessName": "smsOtp",
-        "colorIndex": 1,
-        "disabled": false,
-        "from": "e57678fc-16bd-4b0d-8fd1-06d84e4f482d",
-        "to": "ff1e42a7-3512-451a-9d1c-10c4140039d7",
-        "component_": null
-      },
-      {
-        "id": "ec63d8bc-8037-4b1c-a26c-8879cf81b5db",
-        "accessName": "smsOtp",
-        "colorIndex": 1,
-        "disabled": false,
-        "from": "f8927225-c411-4cc8-8983-f1958d92faff",
-        "to": "ff1e42a7-3512-451a-9d1c-10c4140039d7",
-        "component_": null
-      },
-      {
-        "id": "d2b5210d-4b0d-4ef3-b3f1-ce251970ac43",
-        "accessName": "smsOtp",
-        "colorIndex": 1,
-        "disabled": false,
-        "from": "28e9b22f-e920-4745-b0c8-573d1236293e",
         "to": "ff1e42a7-3512-451a-9d1c-10c4140039d7",
         "component_": null
       },

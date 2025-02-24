@@ -1,8 +1,8 @@
 [
-    "github.json",
-    "posteo.json",
-    "twitter.json",
     "amazon.json",
+    "github.json",
+    "google.json",
     "icloud.json",
-    "google.json"
+    "posteo.json",
+    "twitter.json"
 ]
