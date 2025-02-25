@@ -1,7 +1,13 @@
 {
   "name": "Amazon",
   "conditions": [],
-  "accessMethods": [],
+  "accessMethods": [
+    {
+      "name": "addCreditCardScam",
+      "description": "Do you want to include a scam, which enables attackers to access your Amazon account, just using your name, email address, and billing address?",
+      "answer": false
+    }
+  ],
   "rules": [],
   "graph": {
     "vertices": [
