@@ -3,8 +3,6 @@ module AAG.Client.ModifyComponentView
 open Model
 open Bolero.Html
 
-// Validity
-
 // Handle actions
 let handleClickedBackground model dispatch =
     dispatch (Msg.OpenModifyVertexView model.subjectVertexId)

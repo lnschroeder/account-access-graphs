@@ -3,10 +3,6 @@ module AAG.Client.AddComponentView
 open Model
 open Bolero.Html
 
-// Validity
-
-// Handle actions
-
 // Open
 let ``open`` model (components: string list) =
     { page = model.page

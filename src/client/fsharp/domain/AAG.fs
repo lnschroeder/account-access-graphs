@@ -136,7 +136,6 @@ let private isEdgeInAccess (access: Access) (edge: Edge) =
     && edge.``to`` = access.vertexId
     && edge.colorIndex = access.colorIndex
 
-// TODO
 let private isAccessFulfilled (vertexIds: Guid Set) (edges: Edge list) =
     Set.isSubset (edges |> List.map (fun e -> e.from) |> Set.ofList) vertexIds
 
@@ -213,7 +212,7 @@ let getAccesses vertexId (graph: Graph) =
 
 let getEnabledAccesses vertexId (graph: Graph) =
     graph.edges
-    |> List.filter (fun e -> e.``to`` = vertexId && e.disabled = false) // TODO optimize
+    |> List.filter (fun e -> e.``to`` = vertexId && e.disabled = false)
     |> List.map transformEdgeToAccess
     |> Set.ofList
 

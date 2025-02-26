@@ -30,7 +30,6 @@ type Network =
     { nodes: Node list
       edges: Edge list
       view: string
-      subjectVertexId: Guid option
       physics: bool
       edgeLabels: bool }
 
@@ -81,6 +80,5 @@ let transform (model: Model) =
         model.graph.edges
         |> List.map (transformEdge model)
       view = model.view.ToString()
-      subjectVertexId = model.subjectVertexId
       physics = model.physics
       edgeLabels = model.edgeLabels }

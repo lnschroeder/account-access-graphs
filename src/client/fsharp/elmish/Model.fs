@@ -159,6 +159,12 @@ let scoreHint (vertex: AAG.Vertex) =
 
 let isValid (model: Model) f = (f model).level <> Error
 
+let isValidVertex model = isValid model modifyVertexNameInput
+
+let isValidAccess (model: Model) =
+    isValid model selectedFactors
+    && isValid model addAccessNameInput
+
 let highlightAccess (access: AAG.Access) (model: Model) =
     let edges =
         AAG.getEdgesForAccess model.graph access

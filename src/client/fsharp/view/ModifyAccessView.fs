@@ -3,14 +3,9 @@ module AAG.Client.ModifyAccessView
 open Model
 open Bolero.Html
 
-// Validity
-let private isValidAccess (model: Model) =
-    isValid model selectedFactors
-    && isValid model addAccessNameInput
-
 // Handle actions
 let handleClickedVertex (vertex: AAG.Vertex) dispatch =
-    dispatch (Msg.ToggleFactorForSubject(vertex))
+    dispatch (Msg.ToggleFactorForSubject vertex)
 
 let handleClickedBackground model dispatch =
     if isValidAccess model then
@@ -57,7 +52,6 @@ let exitDeletingAccess access model =
         view = ModifyVertex }
 
 // Functionality
-
 let private removeFactorFromSubject vertexId (access: AAG.Access) (model: Model) =
     { model with
         graph = AAG.removeVertexFromAccess vertexId access model.graph
@@ -128,7 +122,7 @@ let private showFactor (model: Model) id =
 let view jsRuntime (model: Model) dispatch =
     Utility.toggleButtonEnabled "ModifyAccessBackButton" (isValidAccess model) jsRuntime
     |> ignore
-
+    isValid
     match model.subjectVertexId with
     | Some subjectVertexId ->
         match AAG.tryFindVertexById subjectVertexId model.graph with

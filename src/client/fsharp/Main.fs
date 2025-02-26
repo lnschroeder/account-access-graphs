@@ -70,12 +70,12 @@ let private handleClickedVisEdge (idAsString: string) model dispatch =
         | _ -> dispatch Msg.IgnoreAction
     | None -> dispatch Msg.IgnoreAction
 
-let getJsonOutputHint (model: Model) =
+let private getJsonOutputHint (model: Model) =
     match Json.tryDeserializeGraph model.json with
     | Graph _ -> Hint.Info
     | ErrorMsg msg -> msg
 
-let handleUpdatedJson jsonAsString (model: Model) =
+let private handleUpdatedJson jsonAsString (model: Model) =
     match Json.tryDeserializeGraph jsonAsString with
     | Graph graph ->
         { Model.Init with
@@ -88,7 +88,7 @@ let handleUpdatedJson jsonAsString (model: Model) =
 let private update (http: HttpClient) message model =
     match message with
     | Msg.IgnoreAction -> model, Cmd.none
-    | Msg.Error _ -> model, Cmd.none // TODO
+    | Msg.Error _ -> model, Cmd.none
     // Main
     | Msg.SetPage page -> { model with page = page }, Cmd.none
     | Msg.ModifiedGraphJson jsonAsString -> handleUpdatedJson jsonAsString model, Cmd.none
@@ -105,19 +105,7 @@ let private update (http: HttpClient) message model =
         let cmd = Cmd.OfTask.either getGraph () Msg.GotGraph Msg.Error
         model, cmd
     // ModifyAccess
-    | Msg.OpenModifyAccessView (access, addAccessNameInput) ->
-        if AAG.getEdgesForAccess model.graph access
-           |> List.filter (fun e -> e.component_.IsSome)
-           |> List.isEmpty then
-            ModifyAccessView.``open`` access addAccessNameInput model, Cmd.none
-        else
-            match AAG.tryFindVertexById access.vertexId model.graph with
-            | Some vertex when vertex.component_.IsSome ->
-                ModifyComponentView.``open``
-                    { model with subjectVertexId = Some vertex.id }
-                    (Option.get vertex.component_),
-                Cmd.none
-            | _ -> ModifyAccessView.``open`` access addAccessNameInput model, Cmd.none
+    | Msg.OpenModifyAccessView (access, addAccessNameInput) -> ModifyAccessView.``open`` access addAccessNameInput model, Cmd.none
     | Msg.ModifiedAccessName (access, name) -> ModifyAccessView.updateAccessName access name model, Cmd.none
     | Msg.ToggleFactorForSubject vertex -> ModifyAccessView.toggleFactorForSubject vertex model, Cmd.none
     | Msg.ClickedDeleteAccess access -> ModifyAccessView.exitDeletingAccess access model, Cmd.none
@@ -191,7 +179,7 @@ let private view (jsRuntime: IJSRuntime) model dispatch =
 
     Template
         .Main()
-        .DebugText(getDebugText model) // TODO
+        .DebugText(getDebugText model)
         .PhysicsCheckbox(model.physics, (fun b -> dispatch (Msg.SetPhysics b)))
         .EdgeLabelsCheckbox(model.edgeLabels, (fun b -> dispatch (Msg.SetEdgeLabels b)))
         .JsonOutput(model.json, (fun jsonAsString -> dispatch (Msg.ModifiedGraphJson jsonAsString)))

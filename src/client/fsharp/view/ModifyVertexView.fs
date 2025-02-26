@@ -3,10 +3,7 @@ module AAG.Client.ModifyVertexView
 open Model
 open Bolero.Html
 
-// Validity
-let isValidVertex model = isValid model modifyVertexNameInput
-
-let isSubjectVertexEmpty (model: Model) =
+let private isSubjectVertexEmpty (model: Model) =
     model.subjectVertexId
     |> Option.map (fun id ->
         let vertex = AAG.tryFindVertexById id model.graph
@@ -39,12 +36,6 @@ let handleClickedBackground (model: Model) dispatch =
     else
         dispatch Msg.IgnoreAction
 
-let handleClickedAccess (access: AAG.Access) (model: Model) dispatch =
-    if isValidVertex model then
-        dispatch (Msg.OpenModifyAccessView(access, access.name))
-    else
-        dispatch Msg.IgnoreAction
-
 // Open
 let private openInternal (vertex: AAG.Vertex) model =
     { page = model.page
@@ -72,7 +63,7 @@ let ``open`` vertexId model =
     | Some vertexId ->
         match AAG.tryFindVertexById vertexId model.graph with
         | Some vertex -> openInternal vertex model
-        | None -> model // TODO throw error if vertexId is not found
+        | None -> model
     | None ->
         let vertex = AAG.Vertex.Default
         let graph = AAG.addVertex vertex model.graph

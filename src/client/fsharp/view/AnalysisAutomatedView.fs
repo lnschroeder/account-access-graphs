@@ -3,7 +3,6 @@ module AAG.Client.AnalysisAutomatedView
 open Model
 open Bolero.Html
 
-// Validity
 // Handle actions
 let handleClickedVertex (vertex: AAG.Vertex) dispatch =
     dispatch (Msg.OpenAnalysisForVertex(Some vertex.id))

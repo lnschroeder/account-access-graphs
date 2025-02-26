@@ -3,7 +3,6 @@ module AAG.Client.VinitView
 open Model
 open Bolero.Html
 
-// Validity
 // Handle actions
 let handleClickedBackground dispatch = dispatch Msg.OpenMainMenuView
 
@@ -36,7 +35,6 @@ let ``open`` model =
       json = model.json }
 
 // Functionality
-
 let setVinit (vertex: AAG.Vertex) isVinit (model: Model) =
     { model with graph = AAG.setVinit model.graph isVinit vertex.id }
 

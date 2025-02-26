@@ -4,7 +4,6 @@ open Model
 
 let clearGraph = Model.Init
 
-// Validity
 // Handle actions
 let handleClickedVertex (vertex: AAG.Vertex) dispatch =
     dispatch (Msg.OpenModifyVertexView(Some vertex.id))
@@ -36,9 +35,7 @@ let ``open`` model =
       subjectComponentName = ""
       json = model.json }
 
-// Functionality
 // View
-
 let view dispatch =
     Template
         .MainMenu()

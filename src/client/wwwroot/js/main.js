@@ -79,7 +79,6 @@ const colors = [
 // removes, updates, and adds nodes and edges to the network
 function updateNetwork(networkDTO) {
   let view = networkDTO.view;
-  let subjectVertexId = networkDTO.subjectVertexId;
   let nodes = networkDTO.nodes;
   let edges = networkDTO.edges;
   let oldNodeIds = data.nodes.map((item) => item.id);
@@ -177,7 +176,7 @@ function updateNetwork(networkDTO) {
     edges.forEach((edge) => {
       let dashes = false;
       let physics = true;
-      let color = colors[edge.colorIndex % colors.length]; // TODO use random color instead
+      let color = colors[edge.colorIndex % colors.length];
       let width = 1;
       let label = " ";
       let opacity = 1.0;

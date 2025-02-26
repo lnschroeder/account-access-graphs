@@ -3,7 +3,6 @@ module AAG.Client.AnalysisManualView
 open Model
 open Bolero.Html
 
-// Validity
 // Open
 let ``open`` model =
     { page = model.page
@@ -26,7 +25,6 @@ let ``open`` model =
       subjectComponentName = ""
       json = model.json }
 
-// Functionality
 // Handle actions
 let handleClickedBackground model dispatch =
     if model.initiallyCompromisedVertexIds.IsEmpty then
