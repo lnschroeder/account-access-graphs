@@ -122,7 +122,7 @@ let private showFactor (model: Model) id =
 let view jsRuntime (model: Model) dispatch =
     Utility.toggleButtonEnabled "ModifyAccessBackButton" (isValidAccess model) jsRuntime
     |> ignore
-    isValid
+    
     match model.subjectVertexId with
     | Some subjectVertexId ->
         match AAG.tryFindVertexById subjectVertexId model.graph with
