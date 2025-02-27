@@ -1,6 +1,12 @@
 # account-access-graphs
 
-A tool for modeling and analyzing account access graphs
+A tool for modeling and analyzing account access graphs.
+
+## Deployment & Live Demo
+
+A live demo of this application is available at: https://lnschroeder.github.io/account-access-graphs/
+
+This is automatically deployed via the [pipeline.yml](.github/workflows/pipeline.yml).
 
 ## Build application for development
 ```sh
@@ -26,11 +32,11 @@ python3 -m http.server 8080
 ```
 
 ## Project structure
-This is a WebAssembly project written in F# using [Bolero](https://fsbolero.io/). The Bolero framework uses [Elmish](https://elmish.github.io/elmish/) as its core architecture.
+This is a [WebAssembly](https://webassembly.org/) project written in F# using [Bolero](https://fsbolero.io/). The Bolero framework uses [Elmish](https://elmish.github.io/elmish/) as its core architecture.
 
 ![System architecture](docs/architecture.svg)
 
-The [Startup.fs](src/client/fsharp/Startup.fs) is the entry point to the code, which initializes the Elmish program, whose `update()` and `loop()` functions are defined in [Main.fs](src/client/fsharp/Main.fs). 
+The [Startup.fs](src/client/fsharp/Startup.fs) is the entry point to the code, which initializes the Elmish program, whose `update()` and `view()` functions are defined in [Main.fs](src/client/fsharp/Main.fs). 
 The `view()` function populates the [index.html](src/client/wwwroot/index.html) using the 
 [templates HTMLs](src/client/wwwroot/templates).
 
