@@ -1,10 +1,11 @@
 # account-access-graphs
+A tool for modeling and analyzing account access graphs (see the paper [User Account Access Graph](https://doi.org/10.1145/3319535.3354193) for more info).
 
-A tool for modeling and analyzing account access graphs.
+This tool was developed as a part of my master thesis _Modeling and Analyzing Account Access Graphs_ at _Berliner Hochschule für Technik (BHT)_.
 
 ## Deployment & Live Demo
 
-A live demo of this application is available at: https://lnschroeder.github.io/account-access-graphs/
+Live Demo at: https://lnschroeder.github.io/account-access-graphs/.
 
 This is automatically deployed via the [pipeline.yml](.github/workflows/pipeline.yml).
 
