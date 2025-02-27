@@ -1,0 +1,45 @@
+name: Deploy to GitHub Pages
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build-github-pages:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Setup dotnet
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '8.0.110'
+      - name: Install wasm-tools
+        run: dotnet workload install wasm-tools
+      - name: Publish dotnet project
+        run: dotnet publish -c Release -o release --nologo src/client/AAG.Client.fsproj
+      - name: Set base path
+        run: sed -i 's/<base href="\/" \/>/<base href="\/account-access-graphs\/">/g' release/wwwroot/index.html
+      - name: Add .nojekyll to include _framework folder
+        run: touch release/wwwroot/.nojekyll
+      - name: Add 404 page to enable page refreshes
+        run: cp release/wwwroot/index.html release/wwwroot/404.html
+      - name: Upload static content
+        id: deployment
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: release/wwwroot/
+
+  deploy-github-pages:
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+    needs: build-github-pages
+    permissions:
+      pages: write
+      id-token: write
+    steps:
+      - name: Deploy web app
+        id: deployment
+        uses: actions/deploy-pages@v4

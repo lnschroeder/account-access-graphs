@@ -1,0 +1,220 @@
+{
+  "name": "iCloud",
+  "conditions": [],
+  "accessMethods": [],
+  "rules": [],
+  "graph": {
+    "vertices": [
+      {
+        "id": "10f490bf-66c2-4cd4-bed4-58aec1fc8231",
+        "name": "mailInbox",
+        "isVinit": false,
+        "score": 8,
+        "accessBase": {
+          "accessSets": [],
+          "score": 2147483647
+        },
+        "component_": null
+      },
+      {
+        "id": "bfba9a74-a8b7-472c-8f7a-67f20ba08400",
+        "name": "tempPassword",
+        "isVinit": false,
+        "score": 5,
+        "accessBase": {
+          "accessSets": [],
+          "score": 2147483647
+        },
+        "component_": null
+      },
+      {
+        "id": "52aa4483-b2f4-4a81-8510-d28eb04576b0",
+        "name": "billingAddress",
+        "isVinit": false,
+        "score": 1,
+        "accessBase": {
+          "accessSets": [],
+          "score": 2147483647
+        },
+        "component_": null
+      },
+      {
+        "id": "9866c9c6-19f4-45bd-a078-88daad66dfae",
+        "name": "creditCardNr (4 digits)",
+        "isVinit": false,
+        "score": 3,
+        "accessBase": {
+          "accessSets": [],
+          "score": 2147483647
+        },
+        "component_": null
+      },
+      {
+        "id": "f4fa5dfb-7f70-49d3-b918-a33ca0f155dc",
+        "name": "support",
+        "isVinit": false,
+        "score": 0,
+        "accessBase": {
+          "accessSets": [],
+          "score": 2147483647
+        },
+        "component_": null
+      },
+      {
+        "id": "b08b4ca9-cf2b-400a-a385-b93567e64985",
+        "name": "secQuestions",
+        "isVinit": false,
+        "score": 2,
+        "accessBase": {
+          "accessSets": [],
+          "score": 2147483647
+        },
+        "component_": null
+      },
+      {
+        "id": "3237b9ba-138b-4722-a1d7-eecd171c303b",
+        "name": "emailAddress",
+        "isVinit": false,
+        "score": 1,
+        "accessBase": {
+          "accessSets": [],
+          "score": 2147483647
+        },
+        "component_": null
+      },
+      {
+        "id": "8117b484-555b-4991-ac16-5256fda82a97",
+        "name": "password",
+        "isVinit": false,
+        "score": 8,
+        "accessBase": {
+          "accessSets": [],
+          "score": 2147483647
+        },
+        "component_": null
+      },
+      {
+        "id": "ddfd9590-ecac-43cf-9bfe-a15394e17d41",
+        "name": "account",
+        "isVinit": false,
+        "score": 8,
+        "accessBase": {
+          "accessSets": [],
+          "score": 2147483647
+        },
+        "component_": null
+      }
+    ],
+    "edges": [
+      {
+        "id": "48ba271a-24fe-4af6-8b76-a5566c6767cf",
+        "accessName": "inbox",
+        "colorIndex": 0,
+        "disabled": false,
+        "from": "ddfd9590-ecac-43cf-9bfe-a15394e17d41",
+        "to": "10f490bf-66c2-4cd4-bed4-58aec1fc8231",
+        "component_": null
+      },
+      {
+        "id": "4a3b2e70-c984-4ccd-a97b-908e1f77a013",
+        "accessName": "recCC",
+        "colorIndex": 1,
+        "disabled": false,
+        "from": "3237b9ba-138b-4722-a1d7-eecd171c303b",
+        "to": "bfba9a74-a8b7-472c-8f7a-67f20ba08400",
+        "component_": null
+      },
+      {
+        "id": "2b94d5b4-b146-48ad-948e-809425f420a4",
+        "accessName": "recCC",
+        "colorIndex": 1,
+        "disabled": false,
+        "from": "f4fa5dfb-7f70-49d3-b918-a33ca0f155dc",
+        "to": "bfba9a74-a8b7-472c-8f7a-67f20ba08400",
+        "component_": null
+      },
+      {
+        "id": "391588fc-4e43-4b8a-96c5-f136e9cb6f4b",
+        "accessName": "recCC",
+        "colorIndex": 1,
+        "disabled": false,
+        "from": "9866c9c6-19f4-45bd-a078-88daad66dfae",
+        "to": "bfba9a74-a8b7-472c-8f7a-67f20ba08400",
+        "component_": null
+      },
+      {
+        "id": "7eff811f-7f06-4126-bacd-a073ce080a5e",
+        "accessName": "recCC",
+        "colorIndex": 1,
+        "disabled": false,
+        "from": "52aa4483-b2f4-4a81-8510-d28eb04576b0",
+        "to": "bfba9a74-a8b7-472c-8f7a-67f20ba08400",
+        "component_": null
+      },
+      {
+        "id": "814f92a7-9836-4c02-b204-dc85fb60037e",
+        "accessName": "recTempPw",
+        "colorIndex": 1,
+        "disabled": false,
+        "from": "3237b9ba-138b-4722-a1d7-eecd171c303b",
+        "to": "ddfd9590-ecac-43cf-9bfe-a15394e17d41",
+        "component_": null
+      },
+      {
+        "id": "ddc93843-4213-4406-81ce-7ce7ebae81ff",
+        "accessName": "recTempPw",
+        "colorIndex": 1,
+        "disabled": false,
+        "from": "bfba9a74-a8b7-472c-8f7a-67f20ba08400",
+        "to": "ddfd9590-ecac-43cf-9bfe-a15394e17d41",
+        "component_": null
+      },
+      {
+        "id": "3646f4c2-8651-4e6a-a5d3-a68aa247dcea",
+        "accessName": "recSecQ",
+        "colorIndex": 0,
+        "disabled": false,
+        "from": "3237b9ba-138b-4722-a1d7-eecd171c303b",
+        "to": "bfba9a74-a8b7-472c-8f7a-67f20ba08400",
+        "component_": null
+      },
+      {
+        "id": "d08c279b-a28b-4c76-807a-a30586de3384",
+        "accessName": "recSecQ",
+        "colorIndex": 0,
+        "disabled": false,
+        "from": "b08b4ca9-cf2b-400a-a385-b93567e64985",
+        "to": "bfba9a74-a8b7-472c-8f7a-67f20ba08400",
+        "component_": null
+      },
+      {
+        "id": "3d93e4f9-990c-4d55-a02f-fb2b392065c8",
+        "accessName": "recSecQ",
+        "colorIndex": 0,
+        "disabled": false,
+        "from": "f4fa5dfb-7f70-49d3-b918-a33ca0f155dc",
+        "to": "bfba9a74-a8b7-472c-8f7a-67f20ba08400",
+        "component_": null
+      },
+      {
+        "id": "96a8f193-d326-48d0-af75-264286da6f91",
+        "accessName": "simple",
+        "colorIndex": 0,
+        "disabled": false,
+        "from": "8117b484-555b-4991-ac16-5256fda82a97",
+        "to": "ddfd9590-ecac-43cf-9bfe-a15394e17d41",
+        "component_": null
+      },
+      {
+        "id": "48ca3784-d353-4c32-9cdc-45b2d4251dd8",
+        "accessName": "simple",
+        "colorIndex": 0,
+        "disabled": false,
+        "from": "3237b9ba-138b-4722-a1d7-eecd171c303b",
+        "to": "ddfd9590-ecac-43cf-9bfe-a15394e17d41",
+        "component_": null
+      }
+    ],
+    "components": []
+  }
+}

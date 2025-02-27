@@ -1,0 +1,16 @@
+<h1 class="title">Manual analysis</h1>
+
+<div class="field">
+  <label class="label">Which vertices were compromised?</label>
+  <div class="tags">
+    ${Factors}
+    <template id="Factor">
+      <span class="tag"> ${Name} </span>
+    </template>
+  </div>
+  <p class="help is-danger">${FactorsHint}</p>
+</div>
+
+<button class="button is-info is-fullwidth" onclick="${BackButton}">
+  Back
+</button>
