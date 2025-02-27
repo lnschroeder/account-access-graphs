@@ -9,14 +9,16 @@ Live Demo at: https://lnschroeder.github.io/account-access-graphs/.
 
 This is automatically deployed via the [pipeline.yml](.github/workflows/pipeline.yml).
 
+## Prerequisites
+
+- `dotnet`: the .NET SDK version is specified inside [global.json](global.json) and once installed will be used automatically
+
 ## Build application for development
 ```sh
 dotnet watch
 # or
 dotnet build
 ```
-
-The .NET SDK version is specified inside [global.json](global.json) and will be used automatically.
 
 ## Build application for deployment
 This will create a production ready deployment of the application. It compiles and bundles all files, which then can be served as a static webserver.
