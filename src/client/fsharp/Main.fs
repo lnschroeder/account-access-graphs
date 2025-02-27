@@ -142,7 +142,7 @@ let private update (http: HttpClient) message model =
     // AddComponent
     | Msg.OpenAddComponentView ->
         let getComponents () =
-            http.GetFromJsonAsync<string list> "resources/components.json"
+            http.GetFromJsonAsync<string list> "resources/aagcs.json"
 
         let cmd = Cmd.OfTask.either getComponents () Msg.GotComponents Msg.Error
 
