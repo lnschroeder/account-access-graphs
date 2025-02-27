@@ -3,6 +3,9 @@ module AAG.Client.VisJSTransformer
 open System
 open Model
 
+/// Transforming the applications domain object for AAGs into an object 
+///  to represent this AAG with VisJS. 
+
 type Node =
     { id: Guid
       label: string
@@ -15,7 +18,7 @@ type Node =
       score: int
       component_: string }
 
-type Edge =
+and Edge =
     { id: Guid
       from: Guid
       ``to``: Guid
@@ -26,7 +29,7 @@ type Edge =
       colorIndex: byte
       straight: bool }
 
-type Network =
+and Network =
     { nodes: Node list
       edges: Edge list
       view: string

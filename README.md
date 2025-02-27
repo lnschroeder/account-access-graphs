@@ -9,6 +9,8 @@ dotnet watch
 dotnet build
 ```
 
+The .NET SDK version is specified inside [global.json](global.json) and will be used automatically.
+
 ## Build application for deployment
 This will create a production ready deployment of the application. It compiles and bundles all files, which then can be served as a static webserver.
 ```sh
@@ -22,3 +24,14 @@ dotnet serve --port 8080 # requires https://github.com/natemcmaster/dotnet-serve
 # or
 python3 -m http.server 8080
 ```
+
+## Project structure
+This is a WebAssembly project written in F# using [Bolero](https://fsbolero.io/). The Bolero framework uses [Elmish](https://elmish.github.io/elmish/) as its core architecture.
+
+![System architecture](docs/architecture.svg)
+
+The [Startup.fs](src/client/fsharp/Startup.fs) is the entry point to the code, which initializes the Elmish program, whose `update()` and `loop()` functions are defined in [Main.fs](src/client/fsharp/Main.fs). 
+The `view()` function populates the [index.html](src/client/wwwroot/index.html) using the 
+[templates HTMLs](src/client/wwwroot/templates).
+
+The _Account Access Graph Components (AAGCs)_ can be found in [src/client/wwwroot/resources/aagc](src/client/wwwroot/resources/aagc). 

@@ -10,6 +10,9 @@ open Microsoft.JSInterop
 open System
 open Bolero.Html
 
+/// The main `init` function of the Elmish program.
+/// Initializes the model and command for the Elmish program.
+/// This function is called once at the start of the program to set up the initial state.
 let private init _ = MainMenuView.clearGraph, Cmd.none
 
 let private getDebugText (model: Model) =
@@ -85,6 +88,8 @@ let private handleUpdatedJson jsonAsString (model: Model) =
             json = jsonAsString }
     | ErrorMsg _ -> { model with json = jsonAsString }
 
+/// The main `update` function of the Elmish program.
+/// Updates the model and command i.e. the state of the program.
 let private update (http: HttpClient) message model =
     match message with
     | Msg.IgnoreAction -> model, Cmd.none
@@ -100,7 +105,7 @@ let private update (http: HttpClient) message model =
     | Msg.ClickedClearGraph -> MainMenuView.clearGraph, Cmd.none
     | Msg.ClickedExampleGraph ->
         let getGraph () =
-            http.GetFromJsonAsync<AAG.Graph> "resources/example.json"
+            http.GetFromJsonAsync<AAG.Graph> "resources/aag/example.json"
 
         let cmd = Cmd.OfTask.either getGraph () Msg.GotGraph Msg.Error
         model, cmd
@@ -149,7 +154,7 @@ let private update (http: HttpClient) message model =
     | Msg.ImportSelectedComponent ->
         let getComponent () =
             http.GetFromJsonAsync<AAG.Component>(
-                "resources/components/"
+                "resources/aagc/"
                 + model.newComponentSelection
             )
 
@@ -179,6 +184,8 @@ let private update (http: HttpClient) message model =
     // Model
     | Msg.UpdateCompromisedVertices vertexIds -> updateTransitivelyCompromisedVertexIds model vertexIds, Cmd.none
 
+/// The main `view` function of the Elmish program.
+/// Populates the HTML templates with the content of the model.
 let private view (jsRuntime: IJSRuntime) model dispatch =
     jsRuntime.InvokeVoidAsync("updateNetwork", VisJSTransformer.transform model)
     |> ignore

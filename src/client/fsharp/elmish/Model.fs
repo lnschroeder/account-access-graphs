@@ -2,7 +2,7 @@ module AAG.Client.Model
 
 open System
 
-/// The Elmish application's model.
+/// The Elmish application's model representing the application's entire state.
 type HintLevel =
     | Info
     | Warning

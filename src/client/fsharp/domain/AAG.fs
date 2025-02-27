@@ -5,9 +5,12 @@ open System
 open System.Collections.Generic
 open Newtonsoft.Json.Linq
 
+/// This file contains the business logic of the application.
+/// i.e. the actual AAG & AAGC data structure and the analyses computations 
+ 
 type IdAccess = { target: Guid; factors: Guid Set }
 
-type Rule = { description: string; logic: obj }
+and Rule = { description: string; logic: obj }
 
 and Condition =
     { name: string
