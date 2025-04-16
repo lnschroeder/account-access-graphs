@@ -1,13 +1,37 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
   <head>
+    <link rel="shortcut icon" href="#" />
     <meta charset="UTF-8" />
     <link rel="icon" type="image/svg+xml" href="/vite.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Vite + Svelte + TS</title>
+    <title>Account Access Graphs</title>
+    <base href="/" />
   </head>
   <body>
-    <div id="app"></div>
+    <nav class="navbar is-dark" role="navigation" aria-label="main navigation">
+      <div class="navbar-brand">
+        <a
+          class="navbar-item is-size-5"
+          href="https://github.com/lnschroeder/account-access-graphs/"
+        >
+          &nbsp;
+          <div class="has-text-weight-bold">
+            Account Access Graphs
+            <span
+              style="font-size: small; vertical-align: top"
+              class="has-text-weight-light"
+              >(alpha)</span
+            >
+          </div>
+          by lnschroeder
+        </a>
+      </div>
+    </nav>
+
+    <div id="app" class="section is-fullheight-with-navbar">
+      <!-- see file://./src/App.svelte -->
+    </div>
     <script type="module" src="/src/main.ts"></script>
   </body>
 </html>
