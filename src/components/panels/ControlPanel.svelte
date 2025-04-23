@@ -1,7 +1,7 @@
 <script lang="ts">
-  import { step, Step } from "./shared.svelte";
-  import MainMenu from "./steps/MainMenu.svelte";
-  import ModifyVertex from "./steps/ModifyVertex.svelte";
+  import { step, Step } from "../../shared.svelte";
+  import MainMenu from "../steps/MainMenu.svelte";
+  import ModifyVertex from "../steps/ModifyVertex.svelte";
 </script>
 
 <div class="box">

@@ -1,8 +1,8 @@
 <script lang="ts">
-  import Checkbox from "../components/Checkbox.svelte";
-  import Input from "../components/Input.svelte";
-  import Table from "../components/Table.svelte";
-  import { step, Step } from "../shared.svelte";
+  import Checkbox from "../Checkbox.svelte";
+  import Input from "../Input.svelte";
+  import Table from "../Table.svelte";
+  import { step, Step } from "../../shared.svelte";
 
   let vertexNameInput = $state("");
   let vertexNameHint = $derived(

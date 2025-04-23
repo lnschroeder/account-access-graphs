@@ -1,5 +1,5 @@
 <script lang="ts">
-  import Textarea from "./components/Textarea.svelte";
+  import Textarea from "../Textarea.svelte";
 
   let aagJsonInput = $state("");
   let aagJsonHint = "";
