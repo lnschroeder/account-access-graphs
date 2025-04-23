@@ -1,14 +1,14 @@
 <script lang="ts">
   import Textarea from "./components/Textarea.svelte";
 
-  function validateJson(input: string): string {
-    return "";
-  }
+  let aagJsonInput = $state("");
+  let aagJsonHint = "";
 </script>
 
 <Textarea
-  heading="JSON representation"
   id="jsonInput"
+  heading="JSON representation"
   placeholder="JSON representation"
-  validate={validateJson}
+  hint={aagJsonHint}
+  bind:input={aagJsonInput}
 />
