@@ -3,6 +3,8 @@
   import GraphPanel from "./lib/GraphPanel.svelte";
   import DebugPanel from "./lib/DebugPanel.svelte";
   import JsonPanel from "./lib/JsonPanel.svelte";
+
+  let graphContainerId = "aagNetwork";
 </script>
 
 <main>
@@ -12,8 +14,8 @@
       <DebugPanel />
     </div>
     <div class="column" style="display: flex">
-      <div class="box p-0" style="flex:1; min-height: 85vh">
-        <GraphPanel />
+      <div id={graphContainerId} class="box p-0" style="flex:1; height: 85vh">
+        <GraphPanel containerId={graphContainerId} />
       </div>
     </div>
   </div>
