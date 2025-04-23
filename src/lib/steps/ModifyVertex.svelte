@@ -1,6 +1,7 @@
 <script lang="ts">
   import Checkbox from "../components/Checkbox.svelte";
   import Input from "../components/Input.svelte";
+  import Table from "../components/Table.svelte";
   import { step, Step } from "../shared.svelte";
 
   let vertexNameInput = $state("");
@@ -11,6 +12,10 @@
   );
 
   let vinitInput = $state(true);
+  let accessMethods = [
+    { name: "access 1", factors: [{ name: "factor 1" }, { name: "factor 2" }] },
+    { name: "access 2", factors: [{ name: "factor 1" }, { name: "factor 3" }] },
+  ];
 </script>
 
 <Input
@@ -22,6 +27,46 @@
 />
 
 <Checkbox id="setVinit" heading="V_init" bind:input={vinitInput} />
+
+{#snippet accessMethodsBody()}
+  {#each accessMethods as accessMethod}
+    <tr>
+      <td>{accessMethod.name}</td>
+      <td>
+        <div class="tags">
+          {#each accessMethod.factors as factor}
+            <span class="tag">{factor.name}</span>
+          {/each}
+        </div>
+      </td>
+      <td>
+        <button class="tag is-info" aria-label="edit access">
+          <span class="icon is-small">
+            <i class="fas fa-edit"></i>
+          </span>
+        </button>
+      </td>
+    </tr>
+  {/each}
+  <tr>
+    <td></td>
+    <td></td>
+    <td>
+      <button class="tag is-success" aria-label="add access">
+        <span class="icon is-small">
+          <i class="fas fa-plus"></i>
+        </span>
+      </button>
+    </td>
+  </tr>
+{/snippet}
+
+<Table
+  id="accesses"
+  heading="Access methods"
+  headers={["a", "b", ""]}
+  body={accessMethodsBody}
+/>
 
 <div class="buttons">
   <button

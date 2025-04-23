@@ -18,14 +18,8 @@
 
 {#snippet content()}
   <label class="checkbox">
-    <input
-      {id}
-      type="checkbox"
-      bind:checked={input}
-      defaultValue={defaultValue}
-    />
-    Remember me
+    <input {id} type="checkbox" bind:checked={input} {defaultValue} />
   </label>
 {/snippet}
 
-<Field {id} {heading} {input} {hint} {content} />
+<Field {id} {heading} {hint} {content} />

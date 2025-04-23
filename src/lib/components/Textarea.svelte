@@ -18,4 +18,4 @@
   ></textarea>
 {/snippet}
 
-<Field {id} {heading} {hint} {input} {content} />
+<Field {id} {heading} {hint} {content} />

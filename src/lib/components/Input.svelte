@@ -29,4 +29,4 @@
   />
 {/snippet}
 
-<Field {id} {heading} {input} {hint} {content} />
+<Field {id} {heading} {hint} {content} />

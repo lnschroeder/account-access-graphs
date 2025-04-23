@@ -1,5 +1,5 @@
 <script lang="ts">
-  let { id, heading, content, input, hint } = $props();
+  let { id, heading, content, hint } = $props();
 </script>
 
 <div class="field">
@@ -8,7 +8,7 @@
 
   <!-- Control -->
   <div class="control">
-    {@render content(input)}
+    {@render content()}
   </div>
 
   <!-- Hint -->
