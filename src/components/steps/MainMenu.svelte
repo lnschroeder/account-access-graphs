@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { step, Step } from "../../shared.svelte";
+  import {step, Step} from "../../shared.svelte";
 </script>
 
 <div class="buttons">

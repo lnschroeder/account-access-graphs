@@ -6,9 +6,9 @@
 </script>
 
 <Textarea
-  id="jsonInput"
-  heading="JSON representation"
-  placeholder="JSON representation"
-  hint={aagJsonHint}
   bind:input={aagJsonInput}
+  heading="JSON representation"
+  hint={aagJsonHint}
+  id="jsonInput"
+  placeholder="JSON representation"
 />

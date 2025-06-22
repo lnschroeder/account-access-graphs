@@ -1,8 +1,8 @@
 <script lang="ts">
-  import { onMount } from "svelte";
-  import { Network } from "vis-network";
-  import { DataSet } from "vis-data";
-  import type { Node, Edge } from "../../domain/model";
+  import {onMount} from "svelte";
+  import {Network} from "vis-network";
+  import {DataSet} from "vis-data";
+  import type {Edge, Node} from "../../domain/model";
 
   let {
     containerId,
@@ -20,7 +20,7 @@
   };
 
   const options = () => ({
-    layout: { randomSeed: 2 },
+    layout: {randomSeed: 2},
     nodes: {
       labelHighlightBold: false,
       borderWidth: 1,
@@ -42,7 +42,7 @@
   });
 
   onMount(() => {
-    var container = document.getElementById(containerId);
+    const container = document.getElementById(containerId);
     if (container) {
       new Network(container, data, options());
     } else {

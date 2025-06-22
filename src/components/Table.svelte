@@ -20,16 +20,16 @@
 {#snippet content()}
   <table class="table is-hoverable is-narrow">
     <thead>
-      <tr>
-        {#each headers as header}
-          <th>{header}</th>
-        {/each}
-      </tr>
+    <tr>
+      {#each headers as header}
+        <th>{header}</th>
+      {/each}
+    </tr>
     </thead>
     <tbody>
-      {@render body()}
+    {@render body()}
     </tbody>
   </table>
 {/snippet}
 
-<Field {id} {heading} {hint} {content} />
+<Field {content} {heading} {hint} {id}/>

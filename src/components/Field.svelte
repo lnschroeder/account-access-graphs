@@ -1,5 +1,5 @@
 <script lang="ts">
-  let { id, heading, content, hint } = $props();
+  let {id, heading, content, hint} = $props();
 </script>
 
 <div class="field">

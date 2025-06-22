@@ -2,7 +2,7 @@
   import Checkbox from "../Checkbox.svelte";
   import Input from "../Input.svelte";
   import Table from "../Table.svelte";
-  import { step, Step } from "../../shared.svelte";
+  import {step, Step} from "../../shared.svelte";
 
   let vertexNameInput = $state("");
   let vertexNameHint = $derived(
@@ -13,20 +13,20 @@
 
   let vinitInput = $state(true);
   let accessMethods = [
-    { name: "access 1", factors: [{ name: "factor 1" }, { name: "factor 2" }] },
-    { name: "access 2", factors: [{ name: "factor 1" }, { name: "factor 3" }] },
+    {name: "access 1", factors: [{name: "factor 1"}, {name: "factor 2"}]},
+    {name: "access 2", factors: [{name: "factor 1"}, {name: "factor 3"}]},
   ];
 </script>
 
 <Input
-  id="vertexNameInput"
-  heading="Name"
-  placeholder="Vertex name"
-  hint={vertexNameHint}
   bind:input={vertexNameInput}
+  heading="Name"
+  hint={vertexNameHint}
+  id="vertexNameInput"
+  placeholder="Vertex name"
 />
 
-<Checkbox id="setVinit" heading="V_init" bind:input={vinitInput} />
+<Checkbox bind:input={vinitInput} heading="V_init" id="setVinit"/>
 
 {#snippet accessMethodsBody()}
   {#each accessMethods as accessMethod}
@@ -62,10 +62,10 @@
 {/snippet}
 
 <Table
-  id="accesses"
-  heading="Access methods"
-  headers={["a", "b", ""]}
   body={accessMethodsBody}
+  headers={["a", "b", ""]}
+  heading="Access methods"
+  id="accesses"
 />
 
 <div class="buttons">
