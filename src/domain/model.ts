@@ -8,3 +8,8 @@ export interface Edge {
   from: number;
   to: number;
 }
+
+export interface Graph {
+  nodes: Node[];
+  edges: Edge[];
+}
