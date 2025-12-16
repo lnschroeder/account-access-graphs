@@ -1,9 +1,10 @@
 name: Deploy to GitHub Pages
 
 on:
-  push:
-    branches:
-      - main
+  # TODO
+  # push:
+  #   branches:
+  #     - main
   workflow_dispatch:
 
 jobs:
@@ -11,16 +12,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - name: Setup dotnet
-        uses: actions/setup-dotnet@v4
-        with:
-          dotnet-version: '8.0.110'
-      - name: Install wasm-tools
-        run: dotnet workload install wasm-tools
-      - name: Publish dotnet project
-        run: dotnet publish -c Release -o release --nologo src/client/AAG.Client.fsproj
-      - name: Set base path
-        run: sed -i 's/<base href="\/" \/>/<base href="\/account-access-graphs\/">/g' release/wwwroot/index.html
+      - name: Build the web app
+        run: ping # TODO
       - name: Add .nojekyll to include _framework folder
         run: touch release/wwwroot/.nojekyll
       - name: Add 404 page to enable page refreshes
