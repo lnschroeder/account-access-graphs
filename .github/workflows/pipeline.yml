@@ -1,10 +1,10 @@
 name: Deploy to GitHub Pages
 
 on:
-  # TODO
-  # push:
-  #   branches:
-  #     - main
+  push:
+    branches:
+      - main
+      - dev
   workflow_dispatch:
 
 jobs:
@@ -12,17 +12,21 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - name: Build the web app
-        run: ping # TODO
-      - name: Add .nojekyll to include _framework folder
-        run: touch release/wwwroot/.nojekyll
-      - name: Add 404 page to enable page refreshes
-        run: cp release/wwwroot/index.html release/wwwroot/404.html
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: "lts/*"
+      - name: Install dependencies
+        run: npm ci
+        working-directory: ./frontend
+      - name: Build static content
+        run: npm run build
+        working-directory: ./frontend
       - name: Upload static content
         id: deployment
         uses: actions/upload-pages-artifact@v3
         with:
-          path: release/wwwroot/
+          path: "./frontend/dist"
 
   deploy-github-pages:
     environment:
