@@ -1,5 +1,5 @@
 <template>
-  <v-card variant="flat" color="grey-darken-3">
+  <v-card>
     <v-card-item>
       <v-card-title>JSON representation</v-card-title>
     </v-card-item>

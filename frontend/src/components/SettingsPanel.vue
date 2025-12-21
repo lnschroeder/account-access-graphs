@@ -5,7 +5,7 @@ const networkStore = useVisNetworkOptionsStore()
 </script>
 
 <template>
-  <v-card variant="outlined">
+  <v-card>
     <v-card-item>
       <v-card-title>Settings</v-card-title>
     </v-card-item>
