@@ -1,6 +1,6 @@
 import { defineStore } from 'pinia'
-import { computed, ref } from 'vue'
 import type { Options } from 'vis-network'
+import { ref, computed } from 'vue'
 import { useTheme } from 'vuetify'
 
 export const useVisNetworkOptionsStore = defineStore('visNetworkOptions', () => {

@@ -1,9 +1,9 @@
 <script setup lang="ts">
-import NavigationPanel from '@/components/NavigationPanel.vue'
-import InfoPanel from '@/components/SettingsPanel.vue'
+import AppBar from '@/components/AppBar.vue'
 import GraphPanel from '@/components/GraphPanel.vue'
 import JsonPanel from '@/components/JsonPanel.vue'
-import AppBar from '@/components/AppBar.vue'
+import NavigationPanel from '@/components/NavigationPanel.vue'
+import InfoPanel from '@/components/SettingsPanel.vue'
 </script>
 
 <template>

@@ -1,8 +1,8 @@
 <script setup lang="ts">
-import { ref, onMounted, onUnmounted, watch } from 'vue'
-import { Network } from 'vis-network'
 import { useGraphStore } from '@/stores/graphStore'
 import { useVisNetworkOptionsStore } from '@/stores/visNetworkOptionsStore'
+import { Network } from 'vis-network'
+import { ref, onMounted, onUnmounted, watch } from 'vue'
 
 const graphContainer = ref<HTMLElement | null>(null)
 
