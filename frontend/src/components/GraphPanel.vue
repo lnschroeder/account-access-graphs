@@ -35,7 +35,7 @@ onUnmounted(() => {
 </script>
 
 <template>
-  <v-card height="80vh" class="overflow-hidden">
-    <div ref="graphContainer" class="fill-height"></div>
+  <v-card class="overflow-hidden" height="80vh">
+    <div class="fill-height" ref="graphContainer"></div>
   </v-card>
 </template>

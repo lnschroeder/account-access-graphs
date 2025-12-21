@@ -2,7 +2,7 @@
   <v-app-bar elevation="1" density="compact">
     <v-app-bar-title>Account Access Graphs</v-app-bar-title>
 
-    <v-chip color="warning" size="small" variant="tonal" class="mr-4"> Under Construction </v-chip>
+    <v-chip class="mr-4" color="warning" size="small" variant="tonal"> Under Construction </v-chip>
 
     <v-btn
       icon="mdi-github"

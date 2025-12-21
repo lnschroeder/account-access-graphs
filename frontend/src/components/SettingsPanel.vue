@@ -10,7 +10,12 @@ const networkStore = useVisNetworkOptionsStore()
       <v-card-title>Settings</v-card-title>
     </v-card-item>
     <v-card-text>
-      <v-switch v-model="networkStore.physicsEnabled" label="Physics" color="primary"></v-switch>
+      <v-switch
+        v-model="networkStore.physicsEnabled"
+        label="Physics"
+        color="primary"
+        hide-details
+      ></v-switch>
     </v-card-text>
   </v-card>
 </template>
