@@ -1,8 +1,16 @@
+<script setup lang="ts">
+import { useGraphStore } from '@/stores/graphStore'
+</script>
+
 <template>
-  <v-card variant="tonal" color="primary">
+  <v-card variant="tonal">
     <v-card-item>
       <v-card-title>Navigation</v-card-title>
     </v-card-item>
-    <v-card-text>Buttons and input fields</v-card-text>
+    <v-card-text class="d-flex flex-column ga-3">
+      <v-btn block prepend-icon="mdi-plus" variant="elevated" @click="useGraphStore().addNode()">
+        Add vertex</v-btn
+      >
+    </v-card-text>
   </v-card>
 </template>

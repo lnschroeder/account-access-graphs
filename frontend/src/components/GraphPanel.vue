@@ -2,23 +2,22 @@
 import { ref, onMounted, onUnmounted, watch } from 'vue'
 import { useTheme } from 'vuetify'
 import { Network } from 'vis-network'
-import type { Data, Options } from 'vis-network'
+import type { Options } from 'vis-network'
+import { useGraphStore } from '@/stores/graphStore'
 
 const theme = useTheme()
 const graphContainer = ref<HTMLElement | null>(null)
 let network: Network | null = null
 
-const data: Data = {
-  nodes: [
-    { id: 1, label: 'Alice' },
-    { id: 2, label: 'Bob' },
-    { id: 3, label: 'Charlie' },
-  ],
-  edges: [
-    { from: 1, to: 2, label: 'knows' },
-    { from: 2, to: 3, label: 'owes' },
-  ],
-}
+const graphStore = useGraphStore()
+
+watch(
+  () => graphStore.graphData,
+  (newData) => {
+    network?.setData(newData)
+  },
+  { deep: true },
+)
 
 const getGraphOptions = (): Options => {
   const colors = theme.current.value.colors
@@ -53,7 +52,7 @@ const getGraphOptions = (): Options => {
 
 onMounted(() => {
   if (graphContainer.value) {
-    network = new Network(graphContainer.value, data, getGraphOptions())
+    network = new Network(graphContainer.value, graphStore.graphData, getGraphOptions())
   }
 })
 
