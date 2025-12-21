@@ -19,6 +19,7 @@
     "@fontsource/roboto": "^5.2.9",
     "@mdi/font": "^7.4.47",
     "pinia": "^3.0.4",
+    "vis-network": "^10.0.2",
     "vue": "^3.5.25",
     "vuetify": "^3.11.4"
   },

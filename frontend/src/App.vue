@@ -9,6 +9,7 @@ import AppBar from '@/components/AppBar.vue'
 <template>
   <v-app>
     <AppBar />
+    
     <v-main>
       <v-container fluid>
         <v-row>
