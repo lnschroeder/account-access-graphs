@@ -2,11 +2,12 @@ import { defineStore } from 'pinia'
 import { ref, computed } from 'vue'
 
 export interface Node {
-  id: number
+  id: string
   label: string
 }
 
 export interface Edge {
+  id: string
   from: number
   to: number
   label: string
@@ -19,14 +20,14 @@ export interface GraphData {
 
 export const useGraphStore = defineStore('graph', () => {
   const nodes = ref<Node[]>([
-    { id: 1, label: 'Alice' },
-    { id: 2, label: 'Bob' },
-    { id: 3, label: 'Charlie' },
+    { id: '1', label: 'Alice' },
+    { id: '2', label: 'Bob' },
+    { id: '3', label: 'Charlie' },
   ])
 
   const edges = ref<Edge[]>([
-    { from: 1, to: 2, label: 'knows' },
-    { from: 2, to: 3, label: 'owes' },
+    { id: '1', from: 1, to: 2, label: 'knows' },
+    { id: '2', from: 2, to: 3, label: 'owes' },
   ])
 
   const graphData = computed<GraphData>(() => ({
@@ -36,7 +37,7 @@ export const useGraphStore = defineStore('graph', () => {
 
   function addNode() {
     const id = nodes.value.length + 1
-    nodes.value.push({ id, label: `Node ${id}` })
+    nodes.value.push({ id: `${id}`, label: `Node ${id}` })
   }
 
   return {
