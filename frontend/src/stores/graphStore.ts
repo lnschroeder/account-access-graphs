@@ -35,9 +35,13 @@ export const useGraphStore = defineStore('graph', () => {
     edges: edges.value,
   }))
 
-  function addNode() {
+  function addNode(): Node {
     const id = nodes.value.length + 1
-    nodes.value.push({ id: `${id}`, label: `Node ${id}` })
+    const node = { id: `${id}`, label: `Node ${id}` }
+
+    nodes.value.push(node)
+
+    return node
   }
 
   return {

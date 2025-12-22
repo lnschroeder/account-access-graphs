@@ -1,18 +1,34 @@
 <script setup lang="ts">
-import { useGraphStore } from '@/stores/graphStore'
+import MainMenu from './navigationPanel/MainMenu.vue'
+import VertexMenu from './navigationPanel/VertexMenu.vue'
+import { useUiStore } from '@/stores/uiStore'
+import { computed } from 'vue'
 
-const graphStore = useGraphStore()
+type ViewComponent = {
+  component: typeof MainMenu | typeof VertexMenu
+  title: string
+}
+
+const uiStore = useUiStore()
+const currentView = computed<ViewComponent>(() => {
+  if (uiStore.selectedVertex)
+    return {
+      component: VertexMenu,
+      title: `Vertex Menu ${JSON.stringify(uiStore.selectedVertex)}`,
+    }
+  return {
+    component: MainMenu,
+    title: 'Main Menu',
+  }
+})
 </script>
 
 <template>
   <v-card>
     <v-card-item>
-      <v-card-title>Navigation</v-card-title>
+      <v-card-title>{{ currentView.title }}</v-card-title>
     </v-card-item>
-    <v-card-text class="d-flex flex-column ga-3">
-      <v-btn block prepend-icon="mdi-plus" @click="graphStore.addNode()" color="primary">
-        Add vertex</v-btn
-      >
-    </v-card-text>
+
+    <component :is="currentView.component" />
   </v-card>
 </template>
