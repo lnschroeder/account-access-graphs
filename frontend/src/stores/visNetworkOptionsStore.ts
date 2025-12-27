@@ -42,6 +42,10 @@ export const useVisNetworkOptionsStore = defineStore('visNetworkOptions', () => 
         arrows: { to: { enabled: true } },
         chosen: false,
         font: font,
+        background: {
+          enabled: true,
+          color: surfaceColor,
+        },
       },
     }
   })
