@@ -67,7 +67,14 @@ watch(
   (newOptions) => network?.setOptions(newOptions),
 )
 
-onMounted(() => {
+onMounted(async () => {
+  // initialize the network only after fonts are loaded
+  try {
+    await document.fonts.ready
+  } catch (error) {
+    console.error('Font loading failed', error)
+  }
+
   if (graphContainer.value) {
     network = new Network(graphContainer.value, data, networkStore.options)
   }

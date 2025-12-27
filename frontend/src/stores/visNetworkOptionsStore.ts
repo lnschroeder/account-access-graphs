@@ -6,6 +6,8 @@ import { useTheme } from 'vuetify'
 export const useVisNetworkOptionsStore = defineStore('visNetworkOptions', () => {
   const theme = useTheme()
   const physicsEnabled = ref(true)
+  const fontFace = 'Roboto, Arial'
+
   const options = computed<Options>(() => {
     const colors = theme.current.value.colors
     return {
@@ -21,6 +23,7 @@ export const useVisNetworkOptionsStore = defineStore('visNetworkOptions', () => 
         },
         font: {
           color: colors['surface-variant'],
+          face: fontFace,
         },
       },
       edges: {
@@ -32,6 +35,7 @@ export const useVisNetworkOptionsStore = defineStore('visNetworkOptions', () => 
         },
         chosen: false,
         font: {
+          face: fontFace,
           color: colors['surface-variant'],
           background: colors['surface'],
           strokeWidth: 0,
