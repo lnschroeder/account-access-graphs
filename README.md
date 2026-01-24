@@ -5,7 +5,7 @@ This tool was developed as a part of my master thesis _Modeling and Analyzing Ac
 
 ## Deployment & Live Demo
 
-Live Demo at: https://lnschroeder.github.io/account-access-graphs/.
+Live Demo at: https://lnschroeder.github.io/account-access-graphs-old.
 
 This is automatically deployed via the [pipeline.yml](.github/workflows/pipeline.yml).
 
